@@ -22,8 +22,7 @@
     
                     // Make a connection to the Oracle datasource "cse132b"
                     Connection conn = DriverManager.getConnection
-                        ("jdbc:sqlserver://localhost:1433;databaseName=cse132b", 
-                            "username", "password");
+                        ("jdbc:sqlserver://localhost; databaseName=tritonlink; integratedSecurity=true;");
 
             %>
 
