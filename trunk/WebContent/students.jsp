@@ -1,5 +1,7 @@
 <html>
-
+<head>
+<link rel="shortcut icon" href="favicon.ico" >
+</head>
 <body>
     <table border="1">
         <tr>
