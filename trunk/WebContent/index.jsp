@@ -10,5 +10,6 @@
 <body>
 <h1>Welcome!</h1>
 <jsp:include page="menu.html" />
+
 </body>
 </html>
