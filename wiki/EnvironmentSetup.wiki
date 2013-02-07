@@ -16,7 +16,23 @@ The following instructions will help you setup the JSP project in Eclipse.
   * Check whether your Eclipse contains WTP (Web Tool Platform). Go to Window->Preferences->Server->Runtime Environment to see if you can add a new server. Follow this [http://www.vogella.com/articles/EclipseWTP/article.html#configuration link] to see if you can setup the server. Contact me if you cannot.
   * To create a JSP project, go to File->New->New project->Web->Dynamic Web Project. Type the _Project name_ and choose the _Target runtime_ as the server you just setup. It should be Apache Tomcat v7.0. Keep rest of settings as default.
   * After the creation of the project, you will see a list of folders. Put your website page under the _WebContent_ folder.
-  * Follow [http://www.srccodes.com/p/article/2/JSP-Hello-World-Program-using-Eclipse-IDE-and-Tomcat-web-server this] link if you need more detailed instructions.
+  * Create a new file test.jsp and put the following code in it.
+{{{
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Hello World - JSP tutorial</title>
+</head>
+<body>
+    <%= "Hello World!" %>
+</body>
+</html>
+}}}
+  
+  * Follow [http://www.srccodes.com/p/article/2/JSP-Hello-World-Program-using-Eclipse-IDE-and-Tomcat-web-server this] link if you need more detail instructions.
   * Make sure that you stop the service before you run the program in Eclipse. There will be port conflict:(
 
 = MS SQL Server =
