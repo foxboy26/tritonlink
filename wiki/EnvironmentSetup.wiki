@@ -14,7 +14,7 @@ MS SQL Sever 2012 Express can be downloaded from [https://www.microsoft.com/beta
 = Eclipse =
 The following instructions will help you setup the JSP project in Eclipse.
   * Check whether your Eclipse contains WTP (Web Tool Platform). Go to Window->Preferences->Server->Runtime Environment to see if you can add a new server. Follow this [http://www.vogella.com/articles/EclipseWTP/article.html#configuration link] to see if you can setup the server. Contact me if you cannot.
-  * To create a JSP project, go to File->New->New project->Web->Dynamic Web Project
+  * To create a JSP project, go to File->New->New project->Web->Dynamic Web Project. Type the _Project name_ and choose the _Target runtime_ as the server you just setup. It should be Apache Tomcat v7.0.
   * Make sure that you stop the service before you run the program in Eclipse. There will be port conflict:(
   * 
 
