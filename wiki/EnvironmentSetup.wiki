@@ -1,4 +1,4 @@
-#Instructions for development environment configuration.
+#summary Instructions for development environment configuration.
 
 = Preparation =
 Go to [http://code.google.com/p/tritonlink/downloads/list Downloads] page to download tomcat, svn and jdbc.
