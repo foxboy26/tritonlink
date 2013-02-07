@@ -9,10 +9,14 @@ MS SQL Sever 2012 Express can be downloaded from [https://www.microsoft.com/beta
 = Tomcat =
   * Install apache tomcat server. Choose all the default settings.
   * To make sure that tomcat service is running, open a browser and type localhost:8080 in the address bar. If you see the tomcat homepage, it turns out that the server is working.
+  * To start/stop the service, just right click the icon in system tray.
 
 = Eclipse =
 The following instructions will help you setup the JSP project in Eclipse.
-  * Check whether your Eclipse contains WTP (Web Tool Platform). Goto Window->Preferences->Server->Runtime Environment to see if you can add a new server. If you cannot
+  * Check whether your Eclipse contains WTP (Web Tool Platform). Go to Window->Preferences->Server->Runtime Environment to see if you can add a new server. Follow this [http://www.vogella.com/articles/EclipseWTP/article.html#configuration link] to see if you can setup the server. Contact me if you cannot.
+  * To create a JSP project, go to File->New->New project->Web->Dynamic Web Project
+  * Make sure that you stop the service before you run the program in Eclipse. There will be port conflict:(
+  * 
 
 = MS SQL Server =
 
