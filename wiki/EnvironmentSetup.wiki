@@ -8,10 +8,14 @@ MS SQL Sever 2012 Express can be downloaded from [https://www.microsoft.com/beta
 
 = Tomcat =
   * Install apache tomcat server. Choose all the default settings.
-  * To make sure that sever is running, pen a browser and type localhost:8080 in the address bar. If you see the tomcat homepage, it turns out that the server is working.
+  * To make sure that tomcat service is running, open a browser and type localhost:8080 in the address bar. If you see the tomcat homepage, it turns out that the server is working.
 
-= 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= SVN =
+
+= Eclipse =
+
+= MS SQL Server =
+
+
+= JDBC =
+  * Extract the 
