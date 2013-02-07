@@ -1,8 +1,8 @@
 #Instructions for development environment configuration.
 
 = Preparation =
-Go to this[http://code.google.com/p/tritonlink/downloads/list Downloads] page to download tomcat, svn and jdbc.
-MS SQL Sever 2012 Express can be downloaded from here.
+Go to [http://code.google.com/p/tritonlink/downloads/list Downloads] page to download tomcat, svn and jdbc.
+MS SQL Sever 2012 Express can be downloaded from [https://www.microsoft.com/betaexperience/pd/SQLEXPWT/enus/ here]. (Choose the 64-bit version)
 
 = Details =
 
