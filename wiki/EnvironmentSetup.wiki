@@ -1,9 +1,8 @@
-#summary One-sentence summary of this page.
+#Instructions for development environment configuration.
 
-= Introduction =
-
-Add your content here.
-
+= Preparation =
+Go to this[http://code.google.com/p/tritonlink/downloads/list Downloads] page to download tomcat, svn and jdbc.
+MS SQL Sever 2012 Express can be downloaded from here.
 
 = Details =
 
