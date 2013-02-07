@@ -1,7 +1,7 @@
 #summary Instructions for development environment configuration.
 
 = Preparation =
-Go to [http://code.google.com/p/tritonlink/downloads/list Downloads] page to download tomcat, svn and jdbc.
+Go to [http://code.google.com/p/tritonlink/downloads/list Downloads] page to get the tomcat, svn and jdbc.
 MS SQL Sever 2012 Express can be downloaded from [https://www.microsoft.com/betaexperience/pd/SQLEXPWT/enus/ here]. (Choose the 64-bit version)
 
 *Note:* For all the installation below, make sure that you run the program as an administrator to avoid the issue caused by authority.
@@ -10,12 +10,16 @@ MS SQL Sever 2012 Express can be downloaded from [https://www.microsoft.com/beta
   * Install apache tomcat server. Choose all the default settings.
   * To make sure that tomcat service is running, open a browser and type localhost:8080 in the address bar. If you see the tomcat homepage, it turns out that the server is working.
 
-= SVN =
-
 = Eclipse =
+The following instructions will help you setup the JSP project in Eclipse.
+  * Check whether your Eclipse contains WTP (Web Tool Platform). Goto Window->Preferences->Server->Runtime Environment to see if you can add a new server. If you cannot
 
 = MS SQL Server =
 
 
 = JDBC =
   * Extract the 
+
+
+= SVN =
+  * 
