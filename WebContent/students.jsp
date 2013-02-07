@@ -1,6 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="shortcut icon" href="favicon.ico" >
+<title>Tritonlink Home</title>
 </head>
 <body>
     <table border="1">
@@ -42,12 +47,12 @@
                         PreparedStatement pstmt = conn.prepareStatement(
                             "INSERT INTO Student VALUES (?, ?, ?, ?, ?, ?)");
 
+                        pstmt.setString(1, request.getParameter("ID"));
+                        pstmt.setString(2, request.getParameter("FIRSTNAME"));
+                       pstmt.setString(3, request.getParameter("MIDDLENAME"));
+                        pstmt.setString(4, request.getParameter("LASTNAME"));
                         pstmt.setInt(
-                            1, Integer.parseInt(request.getParameter("SSN")));
-                        pstmt.setString(2, request.getParameter("ID"));
-                        pstmt.setString(3, request.getParameter("FIRSTNAME"));
-                       pstmt.setString(4, request.getParameter("MIDDLENAME"));
-                        pstmt.setString(5, request.getParameter("LASTNAME"));
+                                5, Integer.parseInt(request.getParameter("SSN")));
                         pstmt.setString(6, request.getParameter("RESIDENCY"));
                         int rowCount = pstmt.executeUpdate();
 
@@ -68,7 +73,7 @@
                         // Create the prepared statement and use it to
                         // UPDATE the student attributes in the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "UPDATE Student SET ID = ?, FIRSTNAME = ?, " +
+                            "UPDATE Student SET STUDENT_ID = ?, FIRSTNAME = ?, " +
                             "MIDDLENAME = ?, LASTNAME = ?, RESIDENCY = ? WHERE SSN = ?");
 
                         pstmt.setString(1, request.getParameter("ID"));
@@ -164,7 +169,7 @@
     
                             <%-- Get the ID --%>
                             <td>
-                                <input value="<%= rs.getString("ID") %>" 
+                                <input value="<%= rs.getString("STUDENT_ID") %>" 
                                     name="ID" size="10">
                             </td>
     
