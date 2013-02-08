@@ -4,6 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="shortcut icon" href="favicon.ico" >
+<script src="js/jquery-1.9.1.js">
+</script>
 <title>New student</title>
 </head>
 <body>
@@ -24,17 +27,57 @@
 	undergraduateForm.style.display = 'block';
     }
     
-    function addUniversity()
-    {
-        backgroundForm = document.getElementById("background");
-        //TODO: zhiheng: add JQuery to make life easier. 
+    function addUniversity() {
+        $('#background').append(
+        	'<tr class="university"> \
+                <td><input value="" name="university"></td> \
+                <td> \
+                    <select name="degreetype"> \
+                      <option value="Bachelor">Bachelor</option> \
+                      <option value="Master">Master</option> \
+                      <option value="Ph.D">Ph.D</option> \
+                    </select> \
+                 </td> \
+            </tr>');
     }
     
+    function addAttendance() {
+        $('#attendance').after(
+	    	'<tr> \
+	    	<td></td> \
+	    	<td> \
+		        <select name="QUARTER"> \
+		            <option value="Spring">Spring</option> \
+		            <option value="Summer">Summer</option> \
+		            <option value="Fall">Fall</option> \
+		            <option value="Winter">Winter</option> \
+		        </select> \
+			    <input value="" name="start" size="5">  \
+			    -  \
+			        <select name="QUARTER"> \
+			            <option value="Spring">Spring</option>\
+			            <option value="Summer">Summer</option>\
+			            <option value="Fall">Fall</option>\
+			            <option value="Winter">Winter</option>\
+			        </select>\
+			    <input value="" name="end" size="5">\
+		    </td>\
+		    </tr>');
+    }
 </script>
+
 <form action="students.jsp" method="get">
+    <input type="hidden" value="insert" name="action">
     <table id="basic">
         <tr>
           <th colspan="2">Basic information</th>
+        </tr>
+       <tr>
+           <td>Identity</td>
+           <td>
+                <input type="radio" name="identity" value="undergraduate" onclick="showUndergraduateForm()">Undergraduate
+                <input type="radio" name="identity" value="graduate" onclick="showGraduateForm()">Graduate
+           </td>
         </tr>
 	<tr>
     	  <td>Student ID</td>
@@ -66,23 +109,32 @@
                 </select>  
 		     *</td>
         </tr>
-
-	<tr>
-	    <td>Attendence</td>
-	    <td><input value="" name="start" size="15"> - <input value="" name="end" size="15"> <button type="button">Add</button></td>
-	</tr>
-
         <tr>
-	    <td>
-		Identity
-	    </td>
+            <td>Enrollment</td>
             <td>
-		<input type="radio" name="identity" value="undergraduate" onclick="showUndergraduateForm()">Undergraduate
-		<input type="radio" name="identity" value="graduate" onclick="showGraduateForm()">Graduate
-            </td>
-        </tr>
-    </table>
-
+                <input type="radio" name="is_enrolled" value="1">Yes
+                <input type="radio" name="is_enrolled" value="0">No
+		    </td>
+		<tr id="attendance">
+		    <td>Attendance</td>
+		    <td>
+		        <select name="QUARTER">
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Fall">Fall</option>
+                    <option value="Winter">Winter</option>
+                </select>
+		    <input value="" name="start" size="5"> 
+		    - 
+                <select name="QUARTER">
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Fall">Fall</option>
+                    <option value="Winter">Winter</option>
+                </select>
+		    <input value="" name="end" size="5">
+		    <button type="button" onclick="addAttendance()">Add</button></td>
+		</tr>
     </table>
 
     <table id="background">
@@ -93,18 +145,16 @@
 	    <td>Name of school</td>
 	    <td>Degree</td>
 	</tr>
-	<tr>
+	<tr class="university">
 	    <td><input value="" name="university"></td>
-            <td>
-                <select name="degreetype">
-                  <option value="Bachelor">Bachelor</option>
-                  <option value="Master">Master</option>
-                  <option value="Ph.D">Ph.D</option>
-                </select>  
-             </td>
-	     <td>
-		 <button type="button" onclick="addUniversity()">Add</button>
-	     </td>
+        <td>
+            <select name="degreetype">
+              <option value="Bachelor">Bachelor</option>
+              <option value="Master">Master</option>
+              <option value="Ph.D">Ph.D</option>
+            </select>
+         </td>
+	     <td><button type="button" onclick="addUniversity()">Add</button></td>
 	</tr>
     </table>
     
@@ -156,17 +206,17 @@
         <tr>
             <td>Type</td>
             <td>
-                <select name="TYPE">
-                  <option value="5-year">5-year Bachelor's/MS program</option>
+                <select name="type">
                   <option value="normal">Normal</option>
+                  <option value="5-year">5-year Bachelor's/MS program</option>
                 </select>  
              *</td>
         </tr>
     </table>
     <table>
         <tr>
-            <td><input type="submit" value="Submit"></td>
-            <td><input type="submit" value="Cancel"></td>
+            <td><input type="submit" value="Save"></td>
+            <td><button type="button" value="Cancel">Cancel</button></td>
         </tr>
     </table>
 </form>
