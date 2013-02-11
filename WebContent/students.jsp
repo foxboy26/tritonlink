@@ -40,7 +40,7 @@
                     	StringBuilder sb;
                     	
                     	String[] holdUniversity = request.getParameterValues("university");
-                    	String[] holdDegreeType = request.getParameterValues("degree");
+                    	String[] holdDegreeType = request.getParameterValues("degree_type");
                     	sb = new StringBuilder();
                         for (int i = 0; i < holdUniversity.length; i++) {
                             sb.append(holdUniversity[i]);
@@ -68,7 +68,7 @@
                     	System.out.println(holdDegrees);
                     	System.out.println(attendances);
                     	System.out.println(Boolean.parseBoolean(request.getParameter("is_enrolled")));
-                        // Begin transaction
+                    	// Begin transaction
                         conn.setAutoCommit(false);
                         
                         // Create the prepared statement and use it to
@@ -80,8 +80,10 @@
                         pstmt.setString(2, request.getParameter("firstname"));
                         pstmt.setString(3, request.getParameter("middlename"));
                         pstmt.setString(4, request.getParameter("lastname"));
-                        if (request.getParameter("ssn") != null)
+                        if (!request.getParameter("ssn").equals(""))
                             pstmt.setInt(5, Integer.parseInt(request.getParameter("ssn")));
+                        else
+                        	pstmt.setNull(5, Types.INTEGER);
                         pstmt.setString(6, request.getParameter("residency"));
                         pstmt.setBoolean(7, Boolean.parseBoolean(request.getParameter("is_enrolled")));
                         pstmt.setString(8, holdDegrees);
@@ -107,14 +109,19 @@
                         }
 
                         if (identity != null && identity.equals("graduate")) {
+                        	System.out.println(request.getParameter("department"));
+                        	System.out.println(request.getParameter("degree"));
+                        	System.out.println(request.getParameter("state"));
                             pstmt = conn.prepareStatement(
                                     "INSERT INTO graduate VALUES (?, ?, ?, ?)");
 
                                 pstmt.setString(1, request.getParameter("student_id"));
                                 pstmt.setString(2, request.getParameter("department"));
                                 pstmt.setString(3, request.getParameter("degree"));
-                                pstmt.setString(4, "normal");
-                                //pstmt.setString(4, request.getParameter("state"));
+                                if (request.getParameter("state") == null)
+                                	pstmt.setNull(4, Types.VARCHAR);
+                                else
+                                	pstmt.setString(4, request.getParameter("state"));
                                 rowCount = pstmt.executeUpdate();
                         }
                         // Commit transaction

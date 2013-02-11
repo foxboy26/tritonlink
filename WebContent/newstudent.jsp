@@ -32,7 +32,7 @@
         	'<tr> \
                 <td><input value="" name="university" size="30"></td> \
                 <td> \
-                    <select name="degreetype"> \
+                    <select name="degree_type"> \
                       <option value="Bachelor">Bachelor</option> \
                       <option value="Master">Master</option> \
                       <option value="Ph.D">Ph.D</option> \
@@ -46,25 +46,47 @@
 	    	'<tr> \
 	    	<td></td> \
 	    	<td> \
-		        <select name="QUARTER"> \
+		        <select name="begin_quarter"> \
 		            <option value="Spring">Spring</option> \
 		            <option value="Summer">Summer</option> \
 		            <option value="Fall">Fall</option> \
 		            <option value="Winter">Winter</option> \
 		        </select> \
-			    <input value="" name="start" size="5">  \
+			    <input value="" name="begin_year" size="5">  \
 			    -  \
-			        <select name="QUARTER"> \
+			        <select name="end_quarter"> \
 			            <option value="Spring">Spring</option>\
 			            <option value="Summer">Summer</option>\
 			            <option value="Fall">Fall</option>\
 			            <option value="Winter">Winter</option>\
 			        </select>\
-			    <input value="" name="end" size="5">\
+			    <input value="" name="end_year" size="5">\
 		    </td>\
 		    </tr>');
     }
+    
+    function showPhdState()
+    {
+    	if ($('select[name=tcol1]'))
+    	$('#state')
+    }
 </script>
+
+ <%-- Set the scripting language to Java and --%>
+            <%-- Import the java.sql package --%>
+            <%@ page language="java" import="java.sql.*" %>
+            <%@ page language="java" import="db.Config" %>
+            <%-- -------- Open Connection Code -------- --%>
+            <%
+                try {
+                    // Load JDBC Driver class file
+                    DriverManager.registerDriver
+                        (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+    
+                    // Make a connection to the MS SQL Server datasource "tritonlink"
+                    Connection conn = DriverManager.getConnection(Config.connectionURL);
+            %>
+
 
 <form action="students.jsp" method="post">
     <input type="hidden" value="insert" name="action">
@@ -75,8 +97,8 @@
        <tr>
            <td>Identity</td>
            <td>
-                <input type="radio" name="identity" value="undergraduate" onclick="showUndergraduateForm()">Undergraduate
-                <input type="radio" name="identity" value="graduate" onclick="showGraduateForm()">Graduate
+                <input type="radio" name="identity" value="undergraduate" onchange="showUndergraduateForm()">Undergraduate
+                <input type="radio" name="identity" value="graduate" checked="yes" onchange="showGraduateForm()">Graduate
            </td>
         </tr>
 	<tr>
@@ -148,7 +170,7 @@
 	<tr>
 	    <td><input value="" name="university" size="30"></td>
         <td>
-            <select name="degree">
+            <select name="degree_type">
               <option value="Bachelor">Bachelor</option>
               <option value="Master">Master</option>
               <option value="Ph.D">Ph.D</option>
@@ -158,29 +180,56 @@
 	</tr>
     </table>
     
-    <table id="graduate" style="display:none"> 
+    <table id="graduate"> 
         <tr>
           <th colspan="2">Graduate information</th>
         </tr>
 	<tr>
 	    <td>Department</td>
-	    <td><input value="" name="department"></td>
+	    <td>
+	        <%
+                    // Create the statement
+                    Statement statement = conn.createStatement();
+
+                    // Use the created statement to SELECT
+                    // the student attributes FROM the Student table.
+                    ResultSet rs = statement.executeQuery
+                        ("SELECT * FROM department");
+            %>
+	    
+	       <select name="department">
+	        <%
+	           while ( rs.next() ) {
+	        %>
+	               <option value="<%= rs.getString("name") %>"><%= rs.getString("name") %></option>
+	           
+	        <%
+	           }
+	        %>
+           </select>
+	    </td>
 	</tr>
         <tr>
             <td>Degree type</td>
             <td>
-                <select name="degreetype">
+                <select name="degree" onchange="showPhdState()">
                   <option value="Master">Master</option>
-                  <option value="PhD candidates">PhD candidates</option>
-                  <option value="PhD precandidacy">PhD precandidacy</option>
+                  <option value="PhD">PhD</option>
                 </select>  
              *</td>
+        </tr>
+        <tr id="state">
+            <td>State</td>
+            <td>
+                <input type="radio" name="state" value="PhD candidates">PhD candidates
+                <input type="radio" name="state" value="PhD precandidacy">PhD precandidacy
+            </td>
         </tr>
     </table>
     
     <table id="undergraduate" style="display:none">
         <tr>
-	    <th colspan="2">Undergradate information</th>
+	    <th colspan="2">Undergraduate information</th>
         </tr>
 	<tr>
 	    <td>College</td>
@@ -219,6 +268,22 @@
             <td><button type="button" value="Cancel">Cancel</button></td>
         </tr>
     </table>
+    <%-- -------- Close Connection Code -------- --%>
+    <%
+            // Close the ResultSet
+            rs.close();
+
+            // Close the Statement
+            statement.close();
+
+            // Close the Connection
+            conn.close();
+        } catch (SQLException sqle) {
+            out.println(sqle.getMessage());
+        } catch (Exception e) {
+            out.println(e.getMessage());
+        }
+    %>
 </form>
 </body>
 </html>
