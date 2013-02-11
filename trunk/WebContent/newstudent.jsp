@@ -29,8 +29,8 @@
     
     function addUniversity() {
         $('#background').append(
-        	'<tr class="university"> \
-                <td><input value="" name="university"></td> \
+        	'<tr> \
+                <td><input value="" name="university" size="30"></td> \
                 <td> \
                     <select name="degreetype"> \
                       <option value="Bachelor">Bachelor</option> \
@@ -66,7 +66,7 @@
     }
 </script>
 
-<form action="students.jsp" method="get">
+<form action="students.jsp" method="post">
     <input type="hidden" value="insert" name="action">
     <table id="basic">
         <tr>
@@ -81,28 +81,28 @@
         </tr>
 	<tr>
     	  <td>Student ID</td>
-	  <td><input value="" name="ID" size="15">*</td>
+	  <td><input value="" name="student_id" size="15">*</td>
 	</tr>
         <tr>
             <td>First name</td>
-            <td><input value="" name="FIRSTNAME" size="15">*</td>
+            <td><input value="" name="firstname" size="15">*</td>
         </tr>
         <tr>
             <td>Middle name</td>
-            <td><input value="" name="MIDDLETNAME" size="15"></td>
+            <td><input value="" name="middlename" size="15"></td>
         </tr>
         <tr>
             <td>Last name</td>
-            <td><input value="" name="LASTNAME" size="15">*</td>
+            <td><input value="" name="lastname" size="15">*</td>
         </tr>
         <tr>
           <td>SSN</td>
-          <td><input value="" name="SSN" size="15"></td>
+          <td><input value="" name="ssn" size="15"></td>
         </tr>
         <tr>
             <td>Residency</td>
             <td>
-                <select name="RESIDENCY">
+                <select name="residency">
                   <option value="California resident">California resident</option>
                   <option value="Foreign student">Foreign student</option>
                   <option value="Non-CA US student">Non-CA US student</option>
@@ -112,27 +112,27 @@
         <tr>
             <td>Enrollment</td>
             <td>
-                <input type="radio" name="is_enrolled" value="1">Yes
-                <input type="radio" name="is_enrolled" value="0">No
+                <input type="radio" name="is_enrolled" value="true">Yes
+                <input type="radio" name="is_enrolled" value="false">No
 		    </td>
 		<tr id="attendance">
 		    <td>Attendance</td>
 		    <td>
-		        <select name="QUARTER">
+		        <select name="begin_quarter">
                     <option value="Spring">Spring</option>
                     <option value="Summer">Summer</option>
                     <option value="Fall">Fall</option>
                     <option value="Winter">Winter</option>
                 </select>
-		    <input value="" name="start" size="5"> 
-		    - 
-                <select name="QUARTER">
+		        <input value="" name="begin_year" size="5">
+		        - 
+                <select name="end_quarter">
                     <option value="Spring">Spring</option>
                     <option value="Summer">Summer</option>
                     <option value="Fall">Fall</option>
                     <option value="Winter">Winter</option>
                 </select>
-		    <input value="" name="end" size="5">
+		    <input value="" name="end_year" size="5">
 		    <button type="button" onclick="addAttendance()">Add</button></td>
 		</tr>
     </table>
@@ -145,10 +145,10 @@
 	    <td>Name of school</td>
 	    <td>Degree</td>
 	</tr>
-	<tr class="university">
-	    <td><input value="" name="university"></td>
+	<tr>
+	    <td><input value="" name="university" size="30"></td>
         <td>
-            <select name="degreetype">
+            <select name="degree">
               <option value="Bachelor">Bachelor</option>
               <option value="Master">Master</option>
               <option value="Ph.D">Ph.D</option>
@@ -204,7 +204,7 @@
 	    <td><input value="" name="minor"></td>
 	</tr>
         <tr>
-            <td>Type</td>
+            <td>Program type</td>
             <td>
                 <select name="type">
                   <option value="normal">Normal</option>
