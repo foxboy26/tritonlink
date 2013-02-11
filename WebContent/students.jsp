@@ -19,18 +19,16 @@
             <%-- Set the scripting language to Java and --%>
             <%-- Import the java.sql package --%>
             <%@ page language="java" import="java.sql.*" %>
-    
+            <%@ page language="java" import="db.Config" %>
             <%-- -------- Open Connection Code -------- --%>
             <%
                 try {
-                    // Load Oracle Driver class file
+                    // Load JDBC Driver class file
                     DriverManager.registerDriver
                         (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
     
-                    // Make a connection to the Oracle datasource "cse132b"
-                    Connection conn = DriverManager.getConnection
-                        ("jdbc:sqlserver://localhost; databaseName=tritonlink; integratedSecurity=true;");
-
+                    // Make a connection to the MS SQL Server datasource "tritonlink"
+                    Connection conn = DriverManager.getConnection(Config.connectionURL);
             %>
 
             <%-- -------- INSERT Code -------- --%>
@@ -38,24 +36,87 @@
                     String action = request.getParameter("action");
                     // Check if an insertion is requested
                     if (action != null && action.equals("insert")) {
-
+                    	// Preprocess submitted form data
+                    	StringBuilder sb;
+                    	
+                    	String[] holdUniversity = request.getParameterValues("university");
+                    	String[] holdDegreeType = request.getParameterValues("degree");
+                    	sb = new StringBuilder();
+                        for (int i = 0; i < holdUniversity.length; i++) {
+                            sb.append(holdUniversity[i]);
+                            sb.append(' ');
+                            sb.append(holdDegreeType[i]);
+                            sb.append(';');
+                        }
+                        String holdDegrees = sb.toString();
+                        
+                    	String[] beginQuarter = request.getParameterValues("begin_quarter");
+                    	String[] beginYear = request.getParameterValues("begin_year");
+                    	String[] endQuarter = request.getParameterValues("end_quarter");
+                    	String[] endYear = request.getParameterValues("end_year");
+                    	sb = new StringBuilder();
+                    	for (int i = 0; i < beginQuarter.length; i++) {
+                    		sb.append(beginQuarter[i]);
+                    		sb.append(beginYear[i]);
+                    		sb.append('-');
+                            sb.append(endQuarter[i]);
+                            sb.append(endYear[i]);
+                            sb.append(';');
+                    	}
+                    	String attendances = sb.toString();
+                    	
+                    	System.out.println(holdDegrees);
+                    	System.out.println(attendances);
+                    	System.out.println(Boolean.parseBoolean(request.getParameter("is_enrolled")));
                         // Begin transaction
                         conn.setAutoCommit(false);
                         
                         // Create the prepared statement and use it to
                         // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO Student VALUES (?, ?, ?, ?, ?, ?)");
+                            "INSERT INTO Student VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                        pstmt.setString(1, request.getParameter("ID"));
-                        pstmt.setString(2, request.getParameter("FIRSTNAME"));
-                       pstmt.setString(3, request.getParameter("MIDDLENAME"));
-                        pstmt.setString(4, request.getParameter("LASTNAME"));
-                        pstmt.setInt(
-                                5, Integer.parseInt(request.getParameter("SSN")));
-                        pstmt.setString(6, request.getParameter("RESIDENCY"));
+                        pstmt.setString(1, request.getParameter("student_id"));
+                        pstmt.setString(2, request.getParameter("firstname"));
+                        pstmt.setString(3, request.getParameter("middlename"));
+                        pstmt.setString(4, request.getParameter("lastname"));
+                        if (request.getParameter("ssn") != null)
+                            pstmt.setInt(5, Integer.parseInt(request.getParameter("ssn")));
+                        pstmt.setString(6, request.getParameter("residency"));
+                        pstmt.setBoolean(7, Boolean.parseBoolean(request.getParameter("is_enrolled")));
+                        pstmt.setString(8, holdDegrees);
+                        pstmt.setString(9, attendances);
+
                         int rowCount = pstmt.executeUpdate();
 
+                        
+                        String identity = request.getParameter("identity");
+                        
+                        
+                        if (identity != null && identity.equals("undergraduate")) {
+                            pstmt = conn.prepareStatement(
+                                    "INSERT INTO undergraduate VALUES (?, ?, ?, ?, ?)");
+
+                                pstmt.setString(1, request.getParameter("student_id"));
+                                pstmt.setString(2, request.getParameter("college"));
+                                pstmt.setString(3, request.getParameter("major"));
+                                pstmt.setString(4, request.getParameter("minor"));
+                                pstmt.setString(5, request.getParameter("type"));
+                                
+                                rowCount = pstmt.executeUpdate();                        	
+                        }
+
+                        if (identity != null && identity.equals("graduate")) {
+                            pstmt = conn.prepareStatement(
+                                    "INSERT INTO graduate VALUES (?, ?, ?, ?)");
+
+                                pstmt.setString(1, request.getParameter("student_id"));
+                                pstmt.setString(2, request.getParameter("department"));
+                                pstmt.setString(3, request.getParameter("degree"));
+                                pstmt.setString(4, "normal");
+                                //pstmt.setString(4, request.getParameter("state"));
+                                rowCount = pstmt.executeUpdate();
+                        }
                         // Commit transaction
                         conn.commit();
                         conn.setAutoCommit(true);
@@ -109,7 +170,7 @@
                         int rowCount = pstmt.executeUpdate();
 
                         // Commit transaction
-                         conn.commit();
+                        conn.commit();
                         conn.setAutoCommit(true);
                     }
             %>
@@ -126,7 +187,7 @@
             %>
 
             <!-- Add an HTML table header row to format the results -->
-                <table border="1">
+                <table border="0">
                     <tr>
                         <th>SSN</th>
                         <th>ID</th>
@@ -136,19 +197,7 @@
                         <th>Residency</th>
                         <th>Action</th>
                     </tr>
-                    <tr>
-                        <form action="students.jsp" method="get">
-                            <input type="hidden" value="insert" name="action">
-                            <th><input value="" name="SSN" size="10"></th>
-                            <th><input value="" name="ID" size="10"></th>
-                            <th><input value="" name="FIRSTNAME" size="15"></th>
-			    <th><input value="" name="MIDDLENAME" size="15"></th>
-                            <th><input value="" name="LASTNAME" size="15"></th>
-                            <th><input value="" name="RESIDENCY" size="15"></th>
-                            <th><input type="submit" value="Insert"></th>
-                        </form>
-                    </tr>
-
+                    
             <%-- -------- Iteration Code -------- --%>
             <%
                     // Iterate over the ResultSet
