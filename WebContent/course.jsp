@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Tritonlink Home</title>
+<title>Courses</title>
 </head>
-<body style="width: 1000px; height: 600px; text-align:center; margin-left: auto; margin-right: auto;margin-top: 30px;">
-<table border="1" style = "text-align:left;">
+<body style="text-align:center; margin-left: auto; margin-right: auto;margin-top: 30px;">
+<table border="1" style = "text-align:left; width: 60%; margin:auto">
         <tr>
             <td valign="top">
                 <%-- -------- Include menu HTML code -------- --%>
@@ -86,7 +86,7 @@
             %>
 
             <!-- Add an HTML table header row to format the results -->
-                <table border="1">
+                <table border="1" style = "text-align:center; width: 80%; margin:auto">
                     <tr>
                         <th>course_id</th>
                         <th>department</th>
