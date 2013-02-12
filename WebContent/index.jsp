@@ -8,9 +8,7 @@
 <title>Tritonlink Home</title>
 </head>
 <body>
-<%@ page import="test.test" %>
 <h1>Welcome!</h1>
-Now is <%=test.database %>
 <jsp:include page="menu.html" />
 
 </body>
