@@ -73,19 +73,20 @@
 </script>
 
  <%-- Set the scripting language to Java and --%>
-            <%-- Import the java.sql package --%>
-            <%@ page language="java" import="java.sql.*" %>
-            <%@ page language="java" import="db.Config" %>
-            <%-- -------- Open Connection Code -------- --%>
-            <%
-                try {
-                    // Load JDBC Driver class file
-                    DriverManager.registerDriver
-                        (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
-    
-                    // Make a connection to the MS SQL Server datasource "tritonlink"
-                    Connection conn = DriverManager.getConnection(Config.connectionURL);
-            %>
+          <%-- Import the java.sql package --%>
+          <%@ page language="java" import="java.sql.*" %>
+          <%@ page language="java" import="java.util.ArrayList" %>
+          <%@ page language="java" import="db.Config" %>
+          <%-- -------- Open Connection Code -------- --%>
+          <%
+              try {
+                  // Load JDBC Driver class file
+                  DriverManager.registerDriver
+                      (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+  
+                  // Make a connection to the MS SQL Server datasource "tritonlink"
+                  Connection conn = DriverManager.getConnection(Config.connectionURL);
+          %>
 
 
 <form action="students.jsp" method="post">
@@ -98,7 +99,7 @@
            <td>Identity</td>
            <td>
                 <input type="radio" name="identity" value="undergraduate" onchange="showUndergraduateForm()">Undergraduate
-                <input type="radio" name="identity" value="graduate" checked="yes" onchange="showGraduateForm()">Graduate
+                <input type="radio" name="identity" value="graduate" onchange="showGraduateForm()">Graduate
            </td>
         </tr>
 	<tr>
@@ -187,25 +188,28 @@
 	<tr>
 	    <td>Department</td>
 	    <td>
-	        <%
-                    // Create the statement
-                    Statement statement = conn.createStatement();
+	    <%
+	        // Create the statement
+            Statement statement = conn.createStatement();
 
-                    // Use the created statement to SELECT
-                    // the student attributes FROM the Student table.
-                    ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM department");
-            %>
+            // Use the created statement to SELECT
+            // the student attributes FROM the Student table.
+            ResultSet rs = statement.executeQuery("SELECT * FROM department");
+            ArrayList<String> departmentList = new ArrayList<String>();
+            int i = 0;
+            while (rs.next()) {
+            	departmentList.add(rs.getString("name"));
+            }
+        %>
 	    
-	       <select name="department">
-	        <%
-	           while ( rs.next() ) {
-	        %>
-	               <option value="<%= rs.getString("name") %>"><%= rs.getString("name") %></option>
-	           
-	        <%
-	           }
-	        %>
+	    	<select name="department">
+	    <%
+	        for (String department : departmentList) {
+	    %>
+	            <option value="<%= department %>"><%= department %></option>
+	    <%
+	        }
+	    %>
            </select>
 	    </td>
 	</tr>
@@ -246,12 +250,32 @@
 	</tr>
 	<tr>
 	    <td>Major</td>
-	    <td><input value="" name="major"></td>
+	    <td>
+            <select name="major">
+            <%
+            for (String department : departmentList) {
+            %>
+                <option value="<%= department %>"><%= department %></option>
+            <%
+            }
+            %>
+            </select>
+        </td>
 	</tr>
 	<tr>
 	    <td>Minor</td>
-	    <td><input value="" name="minor"></td>
-	</tr>
+        <td>
+            <select name="minor">
+            <%
+            for (String department : departmentList) {
+            %>
+                <option value="<%= department %>"><%= department %></option>
+            <%
+            }
+            %>
+            </select>
+        </td>
+    </tr>
         <tr>
             <td>Program type</td>
             <td>
