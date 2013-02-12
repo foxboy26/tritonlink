@@ -147,7 +147,15 @@
                     <option value="Fall">Fall</option>
                     <option value="Winter">Winter</option>
                 </select>
-		        <input value="" name="begin_year" size="5">
+                <select name="begin_year">		        
+		        <%
+                    for (int i = 1900; i < 2014; ++i) {
+                %>  
+                    <option value="<%= i %>"><%= i %></option>
+                <%
+                    }
+                %>
+                </select>
 		        - 
                 <select name="end_quarter">
                     <option value="Spring">Spring</option>
@@ -155,7 +163,15 @@
                     <option value="Fall">Fall</option>
                     <option value="Winter">Winter</option>
                 </select>
-		    <input value="" name="end_year" size="5">
+                <select name="end_year">              
+                <%
+                    for (int i = 1900; i < 2014; ++i) {
+                %>  
+                    <option value="<%= i %>"><%= i %></option>
+                <%
+                    }
+                %>
+                </select>
 		    <button type="button" onclick="addAttendance()">Add</button></td>
 		</tr>
     </table>
