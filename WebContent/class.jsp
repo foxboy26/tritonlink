@@ -44,7 +44,7 @@
                     	String title = request.getParameter("title");                    	
                     	
                     	
-                    	System.out.println(course_id);
+                    	System.out.println(quarter);
                     	
                     	
                     	// Begin transaction
@@ -55,9 +55,9 @@
                         PreparedStatement pstmt = conn.prepareStatement(
                             "INSERT INTO Class VALUES (?, ?, ?)");
 
-                        pstmt.setString(1, request.getParameter("course_id"));
-                        pstmt.setString(2, request.getParameter("quarter"));
-                        pstmt.setBoolean(3, Boolean.parseBoolean(request.getParameter("title")));
+                        pstmt.setString(1, course_id);
+                        pstmt.setString(2, quarter);
+                        pstmt.setString(3, title);
                        
                         
                         int rowCount = pstmt.executeUpdate();
