@@ -45,22 +45,27 @@
                     	String labwork = request.getParameter("labwork");
                     	
                     	
-                    
+                    	System.out.println(course_id);
+                    	System.out.println(department);
                     	System.out.println(Boolean.parseBoolean(request.getParameter("is_consent")));
+                    	System.out.println(unit_range);
+                    	System.out.println(grade_type);
+                    	System.out.println(Boolean.parseBoolean(request.getParameter("labwork")));
+                    	
                     	// Begin transaction
                         conn.setAutoCommit(false);
                         
                         // Create the prepared statement and use it to
                         // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO Student VALUES (?, ?, ?, ?, ?, ?)");
+                            "INSERT INTO Course VALUES (?, ?, ?, ?, ?, ?)");
 
                         pstmt.setString(1, request.getParameter("course_id"));
                         pstmt.setString(2, request.getParameter("department"));
                         pstmt.setBoolean(3, Boolean.parseBoolean(request.getParameter("is_consent")));
                         pstmt.setString(4, request.getParameter("unit_range"));
-                        pstmt.setString(4, request.getParameter("grade_type"));
-                        pstmt.setBoolean(4, Boolean.parseBoolean(request.getParameter("labwork")));
+                        pstmt.setString(5, request.getParameter("grade_type"));
+                        pstmt.setBoolean(6, Boolean.parseBoolean(request.getParameter("labwork")));
                         
 
                         int rowCount = pstmt.executeUpdate();
@@ -77,7 +82,7 @@
                     // Use the created statement to SELECT
                     // the student attributes FROM the Student table.
                     ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM course");
+                        ("SELECT * FROM Course");
             %>
 
             <!-- Add an HTML table header row to format the results -->
@@ -133,7 +138,7 @@
         </tr>
      </table>
      <div style="text-align:center;">
-        <form action="newstudent.jsp" method="POST" >
+        <form action="newcourse.jsp" method="POST" >
 			<input type="submit" value="Insert" style = "margin-top: 20px">
 		</form>
 	</div>
