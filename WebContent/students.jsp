@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="shortcut icon" href="favicon.ico" >
-<title>Tritonlink Home</title>
+<title>Students</title>
 </head>
 <body>
     <table border="1">
@@ -292,6 +292,11 @@
             </td>
         </tr>
     </table>
+    <div style="text-align:center;">
+        <form action="newstudent.jsp" method="POST" >
+            <input type="submit" value="Insert" style = "margin-top: 20px">
+        </form>
+    </div>
 </body>
 
 </html>
