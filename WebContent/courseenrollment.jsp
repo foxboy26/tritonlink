@@ -28,6 +28,7 @@
     
                     // Make a connection to the MS SQL Server datasource "tritonlink"
                     Connection conn = DriverManager.getConnection(Config.connectionURL);
+                    String currentQuarter = "Winter 2013";
             %>
 
             <%-- -------- INSERT Code -------- --%>
@@ -40,11 +41,7 @@
                         String studentId = request.getParameter("rStudentID");
                         String courseId = request.getParameter("rCourseID");
                         String sectionId = request.getParameter("rSectionID");
-                        String units = request.getParameter("rUnits"); 
-                        
-                        System.out.println(studentId);
-                        System.out.println(sectionId);
-                        System.out.println(units);
+                        String units = request.getParameter("rUnits");                       
                         
                         // Begin transaction
                         conn.setAutoCommit(false);
@@ -52,7 +49,7 @@
                         // Create the prepared statement and use it to
                         // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO student_section VALUES (?, ?, 'enrolled', null, ?, null)");
+                            "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null)");
 
                         pstmt.setInt(1, Integer.parseInt(studentId));
                         pstmt.setString(2, sectionId);
@@ -67,12 +64,12 @@
             %> <%-- -------- SELECT Statement Code -------- --%>
             <%
                     // Create the statement
-                    Statement statement = conn.createStatement();
-
+					PreparedStatement pstmt = conn.prepareStatement(
+							"SELECT * FROM student_section, class_section Where student_section.section_id = class_section.section_id AND class_section.quarter = ?");
+            		pstmt.setString(1, currentQuarter);
                     // Use the created statement to SELECT
                     // the student attributes FROM the Student table.
-                    ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM student_section");
+                    ResultSet rs = pstmt.executeQuery();
             %>
 
             <!-- Add an HTML table header row to format the results -->
@@ -81,7 +78,6 @@
                         <th>Student ID</th>
                         <th>Section ID</th>
                         <th>state</th>
-                        <th>Grade Type</th>    
                         <th>Units</th>  
                         <th>Grade</th>                         
                     </tr>
@@ -97,7 +93,6 @@
                             <td><%= rs.getInt("student_id") %></td>
                             <td><%= rs.getString("section_id") %></td>  
                             <td><%= rs.getString("state") %></td>  
-                            <td><%= rs.getString("grade_type") %></td>  
                             <td><%= rs.getString("unit") %></td>   
                             <td><%= rs.getString("grade") %></td>                              
                             <td><input type = "submit" value="Update"></td>
@@ -113,7 +108,7 @@
                     rs.close();
     
                     // Close the Statement
-                    statement.close();
+                    pstmt.close();
     
                     // Close the Connection
                     conn.close();
