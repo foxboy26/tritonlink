@@ -104,12 +104,12 @@
         
             %>
                     <tr>
-                            <td><%= rs.getInt("course_id") %></td>
+                            <td><%= rs.getString("course_id") %></td>
                             <td><%= rs.getString("department") %></td>    
                             <td><%= rs.getString("is_consent") %></td>
                             <td><%= rs.getString("unit_range") %></td>
                             <td><%= rs.getString("grade_type") %></td>
-                            <td><%= rs.getString("labwork") %></td>
+                            <td><%= rs.getBoolean("labwork") %></td>
                             <td><input type = "submit" value="Update"></td>
                             <td><input type = "submit" value="Delete"></td>
                     </tr>
