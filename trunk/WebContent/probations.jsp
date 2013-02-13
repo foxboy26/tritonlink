@@ -38,7 +38,7 @@
                         // Preprocess submitted form data
                         
                         String studentId = request.getParameter("student_id");
-                        String startTime = request.getParameter("start_quarter") + request.getParameter("start_year");
+                        String startTime = request.getParameter("begin_quarter") + request.getParameter("begin_year");
                         String endTime = request.getParameter("end_quarter") + request.getParameter("end_year");
                         String reason = request.getParameter("reason");                                            
                         
@@ -48,7 +48,7 @@
                         // Create the prepared statement and use it to
                         // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO Faculty VALUES (?, ?, ?, ?)");
+                            "INSERT INTO Probation VALUES (?, ?, ?, ?)");
 
                         pstmt.setInt(1, Integer.parseInt(studentId));
                         pstmt.setString(2, startTime);

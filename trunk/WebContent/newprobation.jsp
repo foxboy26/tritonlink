@@ -41,12 +41,12 @@
                 %>
                 </select>
                 -
-                <select name="quarter">             
+                <select name="end_quarter">             
                     <option value="Fall">Fall</option>
                     <option value="Winter">Winter</option>
                     <option value="Spring">Spring</option>
                 </select>
-                <select name="year">
+                <select name="end_year">
                 <%
                     for (int i = 1900; i < 2014; ++i) {
                 %>  
@@ -60,7 +60,7 @@
 	    <tr>
 	       <td>Reason</td>
 	       <td>
-	           <textarea rows="4" cols="50"></textarea>
+	           <textarea rows="4" cols="50" name="reason"></textarea>
 	       </td>
 	    </tr>   
     </table>   
