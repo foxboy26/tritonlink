@@ -7,7 +7,7 @@
 <title>Faculty</title>
 </head>
 <body style="text-align:center; margin-left: auto; margin-right: auto;margin-top: 30px;">
-<table border="1" style = "text-align:left; width: 60%; margin:auto">
+    <table border="1" style = "text-align:left; width: 60%; margin:auto">
         <tr>
             <td valign="top">
                 <%-- -------- Include menu HTML code -------- --%>
@@ -35,36 +35,31 @@
                     String action = request.getParameter("action");
                     // Check if an insertion is requested
                     if (action != null && action.equals("insert")) {
-                    	// Preprocess submitted form data
-                    	
-                    	String faculty_id = request.getParameter("faculty_id");
-                    	String name = request.getParameter("name");  
-                    	String title = request.getParameter("title");  
-                    	String department = request.getParameter("department");                    	                        
-                    	                                        	
-                    	
-                    	// Begin transaction
+                        // Preprocess submitted form data
+                        String studentId = request.getParameter("student_id");
+                        String[] facultyIdList = request.getParameterValues("faculty_id");
+                        
+                        // Begin transaction
                         conn.setAutoCommit(false);
                         
-                        // Create the prepared statement and use it to
-                        // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO Faculty VALUES (?, ?, ?, ?)");
+                            "INSERT INTO committee VALUES (?, ?)");
 
-                        pstmt.setInt(1, Integer.parseInt(faculty_id));
-                        pstmt.setString(2, name);
-                        pstmt.setString(3, title);
-                        pstmt.setString(4, department);
+                        for (String facultyId : facultyIdList) {
+                            pstmt.setInt(1, Integer.parseInt(studentId));
+                            pstmt.setInt(2, Integer.parseInt(facultyId));
 
-                        
+                            int rowCount = pstmt.executeUpdate();
+                        }
 
-                        int rowCount = pstmt.executeUpdate();
-                        
                         // Commit transaction
                         conn.commit();
                         conn.setAutoCommit(true);
                     }
-            %> <%-- -------- SELECT Statement Code -------- --%>
+            %>
+            
+            <%-- -------- SELECT Statement Code -------- --%>
+            
             <%
                     // Create the statement
                     Statement statement = conn.createStatement();
@@ -72,17 +67,16 @@
                     // Use the created statement to SELECT
                     // the student attributes FROM the Student table.
                     ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM faculty");
+                        ("SELECT * FROM probation");
             %>
 
             <!-- Add an HTML table header row to format the results -->
-                <table border="0" style = "text-align:center; width: 80%; margin:auto">
+                <table border="1" style = "text-align:center; width: 80%; margin:auto">
                     <tr>
-                        <th>faculty_id</th>
-                        <th>name</th>
-                        <th>title</th>
-                        <th>department</th>                       
-                        <th>action</th>
+                        <th>Student ID</th>
+                        <th>Start time</th>
+                        <th>End time</th>
+                        <th>Reason</th>                       
                     </tr>
                     
             <%-- -------- Iteration Code -------- --%>
@@ -93,10 +87,10 @@
         
             %>
                     <tr>
-                            <td><%= rs.getInt("faculty_id") %></td>
-                            <td><%= rs.getString("name") %></td>  
-                            <td><%= rs.getString("title") %></td>  
-                            <td><%= rs.getString("department") %></td>                               
+                            <td><%= rs.getInt("student_id") %></td>
+                            <td><%= rs.getString("start_time") %></td>  
+                            <td><%= rs.getString("end_time") %></td>  
+                            <td><%= rs.getString("reason") %></td>                               
                             <td><input type = "submit" value="Update"></td>
                             <td><input type = "submit" value="Delete"></td>
                     </tr>
@@ -125,9 +119,9 @@
         </tr>
      </table>
      <div style="text-align:center;">
-        <form action="newfaculty.jsp" method="POST" >
-			<input type="submit" value="Insert" style = "margin-top: 20px">
-		</form>
-	</div>
+        <form action="newthesiscommittee.jsp" method="POST" >
+            <input type="submit" value="Insert" style = "margin-top: 20px">
+        </form>
+    </div>
 </body>
 </html>
