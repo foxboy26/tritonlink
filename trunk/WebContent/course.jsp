@@ -43,14 +43,11 @@
                     	String unit_range = request.getParameter("unit_range");
                     	String grade_type = request.getParameter("grade_type");
                     	String labwork = request.getParameter("labwork");
-                    	
-                    	
-                    	System.out.println(course_id);
-                    	System.out.println(department);
-                    	System.out.println(Boolean.parseBoolean(request.getParameter("is_consent")));
-                    	System.out.println(unit_range);
-                    	System.out.println(grade_type);
-                    	System.out.println(Boolean.parseBoolean(request.getParameter("labwork")));
+                        String[] prerequisiteList = request.getParameterValues("prerequisite");
+
+                        for (String prerequisite : prerequisiteList) {
+                            System.out.println(prerequisite);
+                        }
                     	
                     	// Begin transaction
                         conn.setAutoCommit(false);
@@ -66,9 +63,16 @@
                         pstmt.setString(4, request.getParameter("unit_range"));
                         pstmt.setString(5, request.getParameter("grade_type"));
                         pstmt.setBoolean(6, Boolean.parseBoolean(request.getParameter("labwork")));
-                        
 
                         int rowCount = pstmt.executeUpdate();
+
+                        pstmt = conn.prepareStatement("INSERT INTO prerequisite VALUES (?, ?)");
+
+                        for (String prerequisite : prerequisiteList) {
+                            pstmt.setString(1, course_id);
+                            pstmt.setString(2, prerequisite);
+                            rowCount = pstmt.executeUpdate();
+                        }
                         
                         // Commit transaction
                         conn.commit();
