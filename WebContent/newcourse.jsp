@@ -11,6 +11,20 @@
 </head>
 <body>
 
+    <script>
+        function addPrerequisite() {
+            $('#course').append(
+                '<tr> \
+                    <td></td> \
+                    <td> \
+                        <input name="prerequisite" value = ""> \
+                        <button type="button">Add</button> \
+                    </td> \
+                </tr>'
+            );
+        }
+    </script>
+
  <%-- Set the scripting language to Java and --%>
           <%-- Import the java.sql package --%>
           <%@ page language="java" import="java.sql.*" %>
@@ -30,7 +44,7 @@
 
 <form action="course.jsp" method="post">
     <input type="hidden" value="insert" name="action">
-    <table>
+    <table id="course">
         <tr>
           	<th colspan="2">Course Information</th>
         </tr>
@@ -76,7 +90,7 @@
 	    	*</td>
         </tr>
         <tr>
-            <td>Units</td>
+            <td>units</td>
             <td>
                 <input name="unit_range" value = "">
 		     *</td>
@@ -100,6 +114,13 @@
                 </select>
 		    *</td>
 		</tr>
+        <tr>
+            <td>Prerequisite</td>
+            <td>
+                <input name="prerequisite" value = "">
+                <button type="button" onclick="addPrerequisite()">Add</button>
+		    </td>
+        </tr>
     </table>   
     <table>
         <tr>
