@@ -201,6 +201,8 @@
                         <th>Last</th>
                         <th>Residency</th>
                         <th>Enrollment</th>
+                        <th>Attendance</th>
+                        <th>Hold Degrees</th>
                         <th>Department</th>
                         <th>Degree</th>
                         <th>State</th>
@@ -217,6 +219,7 @@
                         String lastname = rs.getString("lastname");
                         String residency = rs.getString("residency");
                         String attendances = rs.getString("attendances");
+                        String holdDegrees = rs.getString("hold_degrees");
                         String isEnrolled = rs.getBoolean("is_enrolled")? "yes" : "no";
                         String department = rs.getString("department");
                         String degree = rs.getString("degree");
@@ -247,7 +250,15 @@
                             <td>
                                 <input value="<%= isEnrolled %>" name="is_enrolled" size="3">
                             </td>
+
+                            <td>
+                                <input value="<%= attendances %>" name="attendances" size="15">
+                            </td>
                             
+                            <td>
+                                <input value="<%= holdDegrees %>" name="hold_degrees" size="15">
+                            </td>
+
                             <td>
                                 <input value="<%= department %>" name="department">
                             </td>
