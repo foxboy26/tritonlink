@@ -4,8 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Faculty</title>
+<title>Thesis committee</title>
 </head>
+
 <body style="text-align:center; margin-left: auto; margin-right: auto;margin-top: 30px;">
     <table border="1" style = "text-align:left; width: 60%; margin:auto">
         <tr>
@@ -64,33 +65,25 @@
                     // Create the statement
                     Statement statement = conn.createStatement();
 
-                    // Use the created statement to SELECT
-                    // the student attributes FROM the Student table.
-                    ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM probation");
+                    ResultSet rs = statement.executeQuery("SELECT * FROM committee");
             %>
 
             <!-- Add an HTML table header row to format the results -->
                 <table border="1" style = "text-align:center; width: 80%; margin:auto">
                     <tr>
                         <th>Student ID</th>
-                        <th>Start time</th>
-                        <th>End time</th>
-                        <th>Reason</th>                       
+                        <th> Professor </th>
                     </tr>
                     
             <%-- -------- Iteration Code -------- --%>
             <%
                     // Iterate over the ResultSet
-        
                     while ( rs.next() ) {
         
             %>
                     <tr>
                             <td><%= rs.getInt("student_id") %></td>
-                            <td><%= rs.getString("start_time") %></td>  
-                            <td><%= rs.getString("end_time") %></td>  
-                            <td><%= rs.getString("reason") %></td>                               
+                            <td><%= rs.getInt("faculty_id") %></td>
                             <td><input type = "submit" value="Update"></td>
                             <td><input type = "submit" value="Delete"></td>
                     </tr>
@@ -118,6 +111,7 @@
             </td>
         </tr>
      </table>
+
      <div style="text-align:center;">
         <form action="newthesiscommittee.jsp" method="POST" >
             <input type="submit" value="Insert" style = "margin-top: 20px">
