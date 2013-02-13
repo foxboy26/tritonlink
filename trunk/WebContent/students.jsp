@@ -11,11 +11,11 @@
     <table border="1">
         <tr>
             <td valign="top">
-                <%-- -------- Include menu HTML code -------- --%>
-                <jsp:include page="menu.html" />
+            <%-- -------- Include menu HTML code -------- --%>
+            <jsp:include page="menu.html" />
             </td>
+            
             <td>
-
             <%-- Set the scripting language to Java and --%>
             <%-- Import the java.sql package --%>
             <%@ page language="java" import="java.sql.*" %>
@@ -154,7 +154,7 @@
                         int rowCount = pstmt.executeUpdate();
 
                         // Commit transaction
-                         conn.commit();
+                        conn.commit();
                         conn.setAutoCommit(true);
                     }
             %>
@@ -182,82 +182,189 @@
                     }
             %>
 
-            <%-- -------- SELECT Statement Code -------- --%>
+            <%-- -------- SELECT Statement Code Graduate-------- --%>
             <%
-                    // Create the statement
                     Statement statement = conn.createStatement();
 
-                    // Use the created statement to SELECT
-                    // the student attributes FROM the Student table.
                     ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM Student");
+                        ("SELECT * FROM graduate, student WHERE student.student_id = graduate.student_id");
             %>
 
             <!-- Add an HTML table header row to format the results -->
                 <table border="0">
+                    <tr>Graduate</tr>
                     <tr>
+                        <th>Student ID</th>
                         <th>SSN</th>
-                        <th>ID</th>
                         <th>First</th>
-			<th>Middle</th>
+			            <th>Middle</th>
                         <th>Last</th>
                         <th>Residency</th>
+                        <th>Enrollment</th>
+                        <th>Department</th>
+                        <th>Degree</th>
+                        <th>State</th>
                         <th>Action</th>
                     </tr>
                     
             <%-- -------- Iteration Code -------- --%>
             <%
-                    // Iterate over the ResultSet
-        
                     while ( rs.next() ) {
-        
+                        String studentId = rs.getString("student_id");
+                        int ssn = rs.getInt("ssn");
+                        String firstname = rs.getString("firstname");
+                        String middlename = rs.getString("middlename");
+                        String lastname = rs.getString("lastname");
+                        String residency = rs.getString("residency");
+                        String attendances = rs.getString("attendances");
+                        String isEnrolled = rs.getBoolean("is_enrolled")? "yes" : "no";
+                        String department = rs.getString("department");
+                        String degree = rs.getString("degree");
+                        String state = rs.getString("state");
+                        if (state == null)
+                        	state = "";
             %>
 
                     <tr>
                         <form action="students.jsp" method="get">
                             <input type="hidden" value="update" name="action">
-
-                            <%-- Get the SSN, which is a number --%>
+                            <td><input value="<%= rs.getString("student_id") %>"  name="student_id" size="8"></td>
+                            <td><input value="<%= ssn  %>" name="ssn" size="8"></td>
                             <td>
-                                <input value="<%= rs.getInt("SSN") %>" 
-                                    name="SSN" size="10">
+                                <input value="<%= firstname %>" name="firstname" size="10">
                             </td>
-    
-                            <%-- Get the ID --%>
                             <td>
-                                <input value="<%= rs.getString("STUDENT_ID") %>" 
-                                    name="ID" size="10">
+                                <input value="<%= middlename %>" name="middlename" size="10">
                             </td>
-    
-                            <%-- Get the FIRSTNAME --%>
                             <td>
-                                <input value="<%= rs.getString("FIRSTNAME") %>"
-                                    name="FIRSTNAME" size="15">
-                            </td>
-    
-                            <%-- Get the LASTNAME --%>
-                            <td>
-                                <input value="<%= rs.getString("MIDDLENAME") %>" 
-                                    name="MIDDLENAME" size="15">
-                            </td>
-    
-			    <%-- Get the LASTNAME --%>
-                            <td>
-                                <input value="<%= rs.getString("LASTNAME") %>" 
-                                    name="LASTNAME" size="15">
+                                <input value="<%= lastname %>" name="lastname" size="10">
                             </td>
 
-                            <%-- Get the COLLEGE --%>
                             <td>
-                                <input value="<%= rs.getString("RESIDENCY") %>" 
-                                    name="RESIDENCY" size="15">
+                                <input value="<%= residency %>" name="residency" size="10">
                             </td>
-    
-                            <%-- Button --%>
+                            
+                            <td>
+                                <input value="<%= isEnrolled %>" name="is_enrolled" size="3">
+                            </td>
+                            
+                            <td>
+                                <input value="<%= department %>" name="department">
+                            </td>
+                            
+                            <td>
+                                <input value="<%= degree %>" name="degree">
+                            </td>                            
+                            
+                            <td>
+                                <input value="<%= state %>" name="state">
+                            </td>
                             <td>
                                 <input type="submit" value="Update">
                             </td>
                         </form>
+
+                        <form action="students.jsp" method="get">
+                            <input type="hidden" value="delete" name="action">
+                            <input type="hidden" 
+                                value="<%= rs.getInt("SSN") %>" name="SSN">
+                            <%-- Button --%>
+                            <td>
+                                <input type="submit" value="Delete">
+                            </td>
+                        </form>
+                    </tr>
+            <%
+                    }
+            %>
+            
+            <%-- -------- SELECT Statement Code Undergraduate -------- --%>
+
+                <%
+                    statement = conn.createStatement();
+
+                    rs = statement.executeQuery
+                        ("SELECT * FROM undergraduate, student WHERE student.student_id = undergraduate.student_id");
+            %>
+            <!-- Add an HTML table header row to format the results -->
+                <table border="0">
+                    <tr>Undergraduate</tr>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>SSN</th>
+                        <th>First</th>
+                        <th>Middle</th>
+                        <th>Last</th>
+                        <th>Residency</th>
+                        <th>Enrollment</th>
+                        <th>College</th>
+                        <th>Major</th>
+                        <th>Minor</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                    </tr>
+                    
+            <%-- -------- Iteration Code -------- --%>
+            <%
+                    while ( rs.next() ) {
+                        String studentId = rs.getString("student_id");
+                        int ssn = rs.getInt("ssn");
+                        String firstname = rs.getString("firstname");
+                        String middlename = rs.getString("middlename");
+                        String lastname = rs.getString("lastname");
+                        String residency = rs.getString("residency");
+                        String attendances = rs.getString("attendances");
+                        String isEnrolled = rs.getBoolean("is_enrolled")? "yes" : "no";
+                        String college = rs.getString("college");
+                        String major = rs.getString("major");
+                        String minor = rs.getString("minor");
+                        String type = rs.getString("type");
+            %>
+
+                    <tr>
+                        <form action="students.jsp" method="get">
+                            <input type="hidden" value="update" name="action">
+                            <td><input value="<%= rs.getString("student_id") %>"  name="student_id" size="8"></td>
+                            <td><input value="<%= ssn  %>" name="ssn" size="8"></td>
+                            <td>
+                                <input value="<%= firstname %>" name="firstname" size="10">
+                            </td>
+                            <td>
+                                <input value="<%= middlename %>" name="middlename" size="10">
+                            </td>
+                            <td>
+                                <input value="<%= lastname %>" name="lastname" size="10">
+                            </td>
+
+                            <td>
+                                <input value="<%= residency %>" name="residency" size="10">
+                            </td>
+                            
+                            <td>
+                                <input value="<%= isEnrolled %>" name="is_enrolled" size="3">
+                            </td>
+
+                            <td>
+                                <input value="<%= college %>" name="college">
+                            </td>                            
+
+                            <td>
+                                <input value="<%= major %>" name="major">
+                            </td>                            
+                            
+                            <td>
+                                <input value="<%= minor %>" name="minor">
+                            </td>
+
+                            <td>
+                                <input value="<%= type %>" name="type">
+                            </td>
+    
+                            <td>
+                                <input type="submit" value="Update">
+                            </td>
+                        </form>
+
                         <form action="students.jsp" method="get">
                             <input type="hidden" value="delete" name="action">
                             <input type="hidden" 
