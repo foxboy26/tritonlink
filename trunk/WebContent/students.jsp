@@ -222,7 +222,7 @@
                         String holdDegrees = rs.getString("hold_degrees");
                         String isEnrolled = rs.getBoolean("is_enrolled")? "yes" : "no";
                         String department = rs.getString("department");
-                        String degree = rs.getString("degree");
+                        String degree = rs.getString("degree_type");
                         String state = rs.getString("state");
                         if (state == null)
                         	state = "";

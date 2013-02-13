@@ -78,13 +78,17 @@
 <%@ page language="java" import="db.Config" %>
 <%-- -------- Open Connection Code -------- --%>
 <%
-  try {
-      // Load JDBC Driver class file
-      DriverManager.registerDriver
+    try {
+        // Load JDBC Driver class file
+        DriverManager.registerDriver
           (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 
-      // Make a connection to the MS SQL Server datasource "tritonlink"
-      Connection conn = DriverManager.getConnection(Config.connectionURL);
+        // Make a connection to the MS SQL Server datasource "tritonlink"
+        Connection conn = DriverManager.getConnection(Config.connectionURL);
+
+        Statement statement;
+
+        ResultSet rs;
 %>
 
 <form action="students.jsp" method="post">
@@ -186,9 +190,16 @@
 	    <td><input value="" name="university" size="30"></td>
         <td>
             <select name="degree_type">
-              <option value="Bachelor">Bachelor</option>
-              <option value="Master">Master</option>
-              <option value="Ph.D">Ph.D</option>
+            <%
+                statement = conn.createStatement();
+                rs = statement.executeQuery("SELECT degree_type FROM degree");
+
+                while (rs.next()) {
+            %>
+            <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
+            <%
+                }
+            %>
             </select>
          </td>
 	     <td><button type="button" onclick="addUniversity()">Add</button></td>
@@ -203,12 +214,9 @@
 	    <td>Department</td>
 	    <td>
 	    <%
-	        // Create the statement
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
 
-            // Use the created statement to SELECT
-            // the student attributes FROM the Student table.
-            ResultSet rs = statement.executeQuery("SELECT * FROM department");
+            rs = statement.executeQuery("SELECT * FROM department");
             ArrayList<String> departmentList = new ArrayList<String>();
             int i = 0;
             while (rs.next()) {
@@ -231,8 +239,9 @@
             <td>Degree type</td>
             <td>
                 <select name="degree" onchange="showPhdState()">
-                  <option value="Master">Master</option>
-                  <option value="PhD">PhD</option>
+                  <option value="MS">Master</option>
+                  <option value="MSE">Master</option>
+                  <option value="Ph.D">PhD</option>
                 </select>  
              *</td>
         </tr>
