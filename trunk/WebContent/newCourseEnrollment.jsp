@@ -83,7 +83,7 @@ function setUnits(){
 	  				%>
 	  				<form action="newCourseEnrollment.jsp" method="post"> 
 	  					<input type="hidden" name = "action" value= "select">
-	  					<input type="hidden" name = "studentID" value= "">
+	  					<input type="hidden" name = "studentID" value= "<%=studentID%>">
 	  				<select onchange = form.submit() name = "course_id">
 	  					<%
 	  					
