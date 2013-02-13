@@ -5,26 +5,26 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="shortcut icon" href="favicon.ico" >
-<script src="js/jquery-1.9.1.js">
-</script>
+<script src="js/jquery-1.9.1.js"></script>
 <title>New student</title>
 </head>
+
 <body>
 <script>
     function showGraduateForm()
     {
-	graduateForm = document.getElementById("graduate");
-	undergraduateForm = document.getElementById("undergraduate");
-	graduateForm.style.display = 'block';
-	undergraduateForm.style.display = 'none';
+        graduateForm = document.getElementById("graduate");
+        undergraduateForm = document.getElementById("undergraduate");
+        graduateForm.style.display = 'block';
+        undergraduateForm.style.display = 'none';
     }
     
     function showUndergraduateForm()
     {
-	graduateForm = document.getElementById("graduate");
-	undergraduateForm = document.getElementById("undergraduate");
-	graduateForm.style.display = 'none';
-	undergraduateForm.style.display = 'block';
+        graduateForm = document.getElementById("graduate");
+        undergraduateForm = document.getElementById("undergraduate");
+        graduateForm.style.display = 'none';
+        undergraduateForm.style.display = 'block';
     }
     
     function addUniversity() {
@@ -67,27 +67,25 @@
     
     function showPhdState()
     {
-    	if ($('select[name=tcol1]'))
-    	$('#state')
+        //TODO: zhiheng
     }
 </script>
 
- <%-- Set the scripting language to Java and --%>
-          <%-- Import the java.sql package --%>
-          <%@ page language="java" import="java.sql.*" %>
-          <%@ page language="java" import="java.util.ArrayList" %>
-          <%@ page language="java" import="db.Config" %>
-          <%-- -------- Open Connection Code -------- --%>
-          <%
-              try {
-                  // Load JDBC Driver class file
-                  DriverManager.registerDriver
-                      (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
-  
-                  // Make a connection to the MS SQL Server datasource "tritonlink"
-                  Connection conn = DriverManager.getConnection(Config.connectionURL);
-          %>
+<%-- Set the scripting language to Java and --%>
+<%-- Import the java.sql package --%>
+<%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="java.util.ArrayList" %>
+<%@ page language="java" import="db.Config" %>
+<%-- -------- Open Connection Code -------- --%>
+<%
+  try {
+      // Load JDBC Driver class file
+      DriverManager.registerDriver
+          (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 
+      // Make a connection to the MS SQL Server datasource "tritonlink"
+      Connection conn = DriverManager.getConnection(Config.connectionURL);
+%>
 
 <form action="students.jsp" method="post">
     <input type="hidden" value="insert" name="action">
