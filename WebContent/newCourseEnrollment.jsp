@@ -23,6 +23,11 @@ function setUnits(){
 	var unit = (document.getElementsByName('units')[0]).options[document.getElementsByName('units')[0].selectedIndex].value;
 	document.getElementsByName("rUnits")[0].value = unit;
 }
+
+function setType(){
+	var t = (document.getElementsByName('type')[0]).options[document.getElementsByName('type')[0].selectedIndex].value;
+	document.getElementsByName("rType")[0].value = t;
+}
 </script>
 </head>
 <body>
@@ -48,6 +53,7 @@ function setUnits(){
                   String sectionID = "";
                   String units = "";
                   String studentID = "";
+                  String gradeType = "Letter";
                   String currentQuarter = "Winter 2013";
                   if(action != null && action.equals("select")){
                 	  courseID = request.getParameter("course_id");
@@ -105,7 +111,7 @@ function setUnits(){
 		</tr>	    
 	    <%
 	        // Create the statement
-	        String exc = "SELECT class.course_id, section_id, unit_range FROM course, class, class_section WHERE class.quarter = ? AND course.course_id = class.course_id AND class.course_id = class_section.course_id";
+	        String exc = "SELECT course.course_id, section_id, unit_range FROM course, class_section WHERE class_section.quarter = ? AND  course.course_id = class_section.course_id";
 	    
 	    	pstmt = conn.prepareStatement(exc);
 
@@ -189,6 +195,17 @@ function setUnits(){
            		</select>
 	    	</td>
 	    </tr>
+	     <tr>
+            <td>Grade Type</td>
+            <td>	 	    
+	    		<select name="type" onchange = "setType()">	  
+	            	<option value="Grade">Letter</option>	   
+	            	<option value="S/U">S/U</option>	
+	            	<option value="Both">Both</option>	   
+	            	<option value="S/U Only">S/U Only</option>   
+           		</select>
+	    	*</td>
+	    </tr>
     </table> 
     <form action="courseenrollment.jsp" method="post">  
     <input type="hidden" value="insert" name="action">
@@ -198,6 +215,7 @@ function setUnits(){
          	<td><input type="hidden" name = "rCourseID" value= "<%= courseID%>"></td>
          	<td><input type="hidden" name = "rSectionID" value= "<%= sectionID%>"></td>
          	<td><input type="hidden" name = "rUnits" value=  "<%= units%>"></td>
+         	<td><input type="hidden" name = "rType" value=  "<%= gradeType%>"></td>
             <td><input type="submit" value="Save"></td>
             <td><button type="button" value="Cancel">Cancel</button></td>
         </tr>
