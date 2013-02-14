@@ -42,19 +42,19 @@
                         String courseId = request.getParameter("rCourseID");
                         String sectionId = request.getParameter("rSectionID");
                         String units = request.getParameter("rUnits");                       
-                        
+                        String type = request.getParameter("rType");    
                         // Begin transaction
                         conn.setAutoCommit(false);
                         
                         // Create the prepared statement and use it to
                         // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null)");
+                            "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null, ?)");
 
                         pstmt.setInt(1, Integer.parseInt(studentId));
                         pstmt.setString(2, sectionId);
                         pstmt.setInt(3, Integer.parseInt(units));
-
+                        pstmt.setString(4, type);
                         int rowCount = pstmt.executeUpdate();
                         
                         // Commit transaction
@@ -79,7 +79,8 @@
                         <th>Section ID</th>
                         <th>state</th>
                         <th>Units</th>  
-                        <th>Grade</th>                         
+                        <th>Grade</th> 
+                        <th>Grade Type</th>                         
                     </tr>
                     
             <%-- -------- Iteration Code -------- --%>
@@ -94,7 +95,8 @@
                             <td><%= rs.getString("section_id") %></td>  
                             <td><%= rs.getString("state") %></td>  
                             <td><%= rs.getString("unit") %></td>   
-                            <td><%= rs.getString("grade") %></td>                              
+                            <td><%= rs.getString("grade") %></td>     
+                            <td><%= rs.getString("grade_type") %></td>                           
                             <td><input type = "submit" value="Update"></td>
                             <td><input type = "submit" value="Delete"></td>
                     </tr>
