@@ -92,12 +92,13 @@
             <!-- Add an HTML table header row to format the results -->
                 <table border="1" style = "text-align:center; width: 80%; margin:auto">
                     <tr>
-                        <th>course_id</th>
-                        <th>department</th>
-                        <th>is_consent</th>
-						<th>unit_range</th>
-                        <th>grade_type</th>
-                        <th>labwork</th>
+                        <th>Course ID</th>
+                        <th>Department</th>
+                        <th>Consent</th>
+						<th>Unit Range</th>
+                        <th>Grade Type</th>
+                        <th>Labwork</th>
+                        <th>Prerequisite</th>
                     </tr>
                     
             <%-- -------- Iteration Code -------- --%>
@@ -105,6 +106,7 @@
                     // Iterate over the ResultSet
         
                     while ( rs.next() ) {
+                        String prerequisite = "";
         
             %>
                     <tr>
@@ -114,6 +116,24 @@
                             <td><%= rs.getString("unit_range") %></td>
                             <td><%= rs.getString("grade_type") %></td>
                             <td><%= rs.getBoolean("labwork") %></td>
+
+                            <%
+                            PreparedStatement pstmt = conn.prepareStatement(
+                            "SELECT pre_course_id FROM prerequisite WHERE prerequisite.course_id=?");
+                                pstmt.setString(1, rs.getString("course_id"));
+                                ResultSet rsPre = pstmt.executeQuery();
+                                //String sql = "SELECT pre_course_id FROM prerequisite WHERE prerequisite.course_id='CSE202'";
+                                //ResultSet rsPre = statement.executeQuery(sql);
+                                //System.out.println("SELECT pre_course_id FROM prerequisite as p WHERE p.course_id='" + rs.getString("course_id")+"'");
+                                prerequisite = "";
+                                System.out.println(prerequisite);
+                                while (rsPre.next()) {
+                                    prerequisite += rsPre.getString("pre_course_id");
+                                    prerequisite += ";";
+                                }
+                            %>
+
+                            <td><%= prerequisite %></td>
                             <td><input type = "submit" value="Update"></td>
                             <td><input type = "submit" value="Delete"></td>
                     </tr>

@@ -206,7 +206,7 @@
 	</tr>
     </table>
     
-    <table id="graduate"> 
+    <table id="graduate" style="display:none"> 
         <tr>
           <th colspan="2">Graduate information</th>
         </tr>
