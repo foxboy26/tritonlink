@@ -101,9 +101,10 @@
 
                             // INSERT INTO the Class_Section table.
                             pstmt = conn.prepareStatement(
-                                "INSERT INTO class_section VALUES (?, ?)");
+                                "INSERT INTO class_section VALUES (?, ?, ?)");
                             pstmt.setString(1, courseId);
                             pstmt.setString(2, section.sectionId);
+                            pstmt.setString(3, quarter);
                             rowCount = pstmt.executeUpdate();
 
                             for (Meeting meeting : section.meetingList) {
@@ -159,7 +160,7 @@
         
             %>
                     <tr>
-                            <td><%= rs.getInt("course_id") %></td>
+                            <td><%= rs.getString("course_id") %></td>
                             <td><%= rs.getString("quarter") %></td>    
                             <td><%= rs.getString("title") %></td>                          
                     </tr>
