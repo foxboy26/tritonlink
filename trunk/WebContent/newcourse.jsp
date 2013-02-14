@@ -101,7 +101,7 @@
 	    		<select name="grade_type">	  
 	            	<option value="Grade">Letter</option>	   
 	            	<option value="S/U">S/U</option>	
-	            	<option value="Grade or S/U">Letter</option>	   
+	            	<option value="Both">Letter</option>	   
 	            	<option value="S/U Only">S/U Only</option>   
            		</select>
 	    	*</td>
