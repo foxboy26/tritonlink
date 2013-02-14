@@ -56,12 +56,16 @@
                         // Create the prepared statement and use it to
                         // INSERT the student attributes INTO the Student table.
                         PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, ?)");
+                            "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, ?, ?)");
 
                         pstmt.setInt(1, Integer.parseInt(studentId));
                         pstmt.setString(2, sectionId);
                         pstmt.setString(3, units);
                         pstmt.setString(4, grade);
+                        if(grade.equals("S") || grade.equals("U"))
+                        	pstmt.setString(5, "S/U");
+                        else
+                        	pstmt.setString(5, "Grade");
                         int rowCount = pstmt.executeUpdate();
                         
                         // Commit transaction
@@ -86,7 +90,8 @@
                         <th>Section ID</th>
                         <th>state</th>  
                         <th>Units</th>  
-                        <th>Grade</th>                         
+                        <th>Grade</th> 
+                        <th>Grade Type</th>                         
                     </tr>
                     
             <%-- -------- Iteration Code -------- --%>
@@ -101,7 +106,8 @@
                             <td><%= rs.getString("section_id") %></td>  
                             <td><%= rs.getString("state") %></td>  
                             <td><%= rs.getString("unit") %></td>   
-                            <td><%= rs.getString("grade") %></td>                              
+                            <td><%= rs.getString("grade") %></td>   
+                             <td><%= rs.getString("grade_type") %></td>                              
                             <td><input type = "submit" value="Update"></td>
                             <td><input type = "submit" value="Delete"></td>
                     </tr>
