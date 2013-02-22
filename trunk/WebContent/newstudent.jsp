@@ -118,7 +118,7 @@
             </div><!--/span-->
 
             <div class="span10">
-                <form class="form-horizontal" action="students.jsp" method="post">
+                <form class="form-horizontal" action="studentlist.jsp" method="post">
                     <input type="hidden" value="insert" name="action">
                     <fieldset>
                         <legend>Basic Information</legend>
