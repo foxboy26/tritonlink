@@ -1,12 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="shortcut icon" href="favicon.ico" >
-<script src="js/jquery-1.9.1.js"></script>
-<title>New student</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" >
+    <title>New student</title>
 </head>
 
 <body>
@@ -29,16 +30,7 @@
     
     function addUniversity() {
         $('#background').append(
-        	'<tr> \
-                <td><input value="" name="university" size="30"></td> \
-                <td> \
-                    <select name="degree_type"> \
-                      <option value="Bachelor">Bachelor</option> \
-                      <option value="Master">Master</option> \
-                      <option value="Ph.D">Ph.D</option> \
-                    </select> \
-                 </td> \
-            </tr>');
+        );
     }
     
     function addAttendance() {
@@ -90,231 +82,290 @@
 
         ResultSet rs;
 %>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="brand" href="#">Tritonlink 132B</a>
+              <div class="nav-collapse collapse">
+                <ul class="nav">
+                  <li><a href="index.jsp">Home</a></li>
+                  <li class="active"><a href="students.jsp">Demo1</a></li>
+                  <li><a href="#">Demo2</a></li>
+                  <li><a href="#">Demo3</a></li>
+                  <li><a href="#">Demo4</a></li>
+                  <li><a href="#about">About</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
 
-<form action="students.jsp" method="post">
-    <input type="hidden" value="insert" name="action">
-    <table id="basic">
-        <tr>
-          <th colspan="2">Basic information</th>
-        </tr>
-       <tr>
-           <td>Identity</td>
-           <td>
-                <input type="radio" name="identity" value="undergraduate" onchange="showUndergraduateForm()">Undergraduate
-                <input type="radio" name="identity" value="graduate" onchange="showGraduateForm()">Graduate
-           </td>
-        </tr>
-	<tr>
-    	  <td>Student ID</td>
-	  <td><input value="" name="student_id" size="15">*</td>
-	</tr>
-        <tr>
-            <td>First name</td>
-            <td><input value="" name="firstname" size="15">*</td>
-        </tr>
-        <tr>
-            <td>Middle name</td>
-            <td><input value="" name="middlename" size="15"></td>
-        </tr>
-        <tr>
-            <td>Last name</td>
-            <td><input value="" name="lastname" size="15">*</td>
-        </tr>
-        <tr>
-          <td>SSN</td>
-          <td><input value="" name="ssn" size="15"></td>
-        </tr>
-        <tr>
-            <td>Residency</td>
-            <td>
-                <select name="residency">
-                  <option value="California resident">California resident</option>
-                  <option value="Foreign student">Foreign student</option>
-                  <option value="Non-CA US student">Non-CA US student</option>
-                </select>  
-		     *</td>
-        </tr>
-        <tr>
-            <td>Enrollment</td>
-            <td>
-                <input type="radio" name="is_enrolled" value="true">Yes
-                <input type="radio" name="is_enrolled" value="false">No
-		    </td>
-		<tr id="attendance">
-		    <td>Attendance</td>
-		    <td>
-		        <select name="begin_quarter">
-                    <option value="Spring">Spring</option>
-                    <option value="Summer">Summer</option>
-                    <option value="Fall">Fall</option>
-                    <option value="Winter">Winter</option>
-                </select>
-                <select name="begin_year">		        
-		        <%
-                    for (int i = 1900; i < 2014; ++i) {
-                %>  
-                    <option value="<%= i %>"><%= i %></option>
-                <%
-                    }
-                %>
-                </select>
-		        - 
-                <select name="end_quarter">
-                    <option value="Spring">Spring</option>
-                    <option value="Summer">Summer</option>
-                    <option value="Fall">Fall</option>
-                    <option value="Winter">Winter</option>
-                </select>
-                <select name="end_year">              
-                <%
-                    for (int i = 1900; i < 2014; ++i) {
-                %>  
-                    <option value="<%= i %>"><%= i %></option>
-                <%
-                    }
-                %>
-                </select>
-		    <button type="button" onclick="addAttendance()">Add</button></td>
-		</tr>
-    </table>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">Actions</li>
+                        <li class="active"><a href="newstudent.jsp">Add student</a></li>
+                        <li><a href="students.jsp">Back</a></li>
+                    </ul>
+                </div><!--/.well -->
+            </div><!--/span-->
 
-    <table id="background">
-	<tr>
-	    <th colspan="2">Educational background</th>
-	</tr>
-	<tr>
-	    <td>Name of school</td>
-	    <td>Degree</td>
-	</tr>
-	<tr>
-	    <td><input value="" name="university" size="30"></td>
-        <td>
-            <select name="degree_type">
-            <%
-                statement = conn.createStatement();
-                rs = statement.executeQuery("SELECT degree_type FROM degree");
+            <div class="span10">
+                <form class="form-horizontal" action="students.jsp" method="post">
+                    <input type="hidden" value="insert" name="action">
+                    <fieldset>
+                        <legend>Basic Information</legend>
 
-                while (rs.next()) {
-            %>
-            <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
-            <%
-                }
-            %>
-            </select>
-         </td>
-	     <td><button type="button" onclick="addUniversity()">Add</button></td>
-	</tr>
-    </table>
-    
-    <table id="graduate" style="display:none"> 
-        <tr>
-          <th colspan="2">Graduate information</th>
-        </tr>
-	<tr>
-	    <td>Department</td>
-	    <td>
-	    <%
-            statement = conn.createStatement();
+                        <div class="control-group">
+                            <label class="control-label" for="student_id">Identity</label>
+                            <div class="controls">
+                                <label class="radio inline">
+                                    <input type="radio" name="identity" value="undergraduate" onchange="showUndergraduateForm()">Undergraduate
+                                </label>
+                                <label class="radio inline">
+                                    <input type="radio" name="identity" value="graduate" onchange="showGraduateForm()">Graduate
+                                </label>
+                            </div>
+                        </div>
 
-            rs = statement.executeQuery("SELECT * FROM department");
-            ArrayList<String> departmentList = new ArrayList<String>();
-            int i = 0;
-            while (rs.next()) {
-            	departmentList.add(rs.getString("name"));
-            }
-        %>
-	    
-	    	<select name="department">
-	    <%
-	        for (String department : departmentList) {
-	    %>
-	            <option value="<%= department %>"><%= department %></option>
-	    <%
-	        }
-	    %>
-           </select>
-	    </td>
-	</tr>
-        <tr>
-            <td>Degree type</td>
-            <td>
-                <select name="degree" onchange="showPhdState()">
-                  <option value="MS">Master</option>
-                  <option value="MSE">Master</option>
-                  <option value="Ph.D">PhD</option>
-                </select>  
-             *</td>
-        </tr>
-        <tr id="state">
-            <td>State</td>
-            <td>
-                <input type="radio" name="state" value="PhD candidates">PhD candidates
-                <input type="radio" name="state" value="PhD precandidacy">PhD precandidacy
-            </td>
-        </tr>
-    </table>
-    
-    <table id="undergraduate" style="display:none">
-        <tr>
-	    <th colspan="2">Undergraduate information</th>
-        </tr>
-	<tr>
-	    <td>College</td>
-            <td>
-                <select name="college">
-                  <option value="Revelle">Revelle</option>
-                  <option value="John Muir">John Muir</option>
-                  <option value="Thrugood Marshall">Thrugood Marshall</option>
-                  <option value="Earl Warren">Earl Warren</option>
-                  <option value="Eleanor Roosevelt">Eleanor Roosevelt</option>
-                  <option value="Sixth">Sixth</option>
-                </select>  
-             *</td>
-	</tr>
-	<tr>
-	    <td>Major</td>
-	    <td>
-            <select name="major">
-            <%
-            for (String department : departmentList) {
-            %>
-                <option value="<%= department %>"><%= department %></option>
-            <%
-            }
-            %>
-            </select>
-        </td>
-	</tr>
-	<tr>
-	    <td>Minor</td>
-        <td>
-            <select name="minor">
-            <%
-            for (String department : departmentList) {
-            %>
-                <option value="<%= department %>"><%= department %></option>
-            <%
-            }
-            %>
-            </select>
-        </td>
-    </tr>
-        <tr>
-            <td>Program type</td>
-            <td>
-                <select name="type">
-                  <option value="normal">Normal</option>
-                  <option value="5-year">5-year Bachelor's/MS program</option>
-                </select>  
-             *</td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td><input type="submit" value="Save"></td>
-            <td><button type="button" value="Cancel">Cancel</button></td>
-        </tr>
-    </table>
+                        <div class="control-group">
+                            <label class="control-label" for="student_id">Student ID</label>
+                            <div class="controls">
+                                <input type="text" id="student_id" placeholder="Student ID" value="" name="student_id">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="name">Name</label>
+                            <div class="controls">
+                                <input type="text" class="input-small" placeholder="First name" value="" name="firstname">
+                                <input type="text" class="input-small" placeholder="Middle name" value="" name="middlename">
+                                <input type="text" class="input-small" placeholder="Last name" value="" name="lastname">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="ssn">SSN</label>
+                            <div class="controls">
+                                <input type="text" id="ssn" placeholder="Student ID" value="" name="ssn">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="residency">Residency</label>
+                            <div class="controls">
+                                <select name="residency">
+                                  <option value="California resident">California resident</option>
+                                  <option value="Foreign student">Foreign student</option>
+                                  <option value="Non-CA US student">Non-CA US student</option>
+                                </select>  
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Enrollment</label>
+                            <div class="controls">
+                                <label class="radio inline">
+                                    <input type="radio" name="is_enrolled" value="true">Yes
+                                </label>
+                                <label class="radio inline">
+                                    <input type="radio" name="is_enrolled" value="false">No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Attendances</label>
+                            <div class="controls" id="attendace">
+                                <select class="input-small" name="begin_quarter">
+                                    <option value="Spring">Spring</option>
+                                    <option value="Summer">Summer</option>
+                                    <option value="Fall">Fall</option>
+                                    <option value="Winter">Winter</option>
+                                </select>
+                                <select class="input-small" name="begin_year">		        
+                                <%
+                                    for (int i = 1900; i < 2014; ++i) {
+                                %>  
+                                    <option value="<%= i %>"><%= i %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                                - 
+                                <select class="input-small" name="end_quarter">
+                                    <option value="Spring">Spring</option>
+                                    <option value="Summer">Summer</option>
+                                    <option value="Fall">Fall</option>
+                                    <option value="Winter">Winter</option>
+                                </select>
+                                <select class="input-small" name="end_year">
+                                <%
+                                    for (int i = 1900; i < 2014; ++i) {
+                                %>  
+                                    <option value="<%= i %>"><%= i %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                                <button class="btn" type="button" onclick="addAttendance()">Add</button></td>
+                            </div>
+                        </div>
+
+
+                        <div id="background">
+                            <legend>Educational Background</legend>
+                            <div class="control-group">
+                                <label class="control-label">University 1</label>
+                                <div class="controls">
+                                    <input type="text" value="" name="university" placeholder="University name">
+                                    <select class="input-mini" name="degree_type">
+                                    <%
+                                        statement = conn.createStatement();
+                                        rs = statement.executeQuery("SELECT degree_type FROM degree");
+
+                                        while (rs.next()) {
+                                    %>
+                                        <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
+                                    <%
+                                        }
+                                    %>
+                                    </select>
+                                    <button class="btn" type="button" onclick="addUniversity()">Add</button>
+                                </div>
+                             </div>
+                        </div>
+                    
+                        <div id="graduate" style="display:none"> 
+                            <legend>Graduate information</legend>
+                            <div class="control-group">
+                                <label class="control-label">Department</label>
+                                <div class="controls">
+                                <%
+                                    statement = conn.createStatement();
+
+                                    rs = statement.executeQuery("SELECT * FROM department");
+                                    ArrayList<String> departmentList = new ArrayList<String>();
+                                    int i = 0;
+                                    while (rs.next()) {
+                                        departmentList.add(rs.getString("name"));
+                                    }
+                                %>
+                                
+                                    <select name="department">
+                                <%
+                                    for (String department : departmentList) {
+                                %>
+                                        <option value="<%= department %>"><%= department %></option>
+                                <%
+                                    }
+                                %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Degree</label>
+                                <div class="controls">
+                                    <select class="input-small" name="degree" onchange="showPhdState()">
+                                      <option value="MS">Master</option>
+                                      <option value="MSE">MSE</option>
+                                      <option value="Ph.D">PhD</option>
+                                    </select>  
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">State</label>
+                                <div class="controls">
+                                    <label class="radio inline">
+                                        <input type="radio" name="state" value="PhD candidates">PhD candidates
+                                    </label>
+                                    <label class="radio inline">
+                                        <input type="radio" name="state" value="PhD precandidacy">PhD precandidacy
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="undergraduate" style="display:none">
+                            <legend>Undergraduate Information</legend>
+                            <div class="control-group">
+                                <label class="control-label">College</label>
+                                <div class="controls">
+                                    <select name="college">
+                                      <option value="Revelle">Revelle</option>
+                                      <option value="John Muir">John Muir</option>
+                                      <option value="Thrugood Marshall">Thrugood Marshall</option>
+                                      <option value="Earl Warren">Earl Warren</option>
+                                      <option value="Eleanor Roosevelt">Eleanor Roosevelt</option>
+                                      <option value="Sixth">Sixth</option>
+                                    </select>  
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Major</label>
+                                <div class="controls">
+                                    <select name="major">
+                                    <%
+                                    for (String department : departmentList) {
+                                    %>
+                                        <option value="<%= department %>"><%= department %></option>
+                                    <%
+                                    }
+                                    %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Minor</label>
+                                <div class="controls">
+                                    <select name="minor">
+                                    <%
+                                    for (String department : departmentList) {
+                                    %>
+                                        <option value="<%= department %>"><%= department %></option>
+                                    <%
+                                    }
+                                    %>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Type</label>
+                                <div class="controls">
+                                    <select name="type">
+                                      <option value="normal">Normal</option>
+                                      <option value="5-year">5-year Bachelor's/MS program</option>
+                                    </select> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn">Cancel</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div><!--/span-->
+        </div><!--/row-->
+
+        <hr>
+
+        <jsp:include page="footer.html"/>
+
+    </div><!--/.fluid-container-->
+
     <%-- -------- Close Connection Code -------- --%>
     <%
             // Close the ResultSet
@@ -331,6 +382,8 @@
             out.println(e.getMessage());
         }
     %>
-</form>
+
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
