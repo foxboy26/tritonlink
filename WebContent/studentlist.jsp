@@ -43,11 +43,11 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li><a href="index.jsp">Home</a></li>
-              <li class="active"><a href="students.jsp">Demo1</a></li>
-              <li><a href="#">Demo2</a></li>
-              <li><a href="#">Demo3</a></li>
-              <li><a href="#">Demo4</a></li>
-              <li><a href="#about">About</a></li>
+              <li class="active"><a href="studentlist.jsp">Students</a></li>
+              <li><a href="facultylist.jsp">Faculty</a></li>
+              <li><a href="courselist.jsp">Course</a></li>
+              <li><a href="classlist.jsp">Class</a></li>
+              <li><a href="programlist.jsp">Program</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
