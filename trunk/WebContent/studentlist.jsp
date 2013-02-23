@@ -15,44 +15,22 @@
     </style>
 </head>
 
-<body>
-    <%-- Set the scripting language to Java and --%>
-    <%-- Import the java.sql package --%>
-    <%@ page language="java" import="java.sql.*" %>
-    <%@ page language="java" import="db.Config" %>
-    <%-- -------- Open Connection Code -------- --%>
-    <%
-        try {
-            // Load JDBC Driver class file
-            DriverManager.registerDriver
-                (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+<%-- Set the scripting language to Java and --%>
+<%-- Import the java.sql package --%>
+<%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="db.Config" %>
+<%-- -------- Open Connection Code -------- --%>
+<%
+    try {
+        // Load JDBC Driver class file
+        DriverManager.registerDriver
+            (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 
-            // Make a connection to the MS SQL Server datasource "tritonlink"
-            Connection conn = DriverManager.getConnection(Config.connectionURL);
-    %>
-    
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="#">Tritonlink 132B</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li><a href="index.jsp">Home</a></li>
-              <li class="active"><a href="studentlist.jsp">Students</a></li>
-              <li><a href="facultylist.jsp">Faculty</a></li>
-              <li><a href="courselist.jsp">Course</a></li>
-              <li><a href="classlist.jsp">Class</a></li>
-              <li><a href="programlist.jsp">Program</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+        // Make a connection to the MS SQL Server datasource "tritonlink"
+        Connection conn = DriverManager.getConnection(Config.connectionURL);
+%>
+<body>
+    <jsp:include page="header.html" />
 
     <div class="container-fluid">
       <div class="row-fluid">
@@ -193,25 +171,29 @@
         </div><!--/span-->
       </div><!--/row-->
     </div><!--/.fluid-container-->
-
-    <%-- -------- Close Connection Code -------- --%>
-    <%
-            // Close the ResultSet
-            rs.close();
-
-            // Close the Statement
-            statement.close();
-
-            // Close the Connection
-            conn.close();
-        } catch (SQLException sqle) {
-            out.println(sqle.getMessage());
-        } catch (Exception e) {
-            out.println(e.getMessage());
-        }
-    %>
-
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-student').addClass('active');
+        });
+    </script>
 </body>
 </html>
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        statement.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>
+
