@@ -61,6 +61,7 @@
             <ul class="nav nav-list">
               <li class="nav-header">Actions</li>
               <li><a href="newstudent.jsp">Add student</a></li>
+              <li><a href="probationlist.jsp">Show probations</a></li>
               <li class="divider"></li>
               <li><a onclick="window.history.back()">Back</a></li>
             </ul>

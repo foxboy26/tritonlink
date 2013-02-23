@@ -83,9 +83,10 @@
                     
             <%
                 while ( rs.next() ) {
+                    String name = rs.getString("name");
             %>
-                    <tr>
-                        <td><%= rs.getString("name") %></td>
+                    <tr onclick="document.location = 'program.jsp?&name=<%= name %>';">
+                        <td><%= name %></td>
                         <td><%= rs.getString("degree_type") %></td>
                         <td><%= rs.getString("department") %></td>  
                     </tr>
