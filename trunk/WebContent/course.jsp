@@ -7,45 +7,10 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" >
-    <title>New student</title>
+    <title>New course</title>
 </head>
 
 <body>
-<script>
-    function addUniversity() {
-        $('#background').append(
-        );
-    }
-    
-    function addAttendance() {
-        $('#attendance').after(
-	    	'<tr> \
-	    	<td></td> \
-	    	<td> \
-		        <select name="begin_quarter"> \
-		            <option value="Spring">Spring</option> \
-		            <option value="Summer">Summer</option> \
-		            <option value="Fall">Fall</option> \
-		            <option value="Winter">Winter</option> \
-		        </select> \
-			    <input value="" name="begin_year" size="5">  \
-			    -  \
-			        <select name="end_quarter"> \
-			            <option value="Spring">Spring</option>\
-			            <option value="Summer">Summer</option>\
-			            <option value="Fall">Fall</option>\
-			            <option value="Winter">Winter</option>\
-			        </select>\
-			    <input value="" name="end_year" size="5">\
-		    </td>\
-		    </tr>');
-    }
-    
-    function showPhdState()
-    {
-        //TODO: zhiheng
-    }
-</script>
 
 <%-- Set the scripting language to Java and --%>
 <%-- Import the java.sql package --%>
@@ -66,7 +31,7 @@
 
         ResultSet rs;
 
-        String studentId = request.getParameter("studentId");
+        String courseId = request.getParameter("courseId");
 %>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
@@ -80,9 +45,9 @@
               <div class="nav-collapse collapse">
                 <ul class="nav">
                   <li><a href="index.jsp">Home</a></li>
-                  <li class="active"><a href="studentlist.jsp">Students</a></li>
+                  <li><a href="studentlist.jsp">Students</a></li>
                   <li><a href="facultylist.jsp">Faculty</a></li>
-                  <li><a href="courselist.jsp">Course</a></li>
+                  <li class="active"><a href="courselist.jsp">Course</a></li>
                   <li><a href="classlist.jsp">Class</a></li>
                   <li><a href="programlist.jsp">Program</a></li>
                 </ul>
@@ -97,9 +62,6 @@
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
                         <li class="nav-header">Actions</li>
-                        <li><a href="newprobation.jsp?studentId=<%= studentId %>">Add probation</a></li>
-                        <li><a href="newCourseEnrollment.jsp?studentId=<%= studentId %>">Enroll new class</a></li>
-                        <li><a href="newpastclass.jsp?studentId=<%= studentId %>">Add past class</a></li>
                         <li class="divider"></li>
                         <li><a onclick="window.history.back()">Back</a></li>
                     </ul>
@@ -107,30 +69,20 @@
             </div><!--/span-->
 
             <div class="span10">
-                <%-- -------- SELECT Statement Code Graduate-------- --%>
                 <%
                     statement = conn.createStatement();
-                    String identity = request.getParameter("identity");
-                    if (identity.equals("graduate")) {
-                        rs = statement.executeQuery
-                            ("SELECT * FROM graduate, student WHERE student.student_id=graduate.student_id AND student.student_id = '" + studentId + "'");
-                        System.out.println("SELECT * FROM graduate, student WHERE student.student_id=graduate.student_id AND student.student_id = '" + studentId + "'");
-                    }
-                    else {
-                        rs = statement.executeQuery
-                            ("SELECT * FROM undergraduate, student WHERE student.student_id=undergraduate.student_id AND student.student_id = '" + studentId + "'");
-                    }
+                    rs = statement.executeQuery("select * from course where course_id='" + courseId + "'");
                     rs.next();
                 %>
-                <form class="form-horizontal" action="students.jsp" method="post">
+                <form class="form-horizontal" action="courselist.jsp" method="post">
                     <input type="hidden" value="insert" name="action">
                     <fieldset>
-                        <legend><%=rs.getString("firstname") + ", " + rs.getString("lastname") %></legend>
+                        <legend>Course Information </legend>
 
                         <div class="control-group">
-                            <label class="control-label" for="student_id">Student ID</label>
+                            <label class="control-label" for="course_id">course ID</label>
                             <div class="controls">
-                                <input type="text" id="student_id" placeholder="Student ID" value="" name="student_id">
+                                <input type="text" id="course_id" placeholder="course ID" value="" name="course_id">
                             </div>
                         </div>
 

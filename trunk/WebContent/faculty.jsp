@@ -68,7 +68,6 @@
             </div><!--/span-->
 
             <div class="span10">
-                <%-- -------- SELECT Statement Code Graduate-------- --%>
                 <%
                     statement = conn.createStatement();
                     rs = statement.executeQuery("select * from faculty where faculty_id='" + facultyId + "'");

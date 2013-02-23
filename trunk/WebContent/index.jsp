@@ -61,10 +61,6 @@
           <p><a class="btn" href="#">View details &raquo;</a></p>
         </div>
       </div>
-      <hr>
-
-        <jsp:include page="footer.html"/>
-
     </div><!--/container-->
 
     <script src="js/jquery-1.9.1.js"></script>

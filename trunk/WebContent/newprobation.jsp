@@ -47,7 +47,7 @@
                         <li><a href="newCourseEnrollment.jsp?studentId=<%= studentId %>">Enroll new class</a></li>
                         <li><a href="newpastclass.jsp?studentId=<%= studentId %>">Add past class</a></li>
                         <li class="divider"></li>
-                        <li><a href="student.jsp">Back</a></li>
+                        <li><a onclick="window.history.back()">Back</a></li>
                     </ul>
                 </div><!--/.well -->
             </div><!--/span-->

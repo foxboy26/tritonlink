@@ -112,7 +112,8 @@
                     <ul class="nav nav-list">
                         <li class="nav-header">Actions</li>
                         <li class="active"><a href="newstudent.jsp">Add student</a></li>
-                        <li><a href="students.jsp">Back</a></li>
+                        <li class="divider"></li>
+                        <li><a onclick="window.history.back()">Back</a></li>
                     </ul>
                 </div><!--/.well -->
             </div><!--/span-->
@@ -359,11 +360,6 @@
                 </form>
             </div><!--/span-->
         </div><!--/row-->
-
-        <hr>
-
-        <jsp:include page="footer.html"/>
-
     </div><!--/.fluid-container-->
 
     <%-- -------- Close Connection Code -------- --%>
