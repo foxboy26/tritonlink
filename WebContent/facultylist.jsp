@@ -15,44 +15,23 @@
     </style>
 </head>
 
-<body>
-    <%-- Set the scripting language to Java and --%>
-    <%-- Import the java.sql package --%>
-    <%@ page language="java" import="java.sql.*" %>
-    <%@ page language="java" import="db.Config" %>
-    <%-- -------- Open Connection Code -------- --%>
-    <%
-        try {
-            // Load JDBC Driver class file
-            DriverManager.registerDriver
-                (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+<%-- Set the scripting language to Java and --%>
+<%-- Import the java.sql package --%>
+<%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="db.Config" %>
+<%-- -------- Open Connection Code -------- --%>
+<%
+    try {
+        // Load JDBC Driver class file
+        DriverManager.registerDriver
+            (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 
-            // Make a connection to the MS SQL Server datasource "tritonlink"
-            Connection conn = DriverManager.getConnection(Config.connectionURL);
-    %>
-    
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="#">Tritonlink 132B</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li><a href="index.jsp">Home</a></li>
-              <li><a href="studentlist.jsp">Students</a></li>
-              <li class="active"><a href="facultylist.jsp">Faculty</a></li>
-              <li><a href="courselist.jsp">Course</a></li>
-              <li><a href="classlist.jsp">Class</a></li>
-              <li><a href="programlist.jsp">Program</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+        // Make a connection to the MS SQL Server datasource "tritonlink"
+        Connection conn = DriverManager.getConnection(Config.connectionURL);
+%>
+
+<body>
+    <jsp:include page="header.html" />
 
     <div class="container-fluid">
       <div class="row-fluid">
@@ -100,56 +79,63 @@
             </div>
         </div>
     </div>
-
-    <%-- -------- INSERT Code -------- --%>
-    <%
-            String action = request.getParameter("action");
-            // Check if an insertion is requested
-            if (action != null && action.equals("insert")) {
-                // Preprocess submitted form data
-                
-                String faculty_id = request.getParameter("faculty_id");
-                String name = request.getParameter("name");  
-                String title = request.getParameter("title");  
-                String department = request.getParameter("department");                    	                        
-                                                            
-                
-                // Begin transaction
-                conn.setAutoCommit(false);
-                
-                // Create the prepared statement and use it to
-                // INSERT the student attributes INTO the Student table.
-                PreparedStatement pstmt = conn.prepareStatement(
-                    "INSERT INTO Faculty VALUES (?, ?, ?, ?)");
-
-                pstmt.setInt(1, Integer.parseInt(faculty_id));
-                pstmt.setString(2, name);
-                pstmt.setString(3, title);
-                pstmt.setString(4, department);
-
-                int rowCount = pstmt.executeUpdate();
-                
-                // Commit transaction
-                conn.commit();
-                conn.setAutoCommit(true);
-            }
-    %>
-
-    <%-- -------- Close Connection Code -------- --%>
-    <%
-            // Close the ResultSet
-            rs.close();
-
-            // Close the Statement
-            statement.close();
-
-            // Close the Connection
-            conn.close();
-        } catch (SQLException sqle) {
-            out.println(sqle.getMessage());
-        } catch (Exception e) {
-            out.println(e.getMessage());
-        }
-    %>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-faculty').addClass('active');
+        });
+    </script>
 </body>
 </html>
+
+<%-- -------- INSERT Code -------- --%>
+<%
+        String action = request.getParameter("action");
+        // Check if an insertion is requested
+        if (action != null && action.equals("insert")) {
+            // Preprocess submitted form data
+            
+            String faculty_id = request.getParameter("faculty_id");
+            String name = request.getParameter("name");  
+            String title = request.getParameter("title");  
+            String department = request.getParameter("department");                    	                        
+                                                        
+            
+            // Begin transaction
+            conn.setAutoCommit(false);
+            
+            // Create the prepared statement and use it to
+            // INSERT the student attributes INTO the Student table.
+            PreparedStatement pstmt = conn.prepareStatement(
+                "INSERT INTO Faculty VALUES (?, ?, ?, ?)");
+
+            pstmt.setInt(1, Integer.parseInt(faculty_id));
+            pstmt.setString(2, name);
+            pstmt.setString(3, title);
+            pstmt.setString(4, department);
+
+            int rowCount = pstmt.executeUpdate();
+            
+            // Commit transaction
+            conn.commit();
+            conn.setAutoCommit(true);
+        }
+%>
+
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        statement.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>

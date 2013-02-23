@@ -4,7 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/redmond/jquery-ui-1.10.0.custom.css" rel="stylesheet">
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" >
@@ -12,28 +11,7 @@
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="#">Tritonlink 132B</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="index.jsp">Home</a></li>
-              <li><a href="studentlist.jsp">Students</a></li>
-              <li><a href="facultylist.jsp">Faculty</a></li>
-              <li><a href="courselist.jsp">Course</a></li>
-              <li><a href="classlist.jsp">Class</a></li>
-              <li><a href="programlist.jsp">Program</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+    <jsp:include page="header.html" />
 
     <div class="container">
       <!-- Main hero unit for a primary marketing message or call to action -->
@@ -65,6 +43,10 @@
 
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery-ui-1.10.0.custom.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-index').addClass('active');
+        });
+    </script>
 </body>
 </html>
