@@ -62,7 +62,7 @@
               <li class="nav-header">Actions</li>
               <li><a href="newfaculty.jsp">Add faculty</a></li>
               <li class="divider"></li>
-              <li><a href="index.jsp">Back</a></li>
+              <li><a onclick="window.history.back()">Back</a></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->

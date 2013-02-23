@@ -50,7 +50,7 @@
     </div>
 
     <div class="container-fluid">
-      <div class="row-fluid">
+        <div class="row-fluid">
         <div class="span2">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
@@ -63,87 +63,85 @@
         </div><!--/span-->
 
         <div class="span10">
-                <form class="form-horizontal" action="facultylist.jsp" method="post">
-                    <input type="hidden" value="insert" name="action">
-                    <legend>Faculty Information</legend>
+            <form class="form-horizontal" action="facultylist.jsp" method="post">
+                <input type="hidden" value="insert" name="action">
+                <legend>Faculty Information</legend>
 
-                        <div class="control-group">
-                            <label class="control-label">Faculty ID</label>
-                            <div class="controls">
-                                <input type="text" name="faculty_id" value = "">	  			
-                            </div>
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">Faculty ID</label>
+                    <div class="controls">
+                        <input type="text" name="faculty_id" value = "">
+                    </div>
+                </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Name</label>
-                            <div class="controls">
-                                <input type="text" name="name" value = "">	  			
-                            </div>
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">Name</label>
+                    <div class="controls">
+                        <input type="text" name="name" value = "">	  			
+                    </div>
+                </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Title</label>
-                            <div class="controls">
-                                <select name="title">	    		
-                                    <option value="Lecturer">Lecturer</option>
-                                    <option value="Assistant Professor">Assistant Professor</option>
-                                    <option value="Associate Professor">Associate Professor</option>
-                                    <option value="Professor">Professor</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="control-group">
+                    <label class="control-label">Title</label>
+                    <div class="controls">
+                        <select name="title">	    		
+                            <option value="Lecturer">Lecturer</option>
+                            <option value="Assistant Professor">Assistant Professor</option>
+                            <option value="Associate Professor">Associate Professor</option>
+                            <option value="Professor">Professor</option>
+                        </select>
+                    </div>
+                </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Department</label>
-                            <div class="controls">
-                            <%
-                                Statement statement = conn.createStatement();
+                <div class="control-group">
+                    <label class="control-label">Department</label>
+                    <div class="controls">
+                    <%
+                        Statement statement = conn.createStatement();
 
-                                ResultSet rs = statement.executeQuery("SELECT * FROM department");
-                                ArrayList<String> departmentList = new ArrayList<String>();
-                                int i = 0;
-                                while (rs.next()) {
-                                    departmentList.add(rs.getString("name"));
-                                }
-                            %>
-                            
-                                <select name="department">
-                            <%
-                                for (String department : departmentList) {
-                            %>
-                                    <option value="<%= department %>"><%= department %></option>
-                            <%
-                                }
-                            %>
-                                </select>
-                            </div>
-                        </div>
+                        ResultSet rs = statement.executeQuery("SELECT * FROM department");
+                        ArrayList<String> departmentList = new ArrayList<String>();
+                        int i = 0;
+                        while (rs.next()) {
+                            departmentList.add(rs.getString("name"));
+                        }
+                    %>
+                    
+                        <select name="department">
+                    <%
+                        for (String department : departmentList) {
+                    %>
+                            <option value="<%= department %>"><%= department %></option>
+                    <%
+                        }
+                    %>
+                        </select>
+                    </div>
+                </div>
 
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn">Cancel</button>
-                        </div>
-                    </fieldset>
-                </form>
-            </div><!--/span-->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn">Cancel</button>
+                </div>
+            </form>
         </div><!--/row-->
     </div><!--/.fluid-container-->
-
-    <%-- -------- Close Connection Code -------- --%>
-    <%
-            // Close the ResultSet
-            rs.close();
-
-            // Close the Statement
-            statement.close();
-
-            // Close the Connection
-            conn.close();
-        } catch (SQLException sqle) {
-            out.println(sqle.getMessage());
-        } catch (Exception e) {
-            out.println(e.getMessage());
-        }
-    %>
 </body>
 </html>
+
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        statement.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>
