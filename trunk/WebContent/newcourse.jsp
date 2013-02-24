@@ -4,8 +4,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" >
     <title>New course</title>
 </head>
@@ -120,9 +120,9 @@
                 <div class="control-group">
                     <label class="control-label">Consent</label>
                     <div class="controls">
-                        <select name="is_consent">	  
-                            <option value="True">True</option>	   
-                            <option value="False">False</option>	   
+                        <select name="is_consent">    
+                            <option value="True">True</option>     
+                            <option value="False">False</option>       
                         </select>
                     </div>
                 </div>
@@ -137,10 +137,10 @@
                 <div class="control-group">
                     <label class="control-label">Grade type</label>
                     <div class="controls">
-                        <select name="grade_type">	  
-                            <option value="Grade">Letter</option>	   
-                            <option value="S/U">S/U</option>	
-                            <option value="Both">Both</option>	   
+                        <select name="grade_type">    
+                            <option value="Grade">Letter</option>      
+                            <option value="S/U">S/U</option>    
+                            <option value="Both">Both</option>     
                             <option value="S/U Only">S/U Only</option>   
                         </select>
                     </div>
@@ -150,8 +150,8 @@
                     <label class="control-label">Lab work</label>
                     <div class="controls">
                         <select name="labwork">
-                           <option value="True">True</option>	   
-                           <option value="False">False</option>	
+                           <option value="True">True</option>      
+                           <option value="False">False</option> 
                         </select>
                     </div>
                 </div>

@@ -11,57 +11,6 @@
 </head>
 
 <body>
-<script>
-    function showGraduateForm()
-    {
-        graduateForm = document.getElementById("graduate");
-        undergraduateForm = document.getElementById("undergraduate");
-        graduateForm.style.display = 'block';
-        undergraduateForm.style.display = 'none';
-    }
-    
-    function showUndergraduateForm()
-    {
-        graduateForm = document.getElementById("graduate");
-        undergraduateForm = document.getElementById("undergraduate");
-        graduateForm.style.display = 'none';
-        undergraduateForm.style.display = 'block';
-    }
-    
-    function addUniversity() {
-        $('#background').append(
-        );
-    }
-    
-    function addAttendance() {
-        $('#attendance').after(
-	    	'<tr> \
-	    	<td></td> \
-	    	<td> \
-		        <select name="begin_quarter"> \
-		            <option value="Spring">Spring</option> \
-		            <option value="Summer">Summer</option> \
-		            <option value="Fall">Fall</option> \
-		            <option value="Winter">Winter</option> \
-		        </select> \
-			    <input value="" name="begin_year" size="5">  \
-			    -  \
-			        <select name="end_quarter"> \
-			            <option value="Spring">Spring</option>\
-			            <option value="Summer">Summer</option>\
-			            <option value="Fall">Fall</option>\
-			            <option value="Winter">Winter</option>\
-			        </select>\
-			    <input value="" name="end_year" size="5">\
-		    </td>\
-		    </tr>');
-    }
-    
-    function showPhdState()
-    {
-        //TODO: zhiheng
-    }
-</script>
 
 <%-- Set the scripting language to Java and --%>
 <%-- Import the java.sql package --%>
@@ -82,42 +31,11 @@
 
         ResultSet rs;
 %>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="brand" href="#">Tritonlink 132B</a>
-              <div class="nav-collapse collapse">
-                <ul class="nav">
-                  <li><a href="index.jsp">Home</a></li>
-                  <li class="active"><a href="#">Students</a></li>
-                  <li><a href="facultylist.jsp">Faculty</a></li>
-                  <li><a href="courselist.jsp">Course</a></li>
-                  <li><a href="classlist.jsp">Class</a></li>
-                  <li><a href="programlist.jsp">Program</a></li>
-                </ul>
-              </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
+    <jsp:include page="header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span2">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Actions</li>
-                        <li class="active"><a href="newstudent.jsp">Add student</a></li>
-                        <li class="divider"></li>
-                        <li><a onclick="window.history.back()">Back</a></li>
-                    </ul>
-                </div><!--/.well -->
-            </div><!--/span-->
-
+            <jsp:include page="sub_studentlist.html" />
             <div class="span10">
                 <form class="form-horizontal" action="studentlist.jsp" method="post">
                     <input type="hidden" value="insert" name="action">
@@ -361,25 +279,79 @@
             </div><!--/span-->
         </div><!--/row-->
     </div><!--/.fluid-container-->
-
-    <%-- -------- Close Connection Code -------- --%>
-    <%
-            // Close the ResultSet
-            rs.close();
-
-            // Close the Statement
-            statement.close();
-
-            // Close the Connection
-            conn.close();
-        } catch (SQLException sqle) {
-            out.println(sqle.getMessage());
-        } catch (Exception e) {
-            out.println(e.getMessage());
-        }
-    %>
-
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-student').addClass('active');
+            $('#sub-newstudent').addClass('active');
+        });
+        function showGraduateForm()
+        {
+            graduateForm = document.getElementById("graduate");
+            undergraduateForm = document.getElementById("undergraduate");
+            graduateForm.style.display = 'block';
+            undergraduateForm.style.display = 'none';
+        }
+        
+        function showUndergraduateForm()
+        {
+            graduateForm = document.getElementById("graduate");
+            undergraduateForm = document.getElementById("undergraduate");
+            graduateForm.style.display = 'none';
+            undergraduateForm.style.display = 'block';
+        }
+        
+        function addUniversity() {
+            $('#background').append(
+            );
+        }
+        
+        function addAttendance() {
+            $('#attendance').after(
+                '<tr> \
+                <td></td> \
+                <td> \
+                    <select name="begin_quarter"> \
+                        <option value="Spring">Spring</option> \
+                        <option value="Summer">Summer</option> \
+                        <option value="Fall">Fall</option> \
+                        <option value="Winter">Winter</option> \
+                    </select> \
+                    <input value="" name="begin_year" size="5">  \
+                    -  \
+                        <select name="end_quarter"> \
+                            <option value="Spring">Spring</option>\
+                            <option value="Summer">Summer</option>\
+                            <option value="Fall">Fall</option>\
+                            <option value="Winter">Winter</option>\
+                        </select>\
+                    <input value="" name="end_year" size="5">\
+                </td>\
+                </tr>');
+        }
+        
+        function showPhdState()
+        {
+            //TODO: zhiheng
+        }
+    </script>
 </body>
 </html>
+
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        statement.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>

@@ -35,59 +35,39 @@
     </script>
 </head>
 
+<%-- Import the java.sql package --%>
+<%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="java.util.ArrayList" %>
+<%@ page language="java" import="db.Config" %>
+<%
+    try {
+        // Load JDBC Driver class file
+        DriverManager.registerDriver
+            (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+
+        // Make a connection to the MS SQL Server datasource "tritonlink"
+        Connection conn = DriverManager.getConnection(Config.connectionURL);
+
+        String action = request.getParameter("action");
+        String studentID = "";
+        String courseID = "";
+        String sectionID = "";
+        String quarter = "";
+        String grade = "A+";
+        String unit = "";
+        String currentQuarter = "Winter 2013";
+
+        if(action != null){   
+            courseID = request.getParameter("course_id");
+            studentID = request.getParameter("studentID");
+            if(action.equals("quarterSelect"))
+              quarter = request.getParameter("quarter");
+        }
+
+        String studentId = request.getParameter("studentId");
+%>
 <body>
-    <%-- Import the java.sql package --%>
-    <%@ page language="java" import="java.sql.*" %>
-    <%@ page language="java" import="java.util.ArrayList" %>
-    <%@ page language="java" import="db.Config" %>
-    <%
-        try {
-            // Load JDBC Driver class file
-            DriverManager.registerDriver
-                (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
-
-            // Make a connection to the MS SQL Server datasource "tritonlink"
-            Connection conn = DriverManager.getConnection(Config.connectionURL);
-            String action = request.getParameter("action");
-            String studentID = "";
-            String courseID = "";
-            String sectionID = "";
-            String quarter = "";
-            String grade = "A+";
-            String unit = "";
-            String currentQuarter = "Winter 2013";
-
-            if(action != null){   
-                courseID = request.getParameter("course_id");
-                studentID = request.getParameter("studentID");
-                if(action.equals("quarterSelect"))
-                  quarter = request.getParameter("quarter");
-            }
-
-            String studentId = request.getParameter("studentId");
-    %>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="brand" href="#">Tritonlink 132B</a>
-              <div class="nav-collapse collapse">
-                <ul class="nav">
-                  <li><a href="index.jsp">Home</a></li>
-                  <li class="active"><a href="studentlist.jsp">Students</a></li>
-                  <li><a href="facultylist.jsp">Faculty</a></li>
-                  <li><a href="courselist.jsp">Course</a></li>
-                  <li><a href="classlist.jsp">Class</a></li>
-                  <li><a href="programlist.jsp">Program</a></li>
-                </ul>
-              </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
+    <jsp:include page="header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
@@ -105,62 +85,52 @@
             </div><!--/span-->
 
             <div class="span10">
-                <input type = "hidden" value = "select" name = "action">
-                <table>
-                    <tr>
-                        <th colspan="2">Past Classes Information</th>
-                    </tr>
-                    <tr>
-                        <td>Student ID</td>
-                        <td><input value= "<%=studentID%>" name="student_id" size="15" onkeyup = setStudent()>*</td>
-                    </tr>
-                    <tr>
-                        <td>Course ID</td>
-                        <td>	  			
-                                
+                <form action="newpastclass.jsp" method="post"> 
+                    <input type = "hidden" value = "select" name = "action">
+                    <legend>Past Classes Information</legend>
+                    <div class="control-group">
+                        <label class="control-label">Student ID</label>
+                        <div class="controls" id="student_id">
+                            <input type="text" value="<%= studentId %>" name="student_id" onkeyup=setStudent()>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Course ID</label>
+                        <div class="controls" id="course_id">
+                        <%
+                            Statement statement = conn.createStatement();
+                            ResultSet rs = statement.executeQuery("SELECT * FROM course");
+                            ArrayList<String> courseList = new ArrayList<String>();
+                            while (rs.next()) {	  	       
+                                    courseList.add(rs.getString("course_id"));
+                            }
+                        %>
+                            <form action="newpastclass.jsp" method="post"> 
+                                <input type="hidden" name = "action" value= "select">
+                                <input type="hidden" name = "studentID" value= "<%=studentID %>">
+                                <select onchange = "form.submit()" name = "course_id">
                                 <%
-                                 Statement statement = conn.createStatement();
-                                 ResultSet rs = statement.executeQuery("SELECT * FROM course");
-                                 ArrayList<String> courseList = new ArrayList<String>();
-                                    while (rs.next()) {	  	       
-                                            courseList.add(rs.getString("course_id"));
-                                    }
                                 
-                                
-                                /* PreparedStatement pstmt = conn.prepareStatement("SELECT course_id FROM class WHERE class.quarter = ?");
-                                pstmt.setString(1, currentQuarter);
-                                // Use the created statement to SELECT
-                                // the student attributes FROM the Student table.
-                                ResultSet rs = pstmt.executeQuery();
-                                ArrayList<String> courseList = new ArrayList<String>();
-                                while (rs.next()) {	  	       
-                                        courseList.add(rs.getString("course_id"));
-                                } */
+                                if(action != null){
+                                    courseList.remove(courseID);	
                                 %>
-                                <form action="newpastclass.jsp" method="post"> 
-                                    <input type="hidden" name = "action" value= "select">
-                                    <input type="hidden" name = "studentID" value= "<%=studentID %>">
-                                    <select onchange = "form.submit()" name = "course_id">
-                                    <%
-                                    
-                                    if(action != null){
-                                        courseList.remove(courseID);	
-                                    %>
-                                    <option value="<%= request.getParameter("course_id") %>"><%= request.getParameter("course_id") %></option>
-                                    <% 
-                                    }
-                                    else
-                                        courseID = courseList.get(0);
-                                    for(String course: courseList){
-                                    %>
-                                        <option value="<%= course %>"><%= course %></option>
-                                    <%
-                                    }
-                                    %>
+                                <option value="<%= request.getParameter("course_id") %>"><%= request.getParameter("course_id") %></option>
+                                <% 
+                                }
+                                else
+                                    courseID = courseList.get(0);
+                                for(String course: courseList){
+                                %>
+                                    <option value="<%= course %>"><%= course %></option>
+                                <%
+                                }
+                                %>
                                 </select>	
-                                </form>			
-                        </td>
-                    </tr>	    
+                            </form>	
+                        </div>
+                    </div>
+
                     <%
                         // Create the statement
                         String exc = "SELECT DISTINCT quarter FROM class WHERE course_id = ? AND quarter != ?";
@@ -300,45 +270,41 @@
                                     }
                                 }
                             }
-                                %>
+                        %>
                                 
                             </select>
-                        </td>
-                    </tr>           
-                </table> 
+
                 <form action="pastclass.jsp" method="post">  
-                <input type="hidden" value="insert" name="action">
-                <table>
-                    <tr>         	
-                        <td><input type="hidden" name = "rStudentID" value= "<%= studentID%>"></td>
-                        <td><input type="hidden" name = "rCourseID" value= "<%= courseID%>"></td>
-                        <td><input type="hidden" name = "rSectionID" value= "<%= sectionID%>"></td>
-                        <td><input type="hidden" name = "rQuarter" value=  "<%= quarter%>"></td>
-                        <td><input type="hidden" name = "rGrade" value=  "<%= grade%>"></td>
-                        <td><input type="hidden" name = "rUnits" value=  "<%= unit%>"></td>
-                        <td><input type="submit" value="Save"></td>
-                        <td><button type="button" value="Cancel">Cancel</button></td>
-                    </tr>
-                </table>
-                <%-- -------- Close Connection Code -------- --%>
-                <%
-                        // Close the ResultSet
-                        rs.close();
-
-                        // Close the Statement
-                        pstmt.close();
-
-                        // Close the Connection
-                        conn.close();
-                    } catch (SQLException sqle) {
-                        out.println(sqle.getMessage());
-                    } catch (Exception e) {
-                        out.println(e.getMessage());
-                    }
-                %>
-            </form>
-        </div>
+                    <input type="hidden" value="insert" name="action">
+                    <table>
+                        <tr>         	
+                            <td><input type="hidden" name = "rStudentID" value= "<%= studentID%>"></td>
+                            <td><input type="hidden" name = "rCourseID" value= "<%= courseID%>"></td>
+                            <td><input type="hidden" name = "rSectionID" value= "<%= sectionID%>"></td>
+                            <td><input type="hidden" name = "rQuarter" value=  "<%= quarter%>"></td>
+                            <td><input type="hidden" name = "rGrade" value=  "<%= grade%>"></td>
+                            <td><input type="hidden" name = "rUnits" value=  "<%= unit%>"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
         </div>
     </div>
 </body>
 </html>
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        pstmt.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>
