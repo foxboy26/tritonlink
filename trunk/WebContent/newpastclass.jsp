@@ -67,7 +67,7 @@
         String studentId = request.getParameter("studentId");
 %>
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
@@ -290,6 +290,17 @@
             </div>
         </div>
     </div>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-student').addClass('active');
+            $('#sub-newpastclass').addClass('active');
+            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
+            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
+            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
+        });
+    </script>
 </body>
 </html>
 <%-- -------- Close Connection Code -------- --%>

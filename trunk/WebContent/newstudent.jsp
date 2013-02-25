@@ -31,11 +31,11 @@
 
         ResultSet rs;
 %>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="sub_studentlist.html" />
+            <jsp:include page="tpl/sub_studentlist.html" />
             <div class="span10">
                 <form class="form-horizontal" action="studentlist.jsp" method="post">
                     <input type="hidden" value="insert" name="action">
@@ -43,7 +43,7 @@
                         <legend>Basic Information</legend>
 
                         <div class="control-group">
-                            <label class="control-label" for="student_id">Identity</label>
+                            <label class="control-label">Identity</label>
                             <div class="controls">
                                 <label class="radio inline">
                                     <input type="radio" name="identity" value="undergraduate" onchange="showUndergraduateForm()">Undergraduate
@@ -55,14 +55,14 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="student_id">Student ID</label>
+                            <label class="control-label">Student ID</label>
                             <div class="controls">
                                 <input type="text" id="student_id" placeholder="Student ID" value="" name="student_id">
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="name">Name</label>
+                            <label class="control-label">Name</label>
                             <div class="controls">
                                 <input type="text" class="input-small" placeholder="First name" value="" name="firstname">
                                 <input type="text" class="input-small" placeholder="Middle name" value="" name="middlename">
@@ -71,14 +71,14 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="ssn">SSN</label>
+                            <label class="control-label">SSN</label>
                             <div class="controls">
-                                <input type="text" id="ssn" placeholder="Student ID" value="" name="ssn">
+                                <input type="text" id="ssn" placeholder="SSN" value="" name="ssn">
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="residency">Residency</label>
+                            <label class="control-label">Residency</label>
                             <div class="controls">
                                 <select name="residency">
                                   <option value="California resident">California resident</option>
@@ -100,9 +100,9 @@
                             </div>
                         </div>
 
-                        <div class="control-group">
+                        <div class="control-group" id="attendancelist">
                             <label class="control-label">Attendances</label>
-                            <div class="controls" id="attendace">
+                            <div class="controls">
                                 <select class="input-small" name="begin_quarter">
                                     <option value="Spring">Spring</option>
                                     <option value="Summer">Summer</option>
@@ -134,33 +134,78 @@
                                     }
                                 %>
                                 </select>
-                                <button class="btn" type="button" onclick="addAttendance()">Add</button></td>
+                                <button class="btn" type="button" onclick="addItem('attendance', 'attendancelist')">Add</button></td>
+                            </div>
+                            <div id="attendance" class="controls" style="display: none;">
+                                <select class="input-small" name="begin_quarter">
+                                    <option value="Spring">Spring</option>
+                                    <option value="Summer">Summer</option>
+                                    <option value="Fall">Fall</option>
+                                    <option value="Winter">Winter</option>
+                                </select>
+                                <select class="input-small" name="begin_year">		        
+                                <%
+                                    for (int i = 1900; i < 2014; ++i) {
+                                %>  
+                                    <option value="<%= i %>"><%= i %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                                - 
+                                <select class="input-small" name="end_quarter">
+                                    <option value="Spring">Spring</option>
+                                    <option value="Summer">Summer</option>
+                                    <option value="Fall">Fall</option>
+                                    <option value="Winter">Winter</option>
+                                </select>
+                                <select class="input-small" name="end_year">
+                                <%
+                                    for (int i = 1900; i < 2014; ++i) {
+                                %>  
+                                    <option value="<%= i %>"><%= i %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
                             </div>
                         </div>
 
+                        <legend>Educational Background</legend>
+                        <div class="control-group" id="backgroundlist">
+                            <label class="control-label">University 1</label>
+                            <div class="controls">
+                                <input type="text" value="" name="university" placeholder="University name">
+                                <select class="input-mini" name="degree_type">
+                                <%
+                                    statement = conn.createStatement();
+                                    rs = statement.executeQuery("SELECT degree_type FROM degree");
 
-                        <div id="background">
-                            <legend>Educational Background</legend>
-                            <div class="control-group">
-                                <label class="control-label">University 1</label>
-                                <div class="controls">
-                                    <input type="text" value="" name="university" placeholder="University name">
-                                    <select class="input-mini" name="degree_type">
-                                    <%
-                                        statement = conn.createStatement();
-                                        rs = statement.executeQuery("SELECT degree_type FROM degree");
+                                    while (rs.next()) {
+                                %>
+                                    <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                                <button class="btn" type="button" onclick="addItem('background', 'backgroundlist')">Add</button>
+                            </div>
+                            <div class="controls" id="background" style="display:none">
+                                <input type="text" value="" name="university" placeholder="University name">
+                                <select class="input-mini" name="degree_type">
+                                <%
+                                    statement = conn.createStatement();
+                                    rs = statement.executeQuery("SELECT degree_type FROM degree");
 
-                                        while (rs.next()) {
-                                    %>
-                                        <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
-                                    <%
-                                        }
-                                    %>
-                                    </select>
-                                    <button class="btn" type="button" onclick="addUniversity()">Add</button>
-                                </div>
-                             </div>
-                        </div>
+                                    while (rs.next()) {
+                                %>
+                                    <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                            </div>
+                         </div>
                     
                         <div id="graduate" style="display:none"> 
                             <legend>Graduate information</legend>
@@ -281,11 +326,13 @@
     </div><!--/.fluid-container-->
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/util.js"></script>
     <script>
         $(document).ready(function() {
             $('#nav-student').addClass('active');
             $('#sub-newstudent').addClass('active');
         });
+
         function showGraduateForm()
         {
             graduateForm = document.getElementById("graduate");
@@ -293,47 +340,13 @@
             graduateForm.style.display = 'block';
             undergraduateForm.style.display = 'none';
         }
-        
+
         function showUndergraduateForm()
         {
             graduateForm = document.getElementById("graduate");
             undergraduateForm = document.getElementById("undergraduate");
             graduateForm.style.display = 'none';
             undergraduateForm.style.display = 'block';
-        }
-        
-        function addUniversity() {
-            $('#background').append(
-            );
-        }
-        
-        function addAttendance() {
-            $('#attendance').after(
-                '<tr> \
-                <td></td> \
-                <td> \
-                    <select name="begin_quarter"> \
-                        <option value="Spring">Spring</option> \
-                        <option value="Summer">Summer</option> \
-                        <option value="Fall">Fall</option> \
-                        <option value="Winter">Winter</option> \
-                    </select> \
-                    <input value="" name="begin_year" size="5">  \
-                    -  \
-                        <select name="end_quarter"> \
-                            <option value="Spring">Spring</option>\
-                            <option value="Summer">Summer</option>\
-                            <option value="Fall">Fall</option>\
-                            <option value="Winter">Winter</option>\
-                        </select>\
-                    <input value="" name="end_year" size="5">\
-                </td>\
-                </tr>');
-        }
-        
-        function showPhdState()
-        {
-            //TODO: zhiheng
         }
     </script>
 </body>

@@ -33,23 +33,11 @@
 %>
 
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span2">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Actions</li>
-                        <li><a href="newprobation.jsp?studentId=<%= studentId %>">Add probation</a></li>
-                        <li><a href="newCourseEnrollment.jsp?studentId=<%= studentId %>">Enroll new class</a></li>
-                        <li><a href="newpastclass.jsp?studentId=<%= studentId %>">Add past class</a></li>
-                        <li class="divider"></li>
-                        <li><a onclick="window.history.back()">Back</a></li>
-                    </ul>
-                </div><!--/.well -->
-            </div><!--/span-->
-
+            <jsp:include page="tpl/sub_student.html" />
             <div class="span10">
                 <%-- -------- SELECT Statement Code Graduate-------- --%>
                 <%
@@ -191,6 +179,10 @@
     <script>
         $(document).ready(function() {
             $('#nav-student').addClass('active');
+            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
+            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
+            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
+            $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
         });
 
         function addUniversity() {

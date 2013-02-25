@@ -31,10 +31,10 @@
 %>
 
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="sub_studentlist.html" />
+            <jsp:include page="tpl/sub_studentlist.html" />
             <div class="span10">
             <%
                     statement = conn.createStatement();

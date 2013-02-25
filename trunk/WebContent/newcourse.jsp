@@ -10,21 +10,6 @@
     <title>New course</title>
 </head>
 
-<body>
-<script>
-    function addPrerequisite() {
-        $('#course').append(
-            '<tr> \
-                <td></td> \
-                <td> \
-                    <input name="prerequisite" value = ""> \
-                    <button type="button">Add</button> \
-                </td> \
-            </tr>'
-        );
-    }
-</script>
-
 <%-- Set the scripting language to Java and --%>
 <%-- Import the java.sql package --%>
 <%@ page language="java" import="java.sql.*" %>
@@ -44,6 +29,8 @@
 
       ResultSet rs;
 %>
+<body>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -172,6 +159,19 @@
         </div>
     </div>
 </body>
+<script>
+    function addPrerequisite() {
+        $('#course').append(
+            '<tr> \
+                <td></td> \
+                <td> \
+                    <input name="prerequisite" value = ""> \
+                    <button type="button">Add</button> \
+                </td> \
+            </tr>'
+        );
+    }
+</script>
 </html>
 <%-- -------- Close Connection Code -------- --%>
 <%

@@ -10,7 +10,6 @@
     <title>Program</title>
 </head>
 
-<body>
 <%-- Set the scripting language to Java and --%>
 <%-- Import the java.sql package --%>
 <%@ page language="java" import="java.sql.*" %>
@@ -32,40 +31,12 @@
 
         String name = request.getParameter("name");
 %>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="brand" href="#">Tritonlink 132B</a>
-              <div class="nav-collapse collapse">
-                <ul class="nav">
-                  <li><a href="index.jsp">Home</a></li>
-                  <li class="active"><a href="studentlist.jsp">Students</a></li>
-                  <li><a href="facultylist.jsp">Faculty</a></li>
-                  <li><a href="courselist.jsp">Course</a></li>
-                  <li><a href="classlist.jsp">Class</a></li>
-                  <li><a href="programlist.jsp">Program</a></li>
-                </ul>
-              </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
 
+<body>
+    <jsp:include page="tpl/header.html" />
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span2">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Actions</li>
-                        <li class="divider"></li>
-                        <li><a href="facultylist.jsp">Back</a></li>
-                    </ul>
-                </div><!--/.well -->
-            </div><!--/span-->
+            <jsp:include page="tpl/sub_program.html" />
 
             <div class="span10">
                 <%
@@ -74,8 +45,9 @@
                     rs.next();
                 %>
                 <form class="form-horizontal" action="programlist.jsp" method="post">
-                    <fieldset>
                     <input type="hidden" value="insert" name="action">
+                    <fieldset>
+                        <legend>Program Information</legend>
                         <div class="control-group">
                             <label class="control-label">Name</label>
                             <div class="controls">
@@ -91,7 +63,6 @@
 
                                 rs = statement.executeQuery("SELECT * FROM department");
                                 ArrayList<String> departmentList = new ArrayList<String>();
-                                int i = 0;
                                 while (rs.next()) {
                                     departmentList.add(rs.getString("name"));
                                 }
@@ -109,6 +80,41 @@
                             </div>
                         </div>
 
+                        <legend>Requirement</legend>
+                        <%
+                            statement = conn.createStatement();
+
+                            rs = statement.executeQuery("SELECT units FROM program_requirement where category='all' AND program_name='" + name + "'");
+                            rs.next();
+                        %>
+                        <div class="control-group">
+                            <label class="control-label">Total units</label>
+                            <div class="controls">
+                                <input type="text" name="total_units" value="<%= rs.getString("units") %>">
+                            </div>
+                        </div>
+
+                        <table id="category_list" class="table table-hover">
+                            <tr>
+                                <th>Category</th>
+                                <th>Units</th>
+                                <th>Min GPA</th>
+                            </tr>
+                            <%
+                                rs = statement.executeQuery("SELECT category, units, min_gpa FROM program_requirement where program_name='" + name + "'");
+                                while (rs.next()) {
+                                    if (rs.getString("category").equals("all")) continue;
+                            %>
+                            <tr>
+                                <td><input type="text" name="category" value="<%= rs.getString("category") %>"></td>
+                                <td><input type="text" name="units" value="<%= rs.getString("units") %>"></td>
+                                <td><input type="text" name="min_gpa" value="<%= rs.getString("min_gpa") %>"></td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                        </table>
+
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Update</button>
                             <button type="button" class="btn">Cancel</button>
@@ -117,28 +123,32 @@
                 </form>
             </div><!--/span-->
         </div><!--/row-->
-
-        <hr>
     </div><!--/.fluid-container-->
-
-    <%-- -------- Close Connection Code -------- --%>
-    <%
-            // Close the ResultSet
-            rs.close();
-
-            // Close the Statement
-            statement.close();
-
-            // Close the Connection
-            conn.close();
-        } catch (SQLException sqle) {
-            out.println(sqle.getMessage());
-        } catch (Exception e) {
-            out.println(e.getMessage());
-        }
-    %>
-
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-program').addClass('active');
+            $('#sub-newprogramrequirement > a').attr('href', 'newprogramrequirement.jsp?name=<%= name %>');
+        });
+    </script>
 </body>
 </html>
+
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        statement.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>
+
