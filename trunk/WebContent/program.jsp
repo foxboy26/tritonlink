@@ -84,7 +84,8 @@
                             statement = conn.createStatement();
 
                             rs = statement.executeQuery("SELECT units FROM program_requirement where category='all' AND program_name='" + name + "'");
-                            rs.next();
+
+                            if (rs.next()) {
                         %>
                         <div class="control-group">
                             <label class="control-label">Total units</label>
@@ -113,6 +114,9 @@
                                 }
                             %>
                         </table>
+                        <%
+                            }
+                        %>
 
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Update</button>
@@ -150,4 +154,3 @@
         out.println(e.getMessage());
     }
 %>
-

@@ -7,7 +7,7 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" >
-    <title>New course</title>
+    <title>Class</title>
 </head>
 
 <%-- Set the scripting language to Java and --%>
@@ -30,6 +30,7 @@
         ResultSet rs;
 
         String courseId = request.getParameter("courseId");
+        String quarter = request.getParameter("quarter");
 %>
 <body>
     <jsp:include page="tpl/header.html" />
@@ -39,127 +40,42 @@
             <div class="span10">
                 <%
                     statement = conn.createStatement();
-                    rs = statement.executeQuery("select * from course where course_id='" + courseId + "'");
-                    rs.next();
+                    rs = statement.executeQuery("SELECT * FROM class WHERE course_id='" + courseId + "' AND quarter='" + quarter + "'");
+                    if (rs.next()) {
+                    String title = rs.getString("title");
                 %>
                 <form class="form-horizontal" action="courselist.jsp" method="post">
                     <input type="hidden" value="insert" name="action">
                     <fieldset>
-                        <legend>Course Information </legend>
-
+                        <legend>Class Information </legend>
                         <div class="control-group">
-                            <label class="control-label" for="course_id">course ID</label>
+                            <label class="control-label">Course ID</label>
                             <div class="controls">
-                                <input type="text" id="course_id" placeholder="course ID" value="" name="course_id">
+                                <input type="text" value="<%= courseId %>" name="course_id">
                             </div>
                         </div>
-
                         <div class="control-group">
-                            <label class="control-label" for="name">Name</label>
+                            <label class="control-label">Quarter</label>
                             <div class="controls">
-                                <input type="text" class="input-small" placeholder="First name" value="" name="firstname">
-                                <input type="text" class="input-small" placeholder="Middle name" value="" name="middlename">
-                                <input type="text" class="input-small" placeholder="Last name" value="" name="lastname">
+                                <input type="text" value="<%= quarter %>" name="quarter">
                             </div>
                         </div>
-
                         <div class="control-group">
-                            <label class="control-label" for="ssn">SSN</label>
+                            <label class="control-label">Title</label>
                             <div class="controls">
-                                <input type="text" id="ssn" placeholder="Student ID" value="" name="ssn">
+                                <input type="text" value="<%= title %>" name="title">
                             </div>
                         </div>
 
-                        <div class="control-group">
-                            <label class="control-label" for="residency">Residency</label>
-                            <div class="controls">
-                                <select name="residency">
-                                  <option value="California resident">California resident</option>
-                                  <option value="Foreign student">Foreign student</option>
-                                  <option value="Non-CA US student">Non-CA US student</option>
-                                </select>  
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label">Enrollment</label>
-                            <div class="controls">
-                                <label class="radio inline">
-                                    <input type="radio" name="is_enrolled" value="true">Yes
-                                </label>
-                                <label class="radio inline">
-                                    <input type="radio" name="is_enrolled" value="false">No
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label">Attendances</label>
-                            <div class="controls" id="attendace">
-                                <select class="input-small" name="begin_quarter">
-                                    <option value="Spring">Spring</option>
-                                    <option value="Summer">Summer</option>
-                                    <option value="Fall">Fall</option>
-                                    <option value="Winter">Winter</option>
-                                </select>
-                                <select class="input-small" name="begin_year">		        
-                                <%
-                                    for (int i = 1900; i < 2014; ++i) {
-                                %>  
-                                    <option value="<%= i %>"><%= i %></option>
-                                <%
-                                    }
-                                %>
-                                </select>
-                                - 
-                                <select class="input-small" name="end_quarter">
-                                    <option value="Spring">Spring</option>
-                                    <option value="Summer">Summer</option>
-                                    <option value="Fall">Fall</option>
-                                    <option value="Winter">Winter</option>
-                                </select>
-                                <select class="input-small" name="end_year">
-                                <%
-                                    for (int i = 1900; i < 2014; ++i) {
-                                %>  
-                                    <option value="<%= i %>"><%= i %></option>
-                                <%
-                                    }
-                                %>
-                                </select>
-                                <button class="btn" type="button" onclick="addAttendance()">Add</button></td>
-                            </div>
-                        </div>
-
-
-                        <div id="background">
-                            <legend>Educational Background</legend>
-                            <div class="control-group">
-                                <label class="control-label">University 1</label>
-                                <div class="controls">
-                                    <input type="text" value="" name="university" placeholder="University name">
-                                    <select class="input-mini" name="degree_type">
-                                    <%
-                                        statement = conn.createStatement();
-                                        rs = statement.executeQuery("SELECT degree_type FROM degree");
-
-                                        while (rs.next()) {
-                                    %>
-                                        <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
-                                    <%
-                                        }
-                                    %>
-                                    </select>
-                                    <button class="btn" type="button" onclick="addUniversity()">Add</button>
-                                </div>
-                             </div>
-                        </div>
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Update</button>
                             <button type="button" class="btn">Cancel</button>
                         </div>
                     </fieldset>
                 </form>
+                <%
+                    }
+                %>
             </div><!--/span-->
         </div><!--/row-->
     </div><!--/.fluid-container-->
