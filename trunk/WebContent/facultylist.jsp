@@ -36,7 +36,6 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <jsp:include page="tpl/sub_facultylist.html" />
-
             <div class="span10">
                 <%
                     Statement statement = conn.createStatement();

@@ -31,71 +31,60 @@
 %>
 <body>
     <jsp:include page="tpl/header.html" />
-
     <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span2">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Actions</li>
-              <li><a href="newcourse.jsp">Add course</a></li>
-              <li class="divider"></li>
-              <li><a onclick="window.history.back()">Back</a></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
+        <div class="row-fluid">
+            <jsp:include page="tpl/sub_courselist.html" />
+            <div class="span10">
+                <%
+                    Statement statement = conn.createStatement();
 
-        <div class="span10">
-            <%
-                Statement statement = conn.createStatement();
+                    ResultSet rs = statement.executeQuery
+                        ("SELECT * FROM Course");
+                %>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Course ID</th>
+                        <th>Department</th>
+                        <th>Consent</th>
+                        <th>Unit Range</th>
+                        <th>Grade Type</th>
+                        <th>Labwork</th>
+                        <th>Prerequisite</th>
+                    </tr>
+                <%
+                        while ( rs.next() ) {
+                            String prerequisite = "";
+                            String courseId = rs.getString("course_id");
+            
+                %>
+                    <tr onclick="document.location = 'course.jsp?&courseId=' + <%= courseId %>;">
+                        <td><%= rs.getString("course_id") %></td>
+                        <td><%= rs.getString("department") %></td>    
+                        <td><%= rs.getString("is_consent") %></td>
+                        <td><%= rs.getString("unit_range") %></td>
+                        <td><%= rs.getString("grade_type") %></td>
+                        <td><%= rs.getBoolean("labwork") %></td>
 
-                ResultSet rs = statement.executeQuery
-                    ("SELECT * FROM Course");
-            %>
-            <table class="table table-hover">
-                <tr>
-                    <th>Course ID</th>
-                    <th>Department</th>
-                    <th>Consent</th>
-                    <th>Unit Range</th>
-                    <th>Grade Type</th>
-                    <th>Labwork</th>
-                    <th>Prerequisite</th>
-                </tr>
-            <%
-                    while ( rs.next() ) {
-                        String prerequisite = "";
-                        String courseId = rs.getString("course_id");
-        
-            %>
-                <tr onclick="document.location = 'course.jsp?&courseId=' + <%= courseId %>;">
-                    <td><%= rs.getString("course_id") %></td>
-                    <td><%= rs.getString("department") %></td>    
-                    <td><%= rs.getString("is_consent") %></td>
-                    <td><%= rs.getString("unit_range") %></td>
-                    <td><%= rs.getString("grade_type") %></td>
-                    <td><%= rs.getBoolean("labwork") %></td>
-
-                    <%
-                    PreparedStatement pstmt = conn.prepareStatement(
-                    "SELECT pre_course_id FROM prerequisite WHERE prerequisite.course_id=?");
-                        pstmt.setString(1, rs.getString("course_id"));
-                        ResultSet rsPre = pstmt.executeQuery();
-                        prerequisite = "";
-                        while (rsPre.next()) {
-                            prerequisite += rsPre.getString("pre_course_id");
-                            prerequisite += ";";
-                        }
-                    %>
-                    <td><%= prerequisite %></td>
-                </tr>
-            <%
-                }
-            %>
-         </table>
-         </div>
-         </div>
-     </div>
+                        <%
+                        PreparedStatement pstmt = conn.prepareStatement(
+                        "SELECT pre_course_id FROM prerequisite WHERE prerequisite.course_id=?");
+                            pstmt.setString(1, rs.getString("course_id"));
+                            ResultSet rsPre = pstmt.executeQuery();
+                            prerequisite = "";
+                            while (rsPre.next()) {
+                                prerequisite += rsPre.getString("pre_course_id");
+                                prerequisite += ";";
+                            }
+                        %>
+                        <td><%= prerequisite %></td>
+                    </tr>
+                <%
+                    }
+                %>
+                </table>
+            </div>
+        </div>
+    </div>
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script>

@@ -60,7 +60,7 @@
                                     courseList.add(rs.getString("course_id"));
                                 }
                             %>
-                                <select class="input-medium" name="course_id">
+                                <select name="course_id">
                                 <%
                                     for (String course : courseList) {
                                 %>
@@ -99,10 +99,9 @@
                             </div>
                         </div>
 
-                        <legend>Section list</legend>
-                        <input type="hidden" value="2" id="section_num">
+                        <button class="btn" type="button" onclick="addSection()">Add section</button>
+                        <input type="hidden" value="1" id="section_num">
                         <legend>Section 1</legend>
-                        <button class="btn" type="button" onclick="addSection()">Add</button>
                         <div class="control-group">
                             <label class="control-label">Section ID</label>
                             <div class="controls">
@@ -144,7 +143,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <select class="input-mini" name="type" onchange="checkMandatory()">
+                                    <select class="input-mini" name="type">
                                         <option value="LE">LE</option>
                                         <option value="DI">DI</option>
                                     </select>
@@ -153,10 +152,26 @@
                                 <td><input type="text" class="input-small" name="start_time"> - <input type="text" class="input-small" name="end_time"></td>
                                 <td><input type="text" class="input-small" name="days"></td>
                                 <td><input type="checkbox" name="mandatory" value="1" checked="true"></td>
-                                <td><button class="btn" type="button" onclick="additem('section1')">Add</button></td>
+                                <td><button class="btn" type="button" onclick="addMeeting()">Add</button></td>
+                            </tr>
+                            <tr id="meeting" style="display:none">
+                                <td>
+                                    <select class="input-mini" name="type">
+                                        <option value="LE">LE</option>
+                                        <option value="DI">DI</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="location"></td>
+                                <td><input type="text" class="input-small" name="start_time"> - <input type="text" class="input-small" name="end_time"></td>
+                                <td><input type="text" class="input-small" name="days"></td>
+                                <td><input type="checkbox" name="mandatory" value="1" checked="true"></td>
                             </tr>
                         </table>
 
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn">Cancel</button>
+                        </div>
                     </fieldset>
                 </form>
             </div><!--/span-->
@@ -172,6 +187,11 @@
         });
 
         function addSection() {
+            $('#section_num')
+            addItem('section', 'sectionlist');
+        }
+
+        function addMeeting(sectionId) {
             $('#section_num')
             addItem('section', 'sectionlist');
         }
