@@ -30,23 +30,23 @@
         Connection conn = DriverManager.getConnection(Config.connectionURL);
 %>
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="sub_studentlist.html" />
+            <jsp:include page="tpl/sub_studentlist.html" />
             <div class="span10">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#graduate" data-toggle="tab">Graduate</a></li>
                     <li><a href="#undergraduate" data-toggle="tab">Undergraduate</a></li>
                 </ul>
-                <%-- -------- SELECT Statement Code Graduate-------- --%>
-                <%
-                    Statement statement = conn.createStatement();
-                    ResultSet rs = statement.executeQuery
-                        ("SELECT * FROM graduate, student WHERE student.student_id = graduate.student_id");
-                %>
                 <div class="tab-content">
+                    <%-- -------- SELECT Statement Code Graduate-------- --%>
+                    <%
+                        Statement statement = conn.createStatement();
+                        ResultSet rs = statement.executeQuery
+                            ("SELECT * FROM graduate, student WHERE student.student_id = graduate.student_id");
+                    %>
                     <div class="tab-pane active" id="graduate">
                         <table class="table table-hover">
                             <tr>

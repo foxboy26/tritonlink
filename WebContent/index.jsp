@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container">
       <!-- Main hero unit for a primary marketing message or call to action -->

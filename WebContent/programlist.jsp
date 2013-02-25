@@ -31,19 +31,10 @@
 %>
     
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span2">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Actions</li>
-                        <li><a href="newprogram.jsp">Add program</a></li>
-                        <li class="divider"></li>
-                        <li><a onclick="window.history.back()">Back</a></li>
-                    </ul>
-                </div><!--/.well -->
-            </div><!--/span-->
+            <jsp:include page="tpl/sub_programlist.html" />
 
             <div class="span10">
             <%

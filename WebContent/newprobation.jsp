@@ -10,47 +10,15 @@
     <title>New probation</title>
 </head>
 
+<%
+    String studentId = request.getParameter("studentId");
+%>
 <body>
-    <%
-        String studentId = request.getParameter("studentId");
-    %>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="brand" href="#">Tritonlink 132B</a>
-              <div class="nav-collapse collapse">
-                <ul class="nav">
-                  <li><a href="index.jsp">Home</a></li>
-                  <li class="active"><a href="studentlist.jsp">Students</a></li>
-                  <li><a href="facultylist.jsp">Faculty</a></li>
-                  <li><a href="courselist.jsp">Course</a></li>
-                  <li><a href="classlist.jsp">Class</a></li>
-                  <li><a href="programlist.jsp">Program</a></li>
-                </ul>
-              </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span2">
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        <li class="nav-header">Actions</li>
-                        <li class="active"><a href="newprobation.jsp?studentId=<%= studentId %>">Add probation</a></li>
-                        <li><a href="newCourseEnrollment.jsp?studentId=<%= studentId %>">Enroll new class</a></li>
-                        <li><a href="newpastclass.jsp?studentId=<%= studentId %>">Add past class</a></li>
-                        <li class="divider"></li>
-                        <li><a onclick="window.history.back()">Back</a></li>
-                    </ul>
-                </div><!--/.well -->
-            </div><!--/span-->
+            <jsp:include page="tpl/sub_student.html" />
 
             <div class="span10">
                 <form class="form-horizontal" action="probations.jsp" method="post">
@@ -114,5 +82,16 @@
             </div>
         </div>
     </div>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-student').addClass('active');
+            $('#sub-newprobation').addClass('active');
+            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
+            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
+            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
+        });
+    </script>
 </body>
 </html>

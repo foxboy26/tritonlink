@@ -31,51 +31,42 @@
 %>
 
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span2">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Actions</li>
-              <li><a href="newfaculty.jsp">Add faculty</a></li>
-              <li class="divider"></li>
-              <li><a onclick="window.history.back()">Back</a></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
+        <div class="row-fluid">
+            <jsp:include page="tpl/sub_facultylist.html" />
 
-        <div class="span10">
-            <%
-                Statement statement = conn.createStatement();
+            <div class="span10">
+                <%
+                    Statement statement = conn.createStatement();
 
-                ResultSet rs = statement.executeQuery
-                    ("SELECT * FROM faculty");
-            %>
-            <table class="table table-hover">
-                <tr>
-                    <th>Faculty ID</th>
-                    <th>Name</th>
-                    <th>Title</th>
-                    <th>Department</th>                       
-                </tr>
-                    
-            <%
-                    while ( rs.next() ) {
-                        String facultyId = rs.getString("faculty_id");
-        
-            %>
-                <tr onclick="document.location = 'faculty.jsp?&facultyId=' + <%= facultyId %>;">
-                    <td><%= rs.getInt("faculty_id") %></td>
-                    <td><%= rs.getString("name") %></td>  
-                    <td><%= rs.getString("title") %></td>  
-                    <td><%= rs.getString("department") %></td>                               
-                </tr>
-            <%
-                }
-            %>
-            </table>
+                    ResultSet rs = statement.executeQuery
+                        ("SELECT * FROM faculty");
+                %>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Faculty ID</th>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Department</th>                       
+                    </tr>
+                        
+                <%
+                        while ( rs.next() ) {
+                            String facultyId = rs.getString("faculty_id");
+            
+                %>
+                    <tr onclick="document.location = 'faculty.jsp?&facultyId=' + <%= facultyId %>;">
+                        <td><%= rs.getInt("faculty_id") %></td>
+                        <td><%= rs.getString("name") %></td>  
+                        <td><%= rs.getString("title") %></td>  
+                        <td><%= rs.getString("department") %></td>                               
+                    </tr>
+                <%
+                    }
+                %>
+                </table>
             </div>
         </div>
     </div>

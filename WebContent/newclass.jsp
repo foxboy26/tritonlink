@@ -1,270 +1,196 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="shortcut icon" href="favicon.ico" >
-<script src="js/jquery-1.9.1.js">
-</script>
-<title>New class</title>
-</head>
-<body>
-    <script>
-        function checkMandatory() {
-            //if ($('.type').val() == "LE") {
-            //    $('.mandatory').attr("disabled", true);            
-            //}
-            //else {
-            //    $('.mandatory').attr("disabled", false);            
-            //}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" >
+    <title>New class</title>
+    <style>
+        .table th {
+            vertical-align: middle;
         }
+    </style>
+</head>
+
+<%-- Set the scripting language to Java and --%>
+<%-- Import the java.sql package --%>
+<%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="java.util.ArrayList" %>
+<%@ page language="java" import="db.Config" %>
+<%-- -------- Open Connection Code -------- --%>
+<%
+    try {
+        // Load JDBC Driver class file
+        DriverManager.registerDriver
+          (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+
+        // Make a connection to the MS SQL Server datasource "tritonlink"
+        Connection conn = DriverManager.getConnection(Config.connectionURL);
+
+        Statement statement;
+
+        ResultSet rs;
+%>
+
+<body>
+    <jsp:include page="tpl/header.html" />
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <jsp:include page="tpl/sub_class.html" />
+            <div class="span10">
+                <form class="form-horizontal" action="classlist.jsp" method="post">
+                    <input type="hidden" value="insert" name="action">
+                    <fieldset>
+                        <legend>Class Information</legend>
+                        <div class="control-group">
+                            <label class="control-label">Course ID</label>
+                            <div class="controls">
+                            <%
+                                
+                                statement = conn.createStatement();
+
+                                rs = statement.executeQuery("SELECT Course_id FROM Course");
+                            
+                                ArrayList<String> courseList = new ArrayList<String>();
+                                while (rs.next()) {
+                                    courseList.add(rs.getString("course_id"));
+                                }
+                            %>
+                                <select class="input-medium" name="course_id">
+                                <%
+                                    for (String course : courseList) {
+                                %>
+                                        <option value="<%= course %>"><%= course %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Title</label>
+                            <div class="controls">
+                                <input type="text" name="title" value = "">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Quarter</label>
+                            <div class="controls">
+                                <select class="input-small" name="quarter">	    		
+                                    <option value="Fall">Fall</option>
+                                    <option value="Winter">Winter</option>
+                                    <option value="Spring">Spring</option>
+                                </select>
+                                <select class="input-small" name="year">
+                                <%
+                                    for (int i = 1900; i < 2014; ++i) {
+                                %>	
+                                    <option value="<%= i %>"><%= i %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <legend>Section list</legend>
+                        <input type="hidden" value="2" id="section_num">
+                        <legend>Section 1</legend>
+                        <button class="btn" type="button" onclick="addSection()">Add</button>
+                        <div class="control-group">
+                            <label class="control-label">Section ID</label>
+                            <div class="controls">
+                                <input type="text" name="section_id">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Instructor</label>
+                            <div class="controls">
+                                <select name="faculty_id">
+                                <%
+                                    rs = statement.executeQuery("SELECT * FROM faculty");
+                                    while (rs.next()) {
+                                %>
+                                    <option value="<%= rs.getString("faculty_id") %>"><%= rs.getString("name") %></option>
+                                <%
+                                    }
+                                %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Limit</label>
+                            <div class="controls">
+                                <input type="text" name="limit">
+                            </div>
+                        </div>
+
+                        <table class="table" id="meetinglist">
+                            <caption>Weekly Meetings</caption>
+                            <tr>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Time</th>
+                                <th>Days</th>
+                                <th>Mandatory</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select class="input-mini" name="type" onchange="checkMandatory()">
+                                        <option value="LE">LE</option>
+                                        <option value="DI">DI</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="location"></td>
+                                <td><input type="text" class="input-small" name="start_time"> - <input type="text" class="input-small" name="end_time"></td>
+                                <td><input type="text" class="input-small" name="days"></td>
+                                <td><input type="checkbox" name="mandatory" value="1" checked="true"></td>
+                                <td><button class="btn" type="button" onclick="additem('section1')">Add</button></td>
+                            </tr>
+                        </table>
+
+                    </fieldset>
+                </form>
+            </div><!--/span-->
+        </div><!--/row-->
+    </div><!--/.fluid-container-->
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/util.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-class').addClass('active');
+            $('#sub-newclass').addClass('active');
+        });
 
         function addSection() {
-            var num = parseInt($('#section_num').val());
-            $('#section_num').val(num+1);
-            $('#section_list').append($('.section').last());
-        }
-
-        function addMeeting(sectionId) {
-            var sectionId = '#' + sectionId;
-            var num = parseInt($(sectionId).val());
-            $(sectionId).val(num+1);
-            $(sectionId + '_meeting').append(
-                '<tr> \
-                    <td> \
-                        <select name="year" onchange="checkMandatory()"> \
-                            <option value="LE">LE</option> \
-                            <option value="DI">DI</option> \
-                        </select> \
-                    </td> \
-                    <td><input name="location"></td> \
-                    <td><input name="start_time" size="5"> - <input name="end_time" size="5"></td> \
-                    <td><input name="days"></td> \
-                    <td><input type="checkbox" name="mandatory" value="1" checked="true"></td> \
-                    <td></td> \
-                </tr>'
-            );
+            $('#section_num')
+            addItem('section', 'sectionlist');
         }
     </script>
-
-    <%-- Set the scripting language to Java and --%>
-    <%-- Import the java.sql package --%>
-    <%@ page language="java" import="java.sql.*" %>
-    <%@ page language="java" import="java.util.ArrayList" %>
-    <%@ page language="java" import="db.Config" %>
-    <%-- -------- Open Connection Code -------- --%>
-    <%
-      try {
-          // Load JDBC Driver class file
-          DriverManager.registerDriver
-              (new com.microsoft.sqlserver.jdbc.SQLServerDriver());
-
-          // Make a connection to the MS SQL Server datasource "tritonlink"
-          Connection conn = DriverManager.getConnection(Config.connectionURL);
-    %>
-
-
-    <form action="class.jsp" method="post">
-        <input type="hidden" value="insert" name="action">
-        <table>
-            <tr>
-                <th colspan="2">Class Information</th>
-            </tr>
-            <tr>
-                <td>Course ID</td>
-                <td>
-                <%
-                    
-                    Statement statement = conn.createStatement();
-
-                    //Get all course ID from table course
-                    ResultSet rs = statement.executeQuery("SELECT Course_id FROM Course");
-                
-                    ArrayList<String> courseList = new ArrayList<String>();
-                    while (rs.next()) {
-                        courseList.add(rs.getString("course_id"));
-                    }
-                %>
-                    <select name="course_id">
-                    <%
-                        for (String course : courseList) {
-                    %>
-                            <option value="<%= course %>"><%= course %></option>
-                    <%
-                        }
-                    %>
-                   </select>
-               </td>
-            </tr>
-            <tr>
-                <td>Title</td>
-                <td>	 	    
-                    <input name="title" value = "">
-                *</td>        
-            </tr>
-            <tr>
-                <td>Quarter</td>
-                <td>
-                    <select name="quarter">	    		
-                        <option value="Fall">Fall</option>
-                        <option value="Winter">Winter</option>
-                        <option value="Spring">Spring</option>
-                    </select>
-                    <select name="year">
-                    <%
-                        for (int i = 1900; i < 2014; ++i) {
-                    %>	
-                        <option value="<%= i %>"><%= i %></option>
-                    <%
-                        }
-                    %>
-                    </select>
-                *</td>
-            </tr>
-        </table> 
-
-        <input type="hidden" value="2" id="section_num" name="section_num">
-        <div id="section_list"> 
-            Section List
-            <button type="button" onclick="addSection()">Add</button>
-            <table class='section'>
-                <tr colspan="2">
-                    <th>Section 1</th>
-                </tr>
-                <tr>
-                    <td>Section ID</td>
-                    <td><input name="section_id" size="5"></td>
-                </tr>
-                <tr>
-                    <td>Instructor</td>
-                    <td>
-                        <select name="faculty_id">
-                        <%
-                            rs = statement.executeQuery("SELECT * FROM faculty");
-                            while (rs.next()) {
-                        %>
-                            <option value="<%= rs.getString("faculty_id") %>"><%= rs.getString("name") %></option>
-                        <%
-                            }
-                        %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Limit</td>
-                    <td><input name="limit" size="5"></td>
-                </tr>
-                <tr>
-                    <td>Weekly Meetings</td>
-                    <td>
-                        <input id="section1" type="hidden" value="1" name="meeting_num">
-                        <table id="section1_meeting">
-                            <tr>
-                                <th>Type</th>
-                                <th>Location</th>
-                                <th>Time</th>
-                                <th>Days</th>
-                                <th>Mandatory</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="type" onchange="checkMandatory()">
-                                        <option value="LE">LE</option>
-                                        <option value="DI">DI</option>
-                                    </select>
-                                </td>
-                                <td><input name="location"></td>
-                                <td><input name="start_time" size="5"> - <input name="end_time" size="5"></td>
-                                <td><input name="days"></td>
-                                <td><input type="checkbox" name="mandatory" value="1" checked="true"></td>
-                                <td><button type="button" onclick="addMeeting('section1')">Add</button></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-
-            <table class='section'>
-                <tr colspan="2">
-                    <th>Section 2</th>
-                <tr>
-                <tr>
-                    <td>Section ID</td>
-                    <td><input name="section_id" size="5"></td>
-                </tr>
-                <tr>
-                    <td>Instructor</td>
-                    <td>
-                        <select name="faculty_id">
-                        <%
-                            rs = statement.executeQuery("SELECT * FROM faculty");
-                            while (rs.next()) {
-                        %>
-                                <option value="<%= rs.getString("faculty_id") %>"><%= rs.getString("name") %></option>
-                        <%
-                            }
-                        %>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Limit</td>
-                    <td><input name="limit" size="5"></td>
-                </tr>
-                <tr>
-                    <td>Weekly Meetings</td>
-                    <td>
-                        <input id="section2" type="hidden" value="1" name="meeting_num">
-                        <table id="section2_meeting">
-                            <tr>
-                                <th>Type</th>
-                                <th>Location</th>
-                                <th>Time</th>
-                                <th>Days</th>
-                                <th>Mandatory</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="type" onchange="checkMandatory()">
-                                        <option value="LE">LE</option>
-                                        <option value="DI">DI</option>
-                                    </select>
-                                </td>
-                                <td><input name="location"></td>
-                                <td><input name="start_time" size="5"> - <input name="end_time" size="5"></td>
-                                <td><input name="days"></td>
-                                <td><input type="checkbox" name="mandatory" value="1" checked="true"></td>
-                                <td><button type="button" onclick="addMeeting('section2')">Add</button></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div> 
-
-        <table>
-            <tr>
-                <td><input type="submit" value="Save"></td>
-                <td><button type="button" value="Cancel">Cancel</button></td>
-            </tr>
-        </table>
-        <%-- -------- Close Connection Code -------- --%>
-        <%
-                // Close the ResultSet
-                rs.close();
-
-                // Close the Statement
-                statement.close();
-
-                // Close the Connection
-                conn.close();
-            } catch (SQLException sqle) {
-                out.println(sqle.getMessage());
-            } catch (Exception e) {
-                out.println(e.getMessage());
-            }
-        %>
-    </form>
 </body>
 </html>
+<%-- -------- Close Connection Code -------- --%>
+<%
+        // Close the ResultSet
+        rs.close();
+
+        // Close the Statement
+        statement.close();
+
+        // Close the Connection
+        conn.close();
+    } catch (SQLException sqle) {
+        out.println(sqle.getMessage());
+    } catch (Exception e) {
+        out.println(e.getMessage());
+    }
+%>

@@ -30,7 +30,7 @@
         Connection conn = DriverManager.getConnection(Config.connectionURL);
 %>
 <body>
-    <jsp:include page="header.html" />
+    <jsp:include page="tpl/header.html" />
 
     <div class="container-fluid">
       <div class="row-fluid">
