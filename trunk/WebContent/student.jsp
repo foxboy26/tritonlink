@@ -184,21 +184,6 @@
             $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
             $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
         });
-
-        function addUniversity() {
-            $('#background').append(
-            );
-        }
-        
-        function addAttendance() {
-            $('#attendance').after(
-            );
-        }
-        
-        function showPhdState()
-        {
-            //TODO: zhiheng
-        }
     </script>
 </body>
 </html>
