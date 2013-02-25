@@ -55,7 +55,7 @@
                         String quarter = rs.getString("quarter");
                         String title = rs.getString("title");
             %>
-                    <tr onclick="document.location = 'class.jsp?&classId=' + <%= courseId %>;">
+                    <tr onclick="document.location = 'class.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>';">
                         <td><%= courseId %></td>
                         <td><%= quarter %></td>    
                         <td><%= title %></td>                          
