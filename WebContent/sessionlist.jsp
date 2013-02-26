@@ -7,7 +7,7 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" >
-    <title>Tritonlink - Classes</title>
+    <title>Session List</title>
     <style>
         .table th {
             vertical-align: middle;
@@ -30,35 +30,79 @@
 
         // Make a connection to the MS SQL Server datasource "tritonlink"
         Connection conn = DriverManager.getConnection(Config.connectionURL);
+        
+		String sectionId = request.getParameter("sectionId");
+		String courseId = request.getParameter("courseId");
+		String quarter = request.getParameter("quarter");
 %>
+
+<%-- -------- INSERT Code -------- --%>
+            <%
+                    String action = request.getParameter("action");
+                    // Check if an insertion is requested
+                    if (action != null && action.equals("insert")) {
+                        // Preprocess submitted form data
+                        
+                        String location = request.getParameter("location");
+                        String startTime = request.getParameter("start_time");
+                        String endTime = request.getParameter("end_time");
+                        String date = request.getParameter("days");                                            
+                        
+                        // Begin transaction
+                        conn.setAutoCommit(false);
+                        
+                        // Create the prepared statement and use it to
+                        // INSERT the student attributes INTO the Student table.
+                        PreparedStatement pstmt = conn.prepareStatement(
+                            "INSERT INTO Meeting VALUES (?, 'RW', ?, ?, ?, ?, 'false')");
+
+                        pstmt.setString(1, sectionId);
+                        pstmt.setString(2, location);
+                        pstmt.setString(3, startTime);
+                        pstmt.setString(4, endTime);
+                        pstmt.setString(5, date);
+
+                        int rowCount = pstmt.executeUpdate();
+                        
+                        // Commit transaction
+                        conn.commit();
+                        conn.setAutoCommit(true);
+                    }
+            %> 
 <body>
     <jsp:include page="tpl/header.html" />
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="tpl/sub_classlist.html" />
+            <jsp:include page="tpl/sub_section.html" />
             <div class="span10">
             <%
                 Statement statement = conn.createStatement();
+            	String sql = "SELECT * FROM meeting"
+            			+ " Where section_id = class_section.course_id = '"
+            			+ sectionId + "'"
+            			+ " ORDER BY type";
 
-                ResultSet rs = statement.executeQuery
-                    ("SELECT * FROM Class");
+                ResultSet rs = statement.executeQuery(sql);
             %>
                 <table class="table table-hover">
                     <tr>
-                        <th>Course ID</th>
-                        <th>Quarter</th>
-                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Dates</th>
+                        <th>Mandatory</th>
                     </tr>
             <%
                     while ( rs.next() ) {
-                        String courseId = rs.getString("course_id");
-                        String quarter = rs.getString("quarter");
-                        String title = rs.getString("title");
             %>
-                    <tr onclick="document.location = 'class.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>';">
-                        <td><%= courseId %></td>
-                        <td><%= quarter %></td>    
-                        <td><%= title %></td>                          
+                    <tr>
+                        <td><%= rs.getString("type") %></td>
+                        <td><%= rs.getString("location") %></td>
+                        <td><%= rs.getString("start_time") %></td>
+                        <td><%= rs.getString("end_time") %></td>
+                        <td><%= rs.getString("days") %></td> 
+                        <td><%= rs.getString("mandatory") %></td>                   
                     </tr>
             <%
                     }
@@ -71,112 +115,14 @@
     <script src="js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#nav-class').addClass('active');
+        	 $('#nav-class').addClass('active');
+             $('#sub-sessionlist').addClass('active');
+             $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
+             $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
         });
     </script>
 </body>
 </html>
-<%-- -------- INSERT Code -------- --%>
-<%
-        String action = request.getParameter("action");
-        // Check if an insertion is requested
-        if (action != null && action.equals("insert")) {
-            // Preprocess submitted form data
-            String courseId = request.getParameter("course_id");
-            String quarter = request.getParameter("quarter");
-            quarter += " ";
-            quarter += request.getParameter("year");
-            String title = request.getParameter("title");
-
-            // section info
-            int sectionNum = Integer.parseInt(request.getParameter("section_num"));
-            System.out.println(sectionNum);
-            String[] sectionIdList = request.getParameterValues("section_id");
-            String[] facultyIdList = request.getParameterValues("faculty_id");
-            String[] limitList = request.getParameterValues("limit");
-            // meeting info
-            String[] meetingNumList = request.getParameterValues("meeting_num");
-            String[] typeList = request.getParameterValues("type");
-            String[] locationList = request.getParameterValues("location");
-            String[] startTimeList = request.getParameterValues("start_time");
-            String[] endTimeList = request.getParameterValues("end_time");
-            String[] daysList = request.getParameterValues("days");
-            String[] mandatoryList = request.getParameterValues("mandatory");
-
-            ClassSection[] sectionList = new ClassSection[sectionNum];
-            int offset = 0;
-            for (int i = 0; i < sectionNum; i++) {
-                sectionList[i] = new ClassSection();
-                sectionList[i].sectionId = sectionIdList[i];
-                sectionList[i].facultyId = facultyIdList[i];
-                sectionList[i].limit = Integer.parseInt(limitList[i]);
-                sectionList[i].meetingList = new Meeting[Integer.parseInt(meetingNumList[i])];
-                for (int j = 0; j < sectionList[i].meetingList.length; j++) {
-                    sectionList[i].meetingList[j] = new Meeting();
-                    sectionList[i].meetingList[j].type = typeList[offset+j];
-                    sectionList[i].meetingList[j].location =locationList[offset+j];
-                    sectionList[i].meetingList[j].startTime = startTimeList[offset+j];
-                    sectionList[i].meetingList[j].endTime = endTimeList[offset+j];
-                    sectionList[i].meetingList[j].days = daysList[offset+j];
-                    sectionList[i].meetingList[j].mandatory = Boolean.parseBoolean(mandatoryList[offset+j]);
-                }
-                offset += sectionList[i].meetingList.length;
-            }
-
-            // Begin transaction
-            conn.setAutoCommit(false);
-            
-            // INSERT the class attributes INTO the Class table.
-            PreparedStatement pstmt = conn.prepareStatement(
-                "INSERT INTO Class VALUES (?, ?, ?)");
-            pstmt.setString(1, courseId);
-            pstmt.setString(2, quarter);
-            pstmt.setString(3, title);
-            int rowCount = pstmt.executeUpdate();
-
-            for (ClassSection section : sectionList) {
-                // INSERT INTO the Section table.
-                pstmt = conn.prepareStatement(
-                    "INSERT INTO Section VALUES (?, 0, 0, ?)");
-                pstmt.setString(1, section.sectionId);
-                pstmt.setInt(2, section.limit);
-                rowCount = pstmt.executeUpdate();
-
-                // INSERT INTO the Class_Section table.
-                pstmt = conn.prepareStatement(
-                    "INSERT INTO class_section VALUES (?, ?, ?)");
-                pstmt.setString(1, courseId);
-                pstmt.setString(2, section.sectionId);
-                pstmt.setString(3, quarter);
-                rowCount = pstmt.executeUpdate();
-
-                for (Meeting meeting : section.meetingList) {
-                    // INSERT INTO the Meeting table.
-                    pstmt = conn.prepareStatement(
-                        "INSERT INTO Meeting VALUES (?, ?, ?, ?, ?, ?, ?)");
-                    pstmt.setString(1, section.sectionId);
-                    pstmt.setString(2, meeting.type);
-                    pstmt.setString(3, meeting.location);
-                    pstmt.setString(4, meeting.startTime);
-                    pstmt.setString(5, meeting.endTime);
-                    pstmt.setString(6, meeting.days);
-                    pstmt.setBoolean(7, meeting.mandatory);
-                    rowCount = pstmt.executeUpdate();
-
-                    // INSERT INTO the Teach table.
-                    pstmt = conn.prepareStatement(
-                        "INSERT INTO Teach VALUES (?, ?)");
-                    pstmt.setString(1, section.facultyId);
-                    pstmt.setString(2, section.sectionId);
-                    rowCount = pstmt.executeUpdate();
-                }
-            }
-
-            // Commit transaction
-            conn.commit();
-            conn.setAutoCommit(true);
-        }
-%>
                     
 <%-- -------- Close Connection Code -------- --%>
 <%
