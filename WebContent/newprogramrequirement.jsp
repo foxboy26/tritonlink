@@ -21,7 +21,7 @@
         <div class="row-fluid">
             <jsp:include page="tpl/sub_program.html" />
             <div class="span10">
-                <form class="form-horizontal" action="programrequirementlist.jsp" method="post">
+                <form class="form-horizontal" action="programrequirement.jsp" method="post">
 
                 <input type="hidden" value="insert" name="action">
                     <fieldset>
@@ -38,16 +38,22 @@
                                 <input type="text" name="total_units">
                             </div>
                         </div>
-                        <table id="category_list" class="table table-hover">
+                        <table id="categorylist" class="table table-hover">
                             <tr>
                                 <th>Category</th>
                                 <th>Units</th>
                                 <th>Min GPA</th>
                             </tr>
                             <tr>
-                                <td><input type="text" name="category"></td>
-                                <td><input type="text" name="units"></td>
-                                <td><input type="text" name="min_gpa"></td>
+                                <td><input class="input-small" type="text" name="category"></td>
+                                <td><input class="input-small" type="text" name="units"></td>
+                                <td><input class="input-mini" type="text" name="min_gpa"></td>
+                                <td><button type="button" class="btn" onclick="addItem('category', 'categorylist')">Add</button></td>
+                            </tr>
+                            <tr id="category">
+                                <td><input class="input-small" type="text" name="category"></td>
+                                <td><input class="input-small" type="text" name="units"></td>
+                                <td><input class="input-mini" type="text" name="min_gpa"></td>
                             </tr>
                         </table>
                         <div class="form-actions">
@@ -62,6 +68,7 @@
 
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/util.js"></script>
     <script>
         $(document).ready(function() {
             $('#nav-program').addClass('active');

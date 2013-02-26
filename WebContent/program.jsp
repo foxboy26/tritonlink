@@ -133,6 +133,7 @@
         $(document).ready(function() {
             $('#nav-program').addClass('active');
             $('#sub-newprogramrequirement > a').attr('href', 'newprogramrequirement.jsp?name=<%= name %>');
+            $('#sub-newplan > a').attr('href', 'newplan.jsp?name=<%= name %>');
         });
     </script>
 </body>
