@@ -27,20 +27,18 @@ try {
     String courseID = "";
     String sectionID = "";
     String units = "";
-    String studentId = request.getParameter("studentId");
+    String studentID = request.getParameter("studentId");
     String gradeType = "Letter";
     if(action != null && action.equals("select")){
         courseID = request.getParameter("course_id");
-        studentId = request.getParameter("studentId");
+        studentID = request.getParameter("studentID");
     }
 %>
 <body>
     <jsp:include page="tpl/header.html" />
-
     <div class="container-fluid">
         <div class="row-fluid">
             <jsp:include page="tpl/sub_student.html" />
-
             <div class="span10">
                 <form action="newcourseenrollment.jsp" method="post"> 
                 <input type = "hidden" value = "select" name = "action">
@@ -48,7 +46,7 @@ try {
                 <div class="control-group">
                     <label class="control-label">Student ID</label>
                     <div class="controls">
-                        <input class="uneditable-input" value= "<%=studentId%>" name="student_id" onkeyup = setStudent()>
+                        <input class="uneditable-input" value= "<%= studentID %>" name="student_id" onkeyup = setStudent()>
                     </div>
                 </div>
 
@@ -66,7 +64,7 @@ try {
                     %>
                         <form action="newcourseenrollment.jsp" method="post"> 
                             <input type="hidden" name = "action" value= "select">
-                            <input type="hidden" name = "studentId" value= "<%=studentId%>">
+                            <input type="hidden" name = "studentID" value= "<%= studentID %>">
                             <select onchange = form.submit() name = "course_id">
                                 <%
                                 
@@ -173,7 +171,7 @@ try {
                     <label class="control-label">Grade type</label>
                     <div class="controls">
                         <select name="type" onchange = "setType()">   
-                            <option value="Grade">Letter</option>      
+                            <option value="Letter">Letter</option>      
                             <option value="S/U">S/U</option>    
                             <option value="Both">Both</option>     
                             <option value="S/U Only">S/U Only</option>   
@@ -186,7 +184,7 @@ try {
                     <input type="hidden" value="insert" name="action">
                     <table>
                         <tr>            
-                            <td><input type="hidden" name = "rStudentId" value= "<%= studentId%>"></td>
+                            <td><input type="hidden" name = "rStudentID" value= "<%= studentID%>"></td>
                             <td><input type="hidden" name = "rCourseID" value= "<%= courseID%>"></td>
                             <td><input type="hidden" name = "rSectionID" value= "<%= sectionID%>"></td>
                             <td><input type="hidden" name = "rUnits" value=  "<%= units%>"></td>
@@ -209,16 +207,16 @@ try {
         $(document).ready(function() {
             $('#nav-student').addClass('active');
             $('#sub-newcourseenrollment').addClass('active');
-            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
-            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
-            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
-            $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
+            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentID %>');
+            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentID=<%= studentID %>');
+            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentID %>');
+            $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentID %>');
         });
 
         function setStudent(){
             var stu = document.getElementsByName('student_id')[0].value;
-            document.getElementsByName("rStudentId")[0].value = stu;
-            document.getElementsByName("studentId")[0].value = stu;
+            document.getElementsByName("rStudentID")[0].value = stu;
+            document.getElementsByName("studentID")[0].value = stu;
         }
 
         function setSecion(){
