@@ -40,7 +40,7 @@
             <div class="span10">
                 <%
                     statement = conn.createStatement();
-                    rs = statement.executeQuery("SELECT * FROM class WHERE course_id='" + courseId + "' AND quarter='" + quarter + "'");
+                    rs = statement.executeQuery("SELECT * FROM class WHERE course_id ='" + courseId + "' AND quarter ='" + quarter + "'");
                     if (rs.next()) {
                     String title = rs.getString("title");
                 %>
@@ -84,8 +84,7 @@
     <script>
         $(document).ready(function() {
             $('#nav-class').addClass('active');
-            $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
-            $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
+            $('#sub-sectionlist > a').attr('href', 'sectionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
             $('#sub-roster > a').attr('href', 'roster.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
         });
     </script>

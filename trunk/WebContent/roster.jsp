@@ -96,8 +96,7 @@
         $(document).ready(function() {
             $('#nav-class').addClass('active');
             $('#sub-roster').addClass('active');
-            $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
-            $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
+            $('#sub-sectionlist > a').attr('href', 'sessionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
             $('#roster > a').attr('href', 'roster.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
         });
     </script>

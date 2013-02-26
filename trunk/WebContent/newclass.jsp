@@ -187,12 +187,12 @@
         });
 
         function addSection() {
-            $('#section_num')
+            $('#section_num').
             addItem('section', 'sectionlist');
         }
 
         function addMeeting(sectionId) {
-            $('#section_num')
+            $('#section_num').
             addItem('section', 'sectionlist');
         }
     </script>
