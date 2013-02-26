@@ -41,7 +41,6 @@
                     <input type="hidden" value="insert" name="action">
                     <fieldset>
                         <legend>Basic Information</legend>
-
                         <div class="control-group">
                             <label class="control-label">Identity</label>
                             <div class="controls">

@@ -21,14 +21,14 @@
             <jsp:include page="tpl/sub_student.html" />
 
             <div class="span10">
-                <form class="form-horizontal" action="probations.jsp" method="post">
+                <form class="form-horizontal" action="probationlist.jsp" method="post">
                     <input type="hidden" value="insert" name="action">
                     <fieldset>
                         <legend>Probation Infomation</legend>
                         <div class="control-group">
                             <label class="control-label">Student ID</label>
                             <div class="controls">
-                                <span class="uneditable-input"><%= studentId %></span>
+                                <input type="text" class="uneditable-input" name="student_id" value="<%= studentId %>" >
                             </div>
                         </div>
                         <div class="control-group">

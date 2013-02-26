@@ -75,7 +75,7 @@
                 <div class="control-group">
                     <label class="control-label">Course ID</label>
                     <div class="controls">
-                        <input type="text" value="" name="course_id" size="15">
+                        <input type="text" placeholder="CSE132" value="" name="course_id">
                     </div>
                 </div>
 
@@ -117,7 +117,7 @@
                 <div class="control-group">
                     <label class="control-label">Units</label>
                     <div class="controls">
-                        <input type="text" name="unit_range" value = "">
+                        <input type="text" name="unit_range" placeholder="1~8 or 4" value = "">
                     </div>
                 </div>
 
@@ -143,11 +143,39 @@
                     </div>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group" id="prerequisitelist">
                     <label class="control-label">Prerequisite</label>
                     <div class="controls">
-                        <input type="text" name="prerequisite" value = "">
-                        <button class="btn" type="button" onclick="addPrerequisite()">Add</button>
+                    <%
+                        statement = conn.createStatement();
+                        rs = statement.executeQuery("SELECT course_id FROM course");
+                        ArrayList<String> courseList = new ArrayList<String>();
+                        while (rs.next()) {
+                            courseList.add(rs.getString("course_id"));
+                        }
+                    %>
+                    
+                        <select name="prerequisite">
+                    <%
+                        for (String course : courseList) {
+                    %>
+                            <option value="<%= course %>"><%= course %></option>
+                    <%
+                        }
+                    %>
+                        </select>
+                        <button class="btn" type="button" onclick="addItem('prerequisite', 'prerequisitelist')">Add</button>
+                    </div>
+                    <div class="controls" id="prerequisite" style="display:none">
+                        <select name="prerequisite">
+                    <%
+                        for (String course : courseList) {
+                    %>
+                            <option value="<%= course %>"><%= course %></option>
+                    <%
+                        }
+                    %>
+                        </select>
                     </div>
                 </div>
 
@@ -159,18 +187,15 @@
         </div>
     </div>
 </body>
-<script>
-    function addPrerequisite() {
-        $('#course').append(
-            '<tr> \
-                <td></td> \
-                <td> \
-                    <input name="prerequisite" value = ""> \
-                    <button type="button">Add</button> \
-                </td> \
-            </tr>'
-        );
-    }
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/util.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#nav-course').addClass('active');
+            $('#sub-newcourse').addClass('active');
+        });
+    </script>
 </script>
 </html>
 <%-- -------- Close Connection Code -------- --%>
