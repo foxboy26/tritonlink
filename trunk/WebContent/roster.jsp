@@ -61,9 +61,10 @@
                     </tr>
                 <%
                     String sql = "SELECT student.student_id, firstname, middlename, lastname, ssn, residency, is_enrolled, hold_degrees, attendances, unit, grade_type "
-                				+ "FROM student, student_section, class_section WHERE class_section.section_id = student_section.section_id "
-                				+ "AND class_section.course_id = '" + courseId + "'"
-                				+ "AND class_section.quarter = '" + quarter + "'";
+                				+ "FROM student, student_section, class_section WHERE class_section.section_id = student_section.section_id"
+                				+ " AND class_section.course_id = '" + courseId + "'"
+                				+ " AND class_section.quarter = '" + quarter + "'"
+                				+ " AND student.student_id = student_section.student_id";
                     rs = statement.executeQuery(sql);
                     int i = 1;
                     while ( rs.next() ) {
