@@ -40,9 +40,11 @@ try {
         <div class="row-fluid">
             <jsp:include page="tpl/sub_student.html" />
             <div class="span10">
-                <form class="form-horizontal" action="checkdegree.jsp?studentId=<%= studentId %>" method="post"> 
+            <fieldset>
+            <legend>Choose a program</legend>
+                <form class="form-horizontal" action="checkmsdegree.jsp?studentId=<%= studentId %>" method="post"> 
                     <input type = "hidden" value = "select" name = "action">
-                    <legend>Choose a program</legend>
+                    
                     <div class="control-group">
                         <label class="control-label">Program</label>
                         <div class="controls">
@@ -75,56 +77,58 @@ try {
                 <legend>Status</legend>
                 <%
                     if (action != null && action.equals("select")) {
-                        int total = 0;
-                        String sql = "SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId;
-                        rs = statement.executeQuery(sql);
-                        if (rs.next()) {
-                            total = rs.getInt("total");
-                        }
-
-                        sql = "SELECT category, units FROM program_requirement WHERE program_name='" + name + "'";
-                        rs = statement.executeQuery(sql);
-                        int totalRequired = 0;
-                        ArrayList<Integer> requiredUnitList = new ArrayList<Integer> ();
-                        while (rs.next()) {
-                            if(rs.getString("category").equals("all"))
-                                totalRequired = rs.getInt("units");
-                            else
-                                requiredUnitList.add(rs.getInt("units"));
-                        }
-
-                        sql = "SELECT p.category AS category, SUM(ss.unit) AS units " +
-                              "FROM student_section AS ss, class_section AS cs, plans AS p " +
-                              "WHERE ss.section_id=cs.section_id " +
-                              "AND cs.course_id=p.course_id " +
-                              "AND ss.student_id=" + studentId + " " +
-                              "AND p.program_name='" + name + "' " +
-                              "GROUP BY category";
-
-                        rs = statement.executeQuery(sql);
+						
+                    	//Find all courses a student has taken
+                    	String table1 = "SELECT course_id, unit, grade FROM student_section, class_section" +
+                    				    " WHERE student_section.student_id = '" + studentId + "'";
+                    	
+                    	//Find all the courses belong to some concentration of the selected degree 
+                    	String table2 = "SELECT course_id, category FROM plans" +
+            				    		" WHERE plans.program_name = '" + name + "'" +
+                    					" AND  category LIKE 'c_%'";
+                    	
+                    	//Find completed units of each concentration
+                    	String table3 = "SELECT SUM(unit) AS sunit, category FROM (" + table1 + ") AS S, (" + table2 + ") AS C" +
+                    				    " WHERE S.course_id = C.course_id" +
+                    					" GROUP BY category";
+                    	
+                    	//Find GPA of each concentration
+                    	String table4 = "SELECT (SUM(number_grade* unit)/SUM(unit)) AS gpa, category" +
+                    					" FROM (" + table1 + ") AS S, (" + table2 + ") AS C, grade_conversion" +
+                    					" WHERE S.course_id = C.course_id" +
+                    					" AND S.grade = grade_conversion.letter_grade" +
+                    					" GROUP BY category";
+                    	
+                    	//Find all completed concentrations
+                    	String table5 = "SELECT COM.category, sunit, gpa, units, min_gpa" +
+                    					" FROM (" + table3 + ") AS COM, (" + table4 + ") AS G, program_requirement" +
+                    					" WHERE COM.category = G.category" +
+                    					" AND program_name = '" + name + "'" +
+                    					" AND sunit >= units" +
+                    					" AND gpa >= min_gpa";
+                        
+                        rs = statement.executeQuery(table5);                                       
                 %>
-                <div>
-                    <h3>Total units: <%= totalRequired %>, <%= totalRequired - total %> remains.</h3>
-                </div>
+                <div class="control-group">
+                	<label class="control-label">Completed Concentrations</label>
+                	<div class="controls">
                 <table class="table">
                     <tr>
                         <th>Category</th>
                         <th>Required Units</th>
                         <th>Completed Units</th>
-                        <th>Remaining Units</th>
+                        <th>Required GPA</th>
+                        <th>Completed GPA</th>
                     </tr>
                     <%
-                        int i = 0;
                         while (rs.next()) {
-                            String category = rs.getString("category");
-                            int requiredUnits = requiredUnitList.get(i++);
-                            int units = rs.getInt("units");
                     %>
                     <tr>
-                        <td><%= category %></td>
-                        <td><%= requiredUnits %></td>
-                        <td><%= units %></td>
-                        <td><%= requiredUnits - units %></td>
+                        <td><%= rs.getString("category") %></td>
+                        <td><%= rs.getInt("units") %></td>
+                        <td><%= rs.getInt("sunit") %></td>
+                        <td><%= rs.getString("min_gpa") %></td>
+                        <td><%= rs.getString("gpa") %></td>
                     </tr>
                     <%
                         }
@@ -133,8 +137,11 @@ try {
                 <%
                     }
                 %>
-            </div>
-        </div>
+            	</div>
+        	</div>
+        </fieldset>
+    </div>
+    </div>
     </div>
     <script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
