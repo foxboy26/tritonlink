@@ -39,7 +39,7 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page= "tpl/sub_class.html" />
+            <jsp:include page="tpl/sub_student.html" />
             <div class="span10">
                 <div class="control-group">
                 	<label class="control-label">Classes</label>
@@ -103,7 +103,7 @@
                 		%>
                       	<tr>
                         	<td><%= rs.getString("quarter") %></td>
-                        	<td><%= rs.getString("gpa") %></td>                        
+                        	<td><%= rs.getFloat("gpa") %></td>                        
                       	</tr>
                 		<%
                     	}
