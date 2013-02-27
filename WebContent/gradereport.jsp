@@ -93,7 +93,7 @@
                     			+	" WHERE G.letter_grade = T.grade"
                     			+	" GROUP BY quarter";
                 	
-                    	String cumulativegpa = "SELECT AVG(number_grade*unit) AS total, SUM(unit) AS units FROM grade_conversion AS G, ("
+                    	String cumulativegpa = "SELECT (SUM(number_grade*unit)/SUM(unit)) AS units gpa grade_conversion AS G, ("
                 			+	basic + " ) AS T"
                 			+	" WHERE G.letter_grade = T.grade"
                 			+	" GROUP BY student_id";
@@ -112,7 +112,7 @@
                 	%>   
                  	<tr>
                     	<td>Cumulative</td>
-                    	<td><%= rs.getInt("total")/rs.getInt("units")  %></td>                        
+                    	<td><%= rs.getFloat("gpa") %></td>                        
                  	</tr> 
                 	 <%
                     	}
