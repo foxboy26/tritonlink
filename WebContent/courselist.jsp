@@ -60,14 +60,14 @@
                     <tr onclick="document.location = 'course.jsp?&courseId=' + <%= courseId %>;">
                         <td><%= rs.getString("course_id") %></td>
                         <td><%= rs.getString("department") %></td>    
-                        <td><%= rs.getString("is_consent") %></td>
+                        <td><%= rs.getBoolean("is_consent") %></td>
                         <td><%= rs.getString("unit_range") %></td>
                         <td><%= rs.getString("grade_type") %></td>
                         <td><%= rs.getBoolean("labwork") %></td>
 
                         <%
-                        PreparedStatement pstmt = conn.prepareStatement(
-                        "SELECT pre_course_id FROM prerequisite WHERE prerequisite.course_id=?");
+                            PreparedStatement pstmt = conn.prepareStatement(
+                            "SELECT pre_course_id FROM prerequisite WHERE prerequisite.course_id=?");
                             pstmt.setString(1, rs.getString("course_id"));
                             ResultSet rsPre = pstmt.executeQuery();
                             prerequisite = "";
@@ -75,6 +75,8 @@
                                 prerequisite += rsPre.getString("pre_course_id");
                                 prerequisite += ";";
                             }
+                            if (prerequisite.equals(""))
+                                prerequisite = "none";
                         %>
                         <td><%= prerequisite %></td>
                     </tr>
@@ -100,7 +102,6 @@
         // Check if an insertion is requested
         if (action != null && action.equals("insert")) {
             // Preprocess submitted form data
-            
             String course_id = request.getParameter("course_id");
             String department = request.getParameter("department");                    	                        
             String is_consent = request.getParameter("is_consent");
@@ -109,18 +110,12 @@
             String labwork = request.getParameter("labwork");
             String[] prerequisiteList = request.getParameterValues("prerequisite");
 
-            for (String prerequisite : prerequisiteList) {
-                System.out.println(prerequisite);
-            }
-            
             // Begin transaction
             conn.setAutoCommit(false);
-            
             // Create the prepared statement and use it to
             // INSERT the student attributes INTO the Student table.
             PreparedStatement pstmt = conn.prepareStatement(
-                "INSERT INTO Course VALUES (?, ?, ?, ?, ?, ?)");
-
+                "INSERT INTO course VALUES (?, ?, ?, ?, ?, ?)");
             pstmt.setString(1, request.getParameter("course_id"));
             pstmt.setString(2, request.getParameter("department"));
             pstmt.setBoolean(3, Boolean.parseBoolean(request.getParameter("is_consent")));
@@ -128,16 +123,20 @@
             pstmt.setString(5, request.getParameter("grade_type"));
             pstmt.setBoolean(6, Boolean.parseBoolean(request.getParameter("labwork")));
 
+
             int rowCount = pstmt.executeUpdate();
 
-            pstmt = conn.prepareStatement("INSERT INTO prerequisite VALUES (?, ?)");
-
-            for (String prerequisite : prerequisiteList) {
-                pstmt.setString(1, course_id);
-                pstmt.setString(2, prerequisite);
-                rowCount = pstmt.executeUpdate();
+            if (prerequisiteList != null) {
+	            pstmt = conn.prepareStatement("INSERT INTO prerequisite VALUES (?, ?)");
+	
+	            for (int i = 0; i < prerequisiteList.length - 1; i++) {
+	            	if (!prerequisiteList[i].equals("none")) {
+		                pstmt.setString(1, course_id);
+		                pstmt.setString(2, prerequisiteList[i]);
+		                rowCount = pstmt.executeUpdate();
+	            	}
+	            }
             }
-            
             // Commit transaction
             conn.commit();
             conn.setAutoCommit(true);

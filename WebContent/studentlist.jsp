@@ -181,7 +181,7 @@
             String[] holdUniversity = request.getParameterValues("university");
             String[] holdDegreeType = request.getParameterValues("degree_type");
             sb = new StringBuilder();
-            for (int i = 0; i < holdUniversity.length; i++) {
+            for (int i = 0; i < holdUniversity.length -1; i++) {
                 sb.append(holdUniversity[i]);
                 sb.append(' ');
                 sb.append(holdDegreeType[i]);
@@ -194,7 +194,7 @@
             String[] endQuarter = request.getParameterValues("end_quarter");
             String[] endYear = request.getParameterValues("end_year");
             sb = new StringBuilder();
-            for (int i = 0; i < beginQuarter.length; i++) {
+            for (int i = 0; i < beginQuarter.length - 1; i++) {
                 sb.append(beginQuarter[i]);
                 sb.append(beginYear[i]);
                 sb.append('-');
