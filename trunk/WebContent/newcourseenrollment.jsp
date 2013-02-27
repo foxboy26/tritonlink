@@ -213,6 +213,7 @@ try {
             $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentID %>');
             $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentID %>');
             $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentID %>');
+            $('#sub-checkmsdegree > a').attr('href', 'checkmsdegree.jsp?studentId=<%= studentId %>');
         });
 
         function setStudent(){
