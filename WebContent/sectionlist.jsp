@@ -39,7 +39,7 @@
     <jsp:include page="tpl/header.html" />
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="tpl/sub_section.html" />
+            <jsp:include page="tpl/sub_class.html" />
             <div class="span10">
             <%
                 Statement statement = conn.createStatement();
@@ -61,10 +61,10 @@
                     </tr>
             <%
                     while ( rs.next() ) {
-                    	String section_id = rs.getString("section_id");
+                    	String sectionId = rs.getString("section_id");
             %>
-                    <tr onclick="document.location = 'sessionlist.jsp?&sectionId=<%= section_id%>&courseId=<%= courseId %>&quarter=<%= quarter %>';">
-                        <td><%= section_id %></td>
+                    <tr onclick="document.location = 'sessionlist.jsp?&sectionId=<%= sectionId%>&courseId=<%= courseId %>&quarter=<%= quarter %>';">
+                        <td><%= sectionId %></td>
                         <td><%= rs.getString("enrolled_num") %></td>
                         <td><%= rs.getString("waitlist_num") %></td> 
                         <td><%= rs.getString("limit_num") %></td>                   
