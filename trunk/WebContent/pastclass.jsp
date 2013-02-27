@@ -17,46 +17,37 @@
 <%-- -------- INSERT Code -------- --%>
 <%
         String action = request.getParameter("action");
-        String studentId = request.getParameter("rStudentID");
+        String studentId = request.getParameter("rStudentId");
         // Check if an insertion is requested
         if (action != null && action.equals("insert")) {
             // Preprocess submitted form data
             String courseId = request.getParameter("rCourseID");
             String sectionId = request.getParameter("rSectionID");
-            String units = request.getParameter("rUnits");         
-            String type = request.getParameter("rType");
-            String status = "enrolled";
+            String quarter = request.getParameter("rQuarter"); 
+            String grade = request.getParameter("rGrade"); 
+            String units = request.getParameter("rUnits"); 
             
-            
-            int enrolledNum = 0;
-            int limit = 0;
-
             // Begin transaction
             conn.setAutoCommit(false);
             
-            if (enrolledNum < limit) {
-                //update enrolledNum+1;
-            }
-            else
-            {
-            	status = "waitlist";
-            	//update waitlist+1;
-            }
             // Create the prepared statement and use it to
             // INSERT the student attributes INTO the Student table.
             pstmt = conn.prepareStatement(
-                "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null, ?)");
+                "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, ?, ?)");
 
             pstmt.setInt(1, Integer.parseInt(studentId));
             pstmt.setString(2, sectionId);
-            pstmt.setInt(3, Integer.parseInt(units));
-            pstmt.setString(4, type);
+            pstmt.setString(3, units);
+            pstmt.setString(4, grade);
+            if(grade.equals("S") || grade.equals("U"))
+                pstmt.setString(5, "S/U");
+            else
+                pstmt.setString(5, "Grade");
             int rowCount = pstmt.executeUpdate();
             
             // Commit transaction
             conn.commit();
             conn.setAutoCommit(true);
-
         }
 %>
 <%-- -------- Close Connection Code -------- --%>
@@ -67,7 +58,7 @@
         // Close the Connection
         conn.close();
 
-        response.sendRedirect("currentclass.jsp?studentId=" + studentId);
+        response.sendRedirect("gradereport.jsp?studentId=" + studentId);
     } catch (SQLException sqle) {
         out.println(sqle.getMessage());
     } catch (Exception e) {
