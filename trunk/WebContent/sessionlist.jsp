@@ -78,7 +78,7 @@
             <%
                 Statement statement = conn.createStatement();
             	String sql = "SELECT * FROM meeting"
-            			+ " Where section_id = class_section.course_id = '"
+            			+ " Where section_id = '"
             			+ sectionId + "'"
             			+ " ORDER BY type";
 
