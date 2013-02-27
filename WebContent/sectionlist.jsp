@@ -43,10 +43,12 @@
             <div class="span10">
             <%
                 Statement statement = conn.createStatement();
-            	String sql = "SELECT section.section_id, enrolled_num, waitlist_num, limit_num FROM section, class_section, class"
+            	String sql = "SELECT section.section_id, faculty.name, enrolled_num, waitlist_num, limit_num FROM section, class_section, class, teach, faculty"
             			+ " Where class.course_id = class_section.course_id"
             			+ " AND class.quarter = class_section.quarter"
             			+ " AND section.section_id = class_section.section_id"
+            			+ " AND teach.section_id = class_section.section_id"
+            			+ " AND teach.faculty_id = faculty.faculty_id"
             			+ " AND class.course_id = '" + courseId + "'"
             			+ " AND class.quarter = '" + quarter + "'";
 
@@ -55,6 +57,7 @@
                 <table class="table table-hover">
                     <tr>
                         <th>Section ID</th>
+                        <th>Lecturer</th>
                         <th>Enrolled</th>
                         <th>WaitList</th>
                         <th>Capacity</th>
@@ -65,6 +68,7 @@
             %>
                     <tr onclick="document.location = 'sessionlist.jsp?&sectionId=<%= sectionId%>&courseId=<%= courseId %>&quarter=<%= quarter %>';">
                         <td><%= sectionId %></td>
+                        <td><%= rs.getString("name") %></td>
                         <td><%= rs.getString("enrolled_num") %></td>
                         <td><%= rs.getString("waitlist_num") %></td> 
                         <td><%= rs.getString("limit_num") %></td>                   
@@ -114,6 +118,12 @@
             pstmt.setString(1, courseId);
             pstmt.setString(2, sectionId);
             pstmt.setString(3, quarter);
+            rowCount = pstmt.executeUpdate();
+
+            pstmt = conn.prepareStatement(
+                "INSERT INTO teach VALUES (?, ?)");
+            pstmt.setString(1, facultyId);
+            pstmt.setString(2, sectionId);
             rowCount = pstmt.executeUpdate();
             
             // Commit transaction
