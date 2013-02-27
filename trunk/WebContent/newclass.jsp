@@ -89,7 +89,7 @@
                                 </select>
                                 <select class="input-small" name="year">
                                 <%
-                                    for (int i = 1900; i < 2014; ++i) {
+                                    for (int i = 2014; i >= 1900; --i) {
                                 %>	
                                     <option value="<%= i %>"><%= i %></option>
                                 <%

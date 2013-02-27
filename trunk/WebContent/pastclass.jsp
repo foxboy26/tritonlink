@@ -42,7 +42,7 @@
             if(grade.equals("S") || grade.equals("U"))
                 pstmt.setString(5, "S/U");
             else
-                pstmt.setString(5, "Grade");
+                pstmt.setString(5, "Letter");
             int rowCount = pstmt.executeUpdate();
             
             // Commit transaction

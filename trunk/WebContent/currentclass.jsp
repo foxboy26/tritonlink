@@ -50,14 +50,15 @@
                         <th>Title</th>
                         <th>Section</th>
                         <th>Unit</th>
+                        <th>Grade Type</th>
                     </tr>
                 <%
-                    String sql = "SELECT class.course_id, class.quarter, class.title, student_section.section_id, student_section.unit " +
-                                 "FROM class, class_section, student_section " +
-                                 "WHERE class.course_id=class_section.course_id " + 
-                                 "AND class_section.section_id=student_section.section_id " +
-                                 "AND class.quarter='" + Config.currentQuarter + "' " +
-                                 "AND student_section.student_id=" + studentId;
+                    String sql = "SELECT class.course_id, class.quarter, class.title, student_section.section_id, student_section.unit, student_section.grade_type" +
+                                 " FROM class, class_section, student_section" +
+                                 " WHERE class.course_id=class_section.course_id" + 
+                                 " AND class_section.section_id=student_section.section_id" +
+                                 " AND class.quarter='" + Config.currentQuarter + "'" +
+                                 " AND student_section.student_id=" + studentId;
                     rs = statement.executeQuery(sql);
                     int i = 1;
                     while ( rs.next() ) {
@@ -69,6 +70,7 @@
                         <td><%= rs.getString("title") %></td>
                         <td><%= rs.getString("section_id") %></td>
                         <td><%= rs.getString("unit") %></td>
+                        <td><%= rs.getString("grade_type") %></td>
                     </tr>
                 <%
                     }
