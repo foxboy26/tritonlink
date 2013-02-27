@@ -88,12 +88,12 @@
                         	<th>GPA</th>
                    	 	</tr>
                     	<%
-                    	String gpa = "SELECT quarter, AVG(number_grade) AS gpa FROM grade_conversion AS G, ( "
+                    	String gpa = "SELECT quarter, (SUM(number_grade*unit)/SUM(unit)) AS gpa FROM grade_conversion AS G, ( "
                     			+	basic + " ) AS T"
                     			+	" WHERE G.letter_grade = T.grade"
                     			+	" GROUP BY quarter";
                 	
-                    	String cumulativegpa = "SELECT AVG(number_grade) AS gpa FROM grade_conversion AS G, ("
+                    	String cumulativegpa = "SELECT AVG(number_grade*unit) AS total, SUM(unit) AS units FROM grade_conversion AS G, ("
                 			+	basic + " ) AS T"
                 			+	" WHERE G.letter_grade = T.grade"
                 			+	" GROUP BY student_id";
@@ -112,7 +112,7 @@
                 	%>   
                  	<tr>
                     	<td>Cumulative</td>
-                    	<td><%= rs.getString("gpa") %></td>                        
+                    	<td><%= rs.getInt("total")/rs.getInt("units")  %></td>                        
                  	</tr> 
                 	 <%
                     	}
