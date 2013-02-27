@@ -54,13 +54,12 @@
                          	<th>Grade</th>                         
                     	</tr>
                 		<%
-                    	String basic = "SELECT student.student_id, class.course_id, class.quarter, title, unit, grade"
-                				+ " FROM student, student_section, class_section, class WHERE"
+                    	String basic = "SELECT student_id, class.course_id, class.quarter, title, unit, grade"
+                				+ " FROM student_section, class_section, class WHERE"
                 				+ " class_section.course_id = class.course_id"
                 				+ " AND class_section.quarter = class.quarter"
                 				+ " AND class_section.section_id = student_section.section_id"
-                				+ " AND student.student_id = student_section.student_id"
-                				+ " AND student.student_id = '" + studentId + "'";
+                				+ " AND student_section.student_id = '" + studentId + "'";
                 		String sql	=	basic	+ " ORDER BY class.quarter";
                 	
                 
@@ -134,6 +133,8 @@
             $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
             $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
             $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentId %>');
+            $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentId %>');
+            $('#sub-checkmsdegree > a').attr('href', 'checkmsdegree.jsp?studentId=<%= studentId %>');
         });
     </script>
 </body>

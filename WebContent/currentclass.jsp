@@ -89,6 +89,7 @@
             $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
             $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentId %>');
             $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentId %>');
+            $('#sub-checkmsdegree > a').attr('href', 'checkmsdegree.jsp?studentId=<%= studentId %>');
         });
     </script>
 </body>
