@@ -66,7 +66,7 @@
                         <div class="control-group">
                             <label class="control-label">Mandatory</label>
                             <div class="controls">
-                                <input type="checkbox" name="mandatory" value="1" checked="true">
+                                <input type="checkbox" name="mandatory" value="1">
                             </div>
                         </div>
 
