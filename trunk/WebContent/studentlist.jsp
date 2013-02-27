@@ -196,9 +196,11 @@
             sb = new StringBuilder();
             for (int i = 0; i < beginQuarter.length - 1; i++) {
                 sb.append(beginQuarter[i]);
+                sb.append(' ');
                 sb.append(beginYear[i]);
                 sb.append('-');
                 sb.append(endQuarter[i]);
+                sb.append(' ');
                 sb.append(endYear[i]);
                 sb.append(';');
             }

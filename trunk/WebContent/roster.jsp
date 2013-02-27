@@ -72,14 +72,14 @@
                     <tr>
                         <td><%= i++ %></td>
                         <td><%= rs.getString("student_id") %></td>
+                        <td><%= (rs.getString("ssn") == null)? "N/A" : rs.getString("ssn") %></td>
                         <td><%= rs.getString("firstname") %></td>
                         <td><%= rs.getString("middlename") %></td>
                         <td><%= rs.getString("lastname") %></td>
-                        <td><%= rs.getString("ssn") %></td>
                         <td><%= rs.getString("residency") %></td>
-                        <td><%= rs.getString("is_enrolled") %></td>
-                        <td><%= rs.getString("hold_degrees") %></td>
+                        <td><%= rs.getBoolean("is_enrolled") %></td>
                         <td><%= rs.getString("attendances") %></td>
+                        <td><%= rs.getString("hold_degrees") %></td>
                         <td><%= rs.getString("unit") %></td>
                         <td><%= rs.getString("grade_type") %></td>
                     </tr>
