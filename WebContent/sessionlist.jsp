@@ -19,8 +19,6 @@
 <%-- Import the java.sql package --%>
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="db.Config" %>
-<%@ page language="java" import="db.ClassSection" %>
-<%@ page language="java" import="db.Meeting" %>
 <%-- -------- Open Connection Code -------- --%>
 <%
     try {
@@ -36,39 +34,6 @@
 		String quarter = request.getParameter("quarter");
 %>
 
-<%-- -------- INSERT Code -------- --%>
-            <%
-                    String action = request.getParameter("action");
-                    // Check if an insertion is requested
-                    if (action != null && action.equals("insert")) {
-                        // Preprocess submitted form data
-                        
-                        String location = request.getParameter("location");
-                        String startTime = request.getParameter("start_time");
-                        String endTime = request.getParameter("end_time");
-                        String date = request.getParameter("days");                                            
-                        
-                        // Begin transaction
-                        conn.setAutoCommit(false);
-                        
-                        // Create the prepared statement and use it to
-                        // INSERT the student attributes INTO the Student table.
-                        PreparedStatement pstmt = conn.prepareStatement(
-                            "INSERT INTO Meeting VALUES (?, 'RW', ?, ?, ?, ?, 'false')");
-
-                        pstmt.setString(1, sectionId);
-                        pstmt.setString(2, location);
-                        pstmt.setString(3, startTime);
-                        pstmt.setString(4, endTime);
-                        pstmt.setString(5, date);
-
-                        int rowCount = pstmt.executeUpdate();
-                        
-                        // Commit transaction
-                        conn.commit();
-                        conn.setAutoCommit(true);
-                    }
-            %> 
 <body>
     <jsp:include page="tpl/header.html" />
     <div class="container-fluid">
@@ -117,12 +82,45 @@
         $(document).ready(function() {
         	 $('#nav-class').addClass('active');
              $('#sub-sessionlist').addClass('active');
+             $('#sub-newsession > a').attr('href', 'newsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
              $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
              $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
         });
     </script>
 </body>
 </html>
+<%-- -------- INSERT Code -------- --%>
+<%
+        String action = request.getParameter("action");
+        if (action != null) {
+            // Preprocess submitted form data
+            String type = action.equals("insert-review")? "RW" : request.getParameter("type"); 
+            String location = request.getParameter("location");
+            String startTime = request.getParameter("start_time");
+            String endTime = request.getParameter("end_time");
+            String date = request.getParameter("days");                                            
+            // Begin transaction
+            conn.setAutoCommit(false);
+            
+            // Create the prepared statement and use it to
+            // INSERT the student attributes INTO the Student table.
+            PreparedStatement pstmt = conn.prepareStatement(
+                "INSERT INTO Meeting VALUES (?, ?, ?, ?, ?, ?, 'false')");
+
+            pstmt.setString(1, sectionId);
+            pstmt.setString(2, type);
+            pstmt.setString(3, location);
+            pstmt.setString(4, startTime);
+            pstmt.setString(5, endTime);
+            pstmt.setString(6, date);
+
+            int rowCount = pstmt.executeUpdate();
+            
+            // Commit transaction
+            conn.commit();
+            conn.setAutoCommit(true);
+        }
+%> 
                     
 <%-- -------- Close Connection Code -------- --%>
 <%

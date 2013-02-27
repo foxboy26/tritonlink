@@ -33,6 +33,10 @@
         Statement statement;
 
         ResultSet rs;
+        
+        String courseId = request.getParameter("courseId");
+        
+        String quarter = request.getParameter("quarter");
 %>
 
 <body>
@@ -40,31 +44,37 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="tpl/sub_classlist.html" />
+            <jsp:include page="tpl/sub_class.html" />
             <div class="span10">
-                <form class="form-horizontal" action="classlist.jsp" method="post">
+                <form class="form-horizontal" action="sectionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>" method="post">
                     <input type="hidden" value="insert" name="action">
+                    <input type="hidden" name="course_id" value="<%= courseId %>">
+                    <input type="hidden" name="quarter" value="<%= quarter %>">
                     <fieldset>
-                        <legend>Class Information</legend>
+                        <legend>Section Information</legend>
+
                         <div class="control-group">
-                            <label class="control-label">Course ID</label>
+                            <label class="control-label">Section ID</label>
                             <div class="controls">
                             <%
-                                
                                 statement = conn.createStatement();
-
-                                rs = statement.executeQuery("SELECT Course_id FROM Course");
-                            
-                                ArrayList<String> courseList = new ArrayList<String>();
-                                while (rs.next()) {
-                                    courseList.add(rs.getString("course_id"));
-                                }
+                                rs = statement.executeQuery("SELECT COUNT(*) AS num FROM section");
+                                rs.next();
                             %>
-                                <select name="course_id">
+                                <input type="text" name="section_id" value="<%= rs.getInt("num") + 1 %>">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Instructor</label>
+                            <div class="controls">
+                                <select name="faculty_id">
                                 <%
-                                    for (String course : courseList) {
+                                    statement = conn.createStatement();
+                                    rs = statement.executeQuery("SELECT * FROM faculty");
+                                    while (rs.next()) {
                                 %>
-                                        <option value="<%= course %>"><%= course %></option>
+                                    <option value="<%= rs.getString("faculty_id") %>"><%= rs.getString("name") %></option>
                                 <%
                                     }
                                 %>
@@ -73,29 +83,9 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">Title</label>
+                            <label class="control-label">Limit</label>
                             <div class="controls">
-                                <input type="text" name="title" value = "">
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label">Quarter</label>
-                            <div class="controls">
-                                <select class="input-small" name="quarter">	    		
-                                    <option value="Fall">Fall</option>
-                                    <option value="Winter">Winter</option>
-                                    <option value="Spring">Spring</option>
-                                </select>
-                                <select class="input-small" name="year">
-                                <%
-                                    for (int i = 1900; i < 2014; ++i) {
-                                %>	
-                                    <option value="<%= i %>"><%= i %></option>
-                                <%
-                                    }
-                                %>
-                                </select>
+                                <input type="text" name="limit">
                             </div>
                         </div>
 
@@ -112,20 +102,13 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/util.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#nav-class').addClass('active');
-            $('#sub-newclass').addClass('active');
-        });
-
-        function addSection() {
-            $('#section_num').
-            addItem('section', 'sectionlist');
-        }
-
-        function addMeeting(sectionId) {
-            $('#section_num').
-            addItem('section', 'sectionlist');
-        }
+	    $(document).ready(function() {
+	        $('#nav-class').addClass('active');
+	        $('#sub-sectionlist > a').addClass('active');
+	        $('#sub-sectionlist > a').attr('href', 'sectionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
+            $('#sub-newsection > a').attr('href', 'newsection.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
+	        $('#roster > a').attr('href', 'roster.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
+	    });
     </script>
 </body>
 </html>

@@ -85,6 +85,7 @@
         $(document).ready(function() {
             $('#nav-class').addClass('active');
             $('#sub-sectionlist > a').attr('href', 'sectionlist.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
+            $('#sub-newsection > a').attr('href', 'newsection.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
             $('#sub-roster > a').attr('href', 'roster.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>');
         });
     </script>
