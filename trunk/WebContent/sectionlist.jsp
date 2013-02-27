@@ -88,6 +88,39 @@
     </script>
 </body>
 </html>
+<%-- -------- INSERT Code -------- --%>
+<%
+        String action = request.getParameter("action");
+        // Check if an insertion is requested
+        if (action != null && action.equals("insert")) {
+            // Preprocess submitted form data
+            String sectionId = request.getParameter("section_id");
+            String facultyId = request.getParameter("faculty_id");
+            String limit = request.getParameter("limit");
+
+            // Begin transaction
+            conn.setAutoCommit(false);
+            
+            // INSERT INTO the Section table.
+            PreparedStatement pstmt = conn.prepareStatement(
+                "INSERT INTO section VALUES (?, 0, 0, ?)");
+            pstmt.setString(1, sectionId);
+            pstmt.setInt(2, Integer.parseInt(limit));
+            int rowCount = pstmt.executeUpdate();
+            
+            // INSERT INTO the Class_Section table.
+            pstmt = conn.prepareStatement(
+                "INSERT INTO class_section VALUES (?, ?, ?)");
+            pstmt.setString(1, courseId);
+            pstmt.setString(2, sectionId);
+            pstmt.setString(3, quarter);
+            rowCount = pstmt.executeUpdate();
+            
+            // Commit transaction
+            conn.commit();
+            conn.setAutoCommit(true);
+        }
+%>
                     
 <%-- -------- Close Connection Code -------- --%>
 <%

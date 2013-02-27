@@ -7,7 +7,7 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="css/style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" >
-    <title>New Review Session</title>
+    <title>New class</title>
     <style>
         .table th {
             vertical-align: middle;
@@ -15,19 +15,10 @@
     </style>
 </head>
 
-<%-- Set the scripting language to Java and --%>
-<%-- Import the java.sql package --%>
-<%@ page language="java" import="java.sql.*" %>
-<%@ page language="java" import="java.util.ArrayList" %>
-<%@ page language="java" import="db.Config" %>
-<%-- -------- Open Connection Code -------- --%>
 <%
-
-		
-        String sectionId = request.getParameter("sectionId");
-        String courseId = request.getParameter("courseId");
-		String quarter = request.getParameter("quarter");
-        
+	String sectionId = request.getParameter("sectionId");
+	String courseId = request.getParameter("courseId");
+	String quarter = request.getParameter("quarter");
 %>
 
 <body>
@@ -35,46 +26,48 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="tpl/sub_section.html" />
+            <jsp:include page="tpl/sub_class.html" />
             <div class="span10">
-                <form class="form-horizontal" action="sessionlist.jsp" method="post">
-                    <input type="hidden" value="insert-review" name="action">
+                <form class="form-horizontal" action="sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>" method="post">
+                    <input type="hidden" value="insert-weekly" name="action">
                     <fieldset>
-                        <legend>New Review Session</legend>                       
-
+                        <legend>Weekly Meeting</legend>
                         <div class="control-group">
-                            <label class="control-label">Section ID</label>
+                            <label class="control-label">Type</label>
                             <div class="controls">
-                                <input type="text" name="sectionId" value = "<%= sectionId %>">
+                                <select class="input-mini" name="type">
+                                    <option value="LE">LE</option>
+                                    <option value="DI">DI</option>
+                                </select>
                             </div>
                         </div>
-                        
+
                         <div class="control-group">
                             <label class="control-label">Location</label>
                             <div class="controls">
-                                <input type="text" name="location" value = "">
+                                <input type="text" name="location">
                             </div>
                         </div>
-                        
+
                         <div class="control-group">
                             <label class="control-label">Time</label>
                             <div class="controls">
-                                <input type="text" name="start_time" value = ""> - <input type="text" name="end_time" value = "">
+                                <input type="text" class="input-small" name="start_time"> - <input type="text" class="input-small" name="end_time">
                             </div>
                         </div>
-                        
+
                         <div class="control-group">
                             <label class="control-label">Days</label>
                             <div class="controls">
-                                <input type="text" name="days" value = "">
+                                <input type="text" class="input-small" name="days">
                             </div>
                         </div>
-                        
-                         <div class="control-group">
+
+                        <div class="control-group">
                             <label class="control-label">Mandatory</label>
                             <div class="controls">
-                        		<input type="checkbox" name="mandatory" value="1">
-                        	</div>
+                                <input type="checkbox" name="mandatory" value="1" checked="true">
+                            </div>
                         </div>
 
                         <div class="form-actions">
@@ -91,13 +84,9 @@
     <script src="js/util.js"></script>
     <script>
         $(document).ready(function() {
-        	 $('#nav-class').addClass('active');
-             $('#sub-newreviewsession > a').addClass('active');
-             $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
-             $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
+            $('#nav-class').addClass('active');
+            $('#sub-newsession').addClass('active');
         });
     </script>
 </body>
 </html>
-
-

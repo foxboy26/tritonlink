@@ -57,7 +57,7 @@
                             String courseId = rs.getString("course_id");
             
                 %>
-                    <tr onclick="document.location = 'course.jsp?&courseId=' + <%= courseId %>;">
+                    <tr onclick="document.location = 'course.jsp?&courseId=<%= courseId %>'">
                         <td><%= rs.getString("course_id") %></td>
                         <td><%= rs.getString("department") %></td>    
                         <td><%= rs.getBoolean("is_consent") %></td>
