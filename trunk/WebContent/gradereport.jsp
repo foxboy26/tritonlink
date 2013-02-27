@@ -39,7 +39,7 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="tpl/sub_class.html" />
+            <jsp:include page= "tpl/sub_class.html" />
             <div class="span10">
                 <div class="control-group">
                 	<label class="control-label">Classes</label>
