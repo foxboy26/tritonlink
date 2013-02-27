@@ -237,10 +237,17 @@
                             <div class="control-group">
                                 <label class="control-label">Degree</label>
                                 <div class="controls">
-                                    <select class="input-small" name="degree" onchange="showPhdState()">
-                                      <option value="MS">Master</option>
-                                      <option value="MSE">MSE</option>
-                                      <option value="Ph.D">PhD</option>
+                                    <select class="input-small" name="degree">
+                                    <%
+                                        statement = conn.createStatement();
+                                        rs = statement.executeQuery("SELECT degree_type FROM degree");
+
+                                        while (rs.next()) {
+                                    %>
+                                        <option value="<%= rs.getString("degree_type") %>"><%= rs.getString("degree_type") %></option>
+                                    <%
+                                        }
+                                    %>
                                     </select>  
                                 </div>
                             </div>

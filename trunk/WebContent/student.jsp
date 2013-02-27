@@ -182,8 +182,10 @@
             $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
             $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
             $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
+            $('#sub-newthesiscommittee > a').attr('href', 'newthesiscommittee.jsp?studentId=<%= studentId %>');
             $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
             $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentId %>');
+            $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentId %>');
         });
     </script>
 </body>
