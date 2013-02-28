@@ -240,7 +240,8 @@
                                     <select class="input-small" name="degree">
                                     <%
                                         statement = conn.createStatement();
-                                        rs = statement.executeQuery("SELECT degree_type FROM degree");
+
+                                        rs = statement.executeQuery("SELECT degree_type FROM degree WHERE degree_type NOT LIKE 'B%'");
 
                                         while (rs.next()) {
                                     %>

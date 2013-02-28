@@ -41,7 +41,7 @@
                 Statement statement = conn.createStatement();
 
                 ResultSet rs = statement.executeQuery
-                    ("SELECT * FROM Class");
+                    ("SELECT * FROM Class ORDER BY quarter");
             %>
                 <table class="table table-hover">
                     <tr>

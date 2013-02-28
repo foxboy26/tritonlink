@@ -38,7 +38,7 @@
                                 <select class="input-mini" name="type">
                                     <option value="LE">LE</option>
                                     <option value="DI">DI</option>
-                                    <option value="LAB">DI</option>
+                                    <option value="LAB">LAB</option>
                                 </select>
                             </div>
                         </div>
