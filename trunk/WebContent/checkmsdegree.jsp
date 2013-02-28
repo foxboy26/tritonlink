@@ -14,6 +14,7 @@
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="java.util.ArrayList" %>
 <%@ page language="java" import="db.Config" %>
+<%@ page language="java" import="db.Quarter" %>
 <%-- -------- Open Connection Code -------- --%>
 <%
 try {
@@ -159,32 +160,33 @@ try {
                         <th>concentration</th>                       
                     </tr>
                     <% 
-                    String next = "FALL 2006";
+                    String next = "Spring 2005";
+                    String courseId = "";
                     String category = "";
-                    next = rs.getString("quarter");
                     	
                 	while (rs.next()) {
-                		if(category == ""){
+                		if(courseId == ""){
+                			courseId = rs.getString("course_id");
                 			category = rs.getString("category");
                 		}
-                		if(!category.equals(rs.getString("category"))){
+                		if(!courseId.equals(rs.getString("course_id"))){
                 			if(next == "SPRING 2005")
 								next = "";
                 	%>
                     	<tr>
-                    		<td><%= rs.getString("course_id") %></td>
-                        	<td><%= rs.getString("category") %></td>
-                        	<td><%= rs.getString("quarter") %></td>
+                    		<td><%= courseId %></td>
+                        	<td><%= category %></td>
+                        	<td><%= next %></td>
                     	</tr>
                     <%
+                    		courseId = rs.getString("course_id");
                     		category = rs.getString("category");
-                    		next = "SPRING 2005";
+                    		next = "Spring 2005";
                 		}
-                		else{
-                			String[] quarter1 = (rs.getString("quarter")).split(" ");
-                			String[] quarter2 = next.split(" ");
-                			if(Integer.parseInt(quarter1[1]) )
+                		else if(Quarter.greater(next, rs.getString("quarter")) && Quarter.greater(rs.getString("quarter"), "Spring 2005")){
+                			next =  rs.getString("quarter");
                 		}
+                	}
                     %> 
                 </table>
                 </div>
