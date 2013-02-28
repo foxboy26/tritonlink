@@ -138,14 +138,14 @@ try {
                     %>
                 </table>
                 	<%
-                	//Find all courses that have not taken yet from everty concentration
+                	//Find all courses that have not taken yet from every concentration
                 	String table6 = "SELECT course_id, category FROM (" + table2 + ") AS C" +
                 					" WHERE course_id NOT IN (SELECT course_id FROM (" + table1 + ") AS S)" +
                 					" AND category LIKE 'c-%'";
                 	
-                	String table7 = "SELECT N.course_id, category, quarter FROM class, (" + table2 + ") AS N" +
+                	String table7 = "SELECT N.course_id, category, quarter FROM class, (" + table6 + ") AS N" +
                 					" WHERE N.course_id = class.course_id" +
-                        			" ORDER BY category";
+                        			" ORDER BY  N.course_id";
                 	
                 	rs = statement.executeQuery(table7);   
                 	              	                	
@@ -166,12 +166,15 @@ try {
                     String category = "";
                     	
                 	while (rs.next()) {
+                		
+                		String quarter =  rs.getString("quarter");
                 		if(courseId == ""){
                 			courseId = rs.getString("course_id");
                 			category = rs.getString("category");
+                			next = quarter;
                 		}
                 		if(!courseId.equals(rs.getString("course_id"))){
-                			if(next == "SPRING 2005")
+                			if(Quarter.greater("Spring 2005", next))
 								next = "";
                 	%>
                     	<tr>
@@ -182,14 +185,22 @@ try {
                     <%
                     		courseId = rs.getString("course_id");
                     		category = rs.getString("category");
-                    		next = "Spring 2005";
+                    		next = quarter;
                 		}
-                		else if(Quarter.greater(next, rs.getString("quarter")) && Quarter.greater(rs.getString("quarter"), "Spring 2005")){
-                			next =  rs.getString("quarter");
+                		else if(Quarter.greater(next, quarter) && Quarter.greater(quarter, "Spring 2005")){
+                			next =  quarter;
                 		}
                 	}
+                	%>
+                	<tr>
+                    		<td><%= courseId %></td>
+                        	<td><%= category %></td>
+                        	<td><%= next %></td>
+                    	</tr>
+                    <% 
                     }
-                    %> 
+                    %>              
+                    	
                 </table>
                 </div>
                 </div>
