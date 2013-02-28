@@ -113,7 +113,7 @@ try {
                         rs = statement.executeQuery(table5);                                       
                 %>
                 <div class="control-group">
-                	<label class="control-label">Courses to choose</label>
+                	<label class="control-label">Completed Concentrations</label>
                 	<div class="controls">
                 <table class="table">
                     <tr>
@@ -152,7 +152,7 @@ try {
                	 	%>
                  	
                 <div class="control-group">
-                <label class="control-label">Completed Concentrations</label>
+                <label class="control-label">Courses to choose</label>
                 <div class="controls">
                 <table class="table">
                 	<tr>
