@@ -48,7 +48,8 @@ try {
                         <div class="controls">
                         <%
                             statement = conn.createStatement();
-                            rs = statement.executeQuery("SELECT name FROM program");
+                            rs = statement.executeQuery("SELECT name FROM program WHERE name LIKE 'B%'");
+                            //rs = statement.executeQuery("SELECT name FROM program");
                             ArrayList<String> programList = new ArrayList<String>();
                             while (rs.next()) {            
                                     programList.add(rs.getString("name"));
@@ -82,7 +83,10 @@ try {
                             total = rs.getInt("total");
                         }
 
-                        sql = "SELECT category, units FROM program_requirement WHERE program_name='" + name + "'";
+                        sql = "SELECT category, units FROM program_requirement" + 
+                              " WHERE program_name='" + name + "'" +
+                              " AND NOT category LIKE 'c-%'";
+
                         rs = statement.executeQuery(sql);
                         int totalRequired = 0;
                         ArrayList<Integer> requiredUnitList = new ArrayList<Integer> ();
@@ -91,15 +95,18 @@ try {
                                 totalRequired = rs.getInt("units");
                             else
                                 requiredUnitList.add(rs.getInt("units"));
+                                System.out.println(rs.getString("category"));
+                                System.out.println(rs.getInt("units"));
                         }
 
-                        sql = "SELECT p.category AS category, SUM(ss.unit) AS units " +
-                              "FROM student_section AS ss, class_section AS cs, plans AS p " +
-                              "WHERE ss.section_id=cs.section_id " +
-                              "AND cs.course_id=p.course_id " +
-                              "AND ss.student_id=" + studentId + " " +
-                              "AND p.program_name='" + name + "' " +
-                              "GROUP BY category";
+                        sql = "SELECT p.category AS category, SUM(ss.unit) AS units" +
+                              " FROM student_section AS ss, class_section AS cs, plans AS p" +
+                              " WHERE ss.section_id=cs.section_id" +
+                              " AND cs.course_id=p.course_id" +
+                              " AND ss.student_id=" + studentId +
+                              " AND p.program_name='" + name + "'" +
+                              " AND NOT p.category LIKE 'c-%'" +
+                              " GROUP BY category";
 
                         rs = statement.executeQuery(sql);
                 %>
