@@ -80,7 +80,8 @@ try {
 						
                     	//Find all courses a student has taken
                     	String table1 = "SELECT course_id, unit, grade FROM student_section, class_section" +
-                    				    " WHERE student_section.student_id = '" + studentId + "'";
+                    				    " WHERE student_section.student_id = '" + studentId + "'" + 
+                    				    " AND student_section.section_id = class_section.section_id";
                     	
                     	//Find all the courses belong to some concentration of the selected degree 
                     	String table2 = "SELECT course_id, category FROM plans" +
@@ -134,9 +135,60 @@ try {
                         }
                     %>
                 </table>
-                <%
+                	<%
+                	//Find all courses that have not taken yet from everty concentration
+                	String table6 = "SELECT course_id, category FROM (" + table2 + ") AS C" +
+                					" WHERE course_id NOT IN (SELECT course_id FROM (" + table1 + ") AS S)" +
+                					" AND category LIKE 'c_%'";
+                	
+                	String table7 = "SELECT N.course_id, category, quarter FROM schedule, (" + table2 + ") AS N" +
+                					" WHERE N.course_id = schedule.course_id" +
+                        			" ORDER BY category";
+                	
+                	rs = statement.executeQuery(table7);   
+                	              	                	
                     }
-                %>
+               	 	%>
+                 	
+                <div class="control-group">
+                <label class="control-label">Completed Concentrations</label>
+                <div class="controls">
+                <table class="table">
+                	<tr>
+                        <th>Course ID</th>
+                        <th>concentration</th>                       
+                    </tr>
+                    <% 
+                    String next = "FALL 2006";
+                    String category = "";
+                    next = rs.getString("quarter");
+                    	
+                	while (rs.next()) {
+                		if(category == ""){
+                			category = rs.getString("category");
+                		}
+                		if(!category.equals(rs.getString("category"))){
+                			if(next == "SPRING 2005")
+								next = "";
+                	%>
+                    	<tr>
+                    		<td><%= rs.getString("course_id") %></td>
+                        	<td><%= rs.getString("category") %></td>
+                        	<td><%= rs.getString("quarter") %></td>
+                    	</tr>
+                    <%
+                    		category = rs.getString("category");
+                    		next = "SPRING 2005";
+                		}
+                		else{
+                			String[] quarter1 = (rs.getString("quarter")).split(" ");
+                			String[] quarter2 = next.split(" ");
+                			if(Integer.parseInt(quarter1[1]) )
+                		}
+                    %> 
+                </table>
+                </div>
+                </div>
             	</div>
         	</div>
         </fieldset>
@@ -175,4 +227,5 @@ try {
     } catch (Exception e) {
         out.println(e.getMessage());
     }
+
 %>
