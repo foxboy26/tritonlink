@@ -8,7 +8,7 @@ public class Quarter {
 			return true;
 		if(Integer.parseInt(quarter1[1]) < Integer.parseInt(quarter2[1])) 
 			return false;
-		if(getValue(quarter1[0]) > getValue(quarter2[0]))
+		if(getValue(quarter1[0]) >= getValue(quarter2[0]))
 			return true;
 		else
 			return false;
