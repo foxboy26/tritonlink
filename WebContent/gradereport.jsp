@@ -93,7 +93,7 @@
                     			+	" WHERE G.letter_grade = T.grade"
                     			+	" GROUP BY quarter";
                 	
-                    	String cumulativegpa = "SELECT (SUM(number_grade*unit)/SUM(unit)) AS units gpa grade_conversion AS G, ("
+                    	String cumulativegpa = "SELECT (SUM(number_grade*unit)/SUM(unit)) AS gpa FROM grade_conversion AS G, ("
                 			+	basic + " ) AS T"
                 			+	" WHERE G.letter_grade = T.grade"
                 			+	" GROUP BY student_id";
