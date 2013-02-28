@@ -87,7 +87,7 @@ try {
                     	//Find all the courses belong to some concentration of the selected degree 
                     	String table2 = "SELECT course_id, category FROM plans" +
             				    		" WHERE plans.program_name = '" + name + "'" +
-                    					" AND  category LIKE 'c_%'";
+                    					" AND  category LIKE 'c-%'";
                     	
                     	//Find completed units of each concentration
                     	String table3 = "SELECT SUM(unit) AS sunit, category FROM (" + table1 + ") AS S, (" + table2 + ") AS C" +
@@ -105,6 +105,7 @@ try {
                     	String table5 = "SELECT COM.category, sunit, gpa, units, min_gpa" +
                     					" FROM (" + table3 + ") AS COM, (" + table4 + ") AS G, program_requirement" +
                     					" WHERE COM.category = G.category" +
+                    					" AND COM.category = program_requirement.category" +
                     					" AND program_name = '" + name + "'" +
                     					" AND sunit >= units" +
                     					" AND gpa >= min_gpa";
@@ -112,7 +113,7 @@ try {
                         rs = statement.executeQuery(table5);                                       
                 %>
                 <div class="control-group">
-                	<label class="control-label">Completed Concentrations</label>
+                	<label class="control-label">Courses to choose</label>
                 	<div class="controls">
                 <table class="table">
                     <tr>
@@ -140,15 +141,14 @@ try {
                 	//Find all courses that have not taken yet from everty concentration
                 	String table6 = "SELECT course_id, category FROM (" + table2 + ") AS C" +
                 					" WHERE course_id NOT IN (SELECT course_id FROM (" + table1 + ") AS S)" +
-                					" AND category LIKE 'c_%'";
+                					" AND category LIKE 'c-%'";
                 	
-                	String table7 = "SELECT N.course_id, category, quarter FROM schedule, (" + table2 + ") AS N" +
-                					" WHERE N.course_id = schedule.course_id" +
+                	String table7 = "SELECT N.course_id, category, quarter FROM class, (" + table2 + ") AS N" +
+                					" WHERE N.course_id = class.course_id" +
                         			" ORDER BY category";
                 	
                 	rs = statement.executeQuery(table7);   
                 	              	                	
-                    }
                	 	%>
                  	
                 <div class="control-group">
@@ -157,7 +157,8 @@ try {
                 <table class="table">
                 	<tr>
                         <th>Course ID</th>
-                        <th>concentration</th>                       
+                        <th>concentration</th>    
+                        <th>Given time</th>                       
                     </tr>
                     <% 
                     String next = "Spring 2005";
@@ -187,6 +188,7 @@ try {
                 			next =  rs.getString("quarter");
                 		}
                 	}
+                    }
                     %> 
                 </table>
                 </div>
