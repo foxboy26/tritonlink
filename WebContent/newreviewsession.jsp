@@ -45,7 +45,7 @@
                         <div class="control-group">
                             <label class="control-label">Section ID</label>
                             <div class="controls">
-                                <input type="text" name="sectionId" value = "<%= sectionId %>">
+                                <input class="uneditable-input" type="text" name="sectionId" value = "<%= sectionId %>">
                             </div>
                         </div>
                         
@@ -59,12 +59,12 @@
                         <div class="control-group">
                             <label class="control-label">Time</label>
                             <div class="controls">
-                                <input type="text" name="start_time" value = ""> - <input type="text" name="end_time" value = "">
+                                <input class="input-small" type="text" name="start_time" value = ""> - <input class="input-small" type="text" name="end_time" value = "">
                             </div>
                         </div>
                         
                         <div class="control-group">
-                            <label class="control-label">Days</label>
+                            <label class="control-label">Date</label>
                             <div class="controls">
                                 <input type="text" name="days" value = "">
                             </div>
@@ -92,7 +92,8 @@
     <script>
         $(document).ready(function() {
         	 $('#nav-class').addClass('active');
-             $('#sub-newreviewsession > a').addClass('active');
+             $('#sub-newreviewsession').addClass('active');
+
              $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
              $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
              $('#sub-checkreviewsession > a').attr('href', 'checkreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
