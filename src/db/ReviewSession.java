@@ -9,4 +9,10 @@ public class ReviewSession extends Meeting{
         this.days = days;
     }
 	
+	public boolean conflictWith(ReviewSession b) {
+    	if(!this.days.equals(b.days))
+    		return false;
+    	return (this.startTime.compareTo(b.startTime) >= 0 && this.startTime.compareTo(b.endTime) <= 0) ||
+     		   (b.startTime.compareTo(this.startTime) >= 0 && b.startTime.compareTo(this.endTime) <= 0);
+    }
 }
