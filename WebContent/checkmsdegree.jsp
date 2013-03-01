@@ -83,7 +83,7 @@ try {
                     if (action != null && action.equals("select")) {
                     	int total = 0, totalRequired = 0;
                         String sql = "SELECT * FROM" +
-                                        " (SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId + ") owned, " +
+                                        " (SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId + " AND grade IS NOT NULL) owned, " +
                                         " (SELECT units FROM program_requirement" + 
                                         " WHERE program_name='" + name + "'" +
                                         " AND category='all') required";
@@ -144,11 +144,26 @@ try {
                     </tr>
                     <%
                         }
+                        sql = "SELECT R.category, units FROM (" + required +  ") AS R" +
+                        	  " WHERE R.category NOT IN (SELECT category FROM (" + owned + ") AS O)" +
+                        	  " AND R.category <> 'all'";
+                        rs = statement.executeQuery(sql);
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td><%= rs.getString("category")%></td>
+                        <td><%= rs.getInt("units")%></td>
+                        <td><%= 0 %></td>
+                        <td><%= rs.getInt("units") %></td>
+                    </tr>
+                    <%
+                        }
                     %>
                 </table>
                     	
                 <%    	
-                    	//Find all courses a student has taken
+                    	
+                		//Find all courses a student has taken
                     	String table1 = "SELECT course_id, unit, grade FROM student_section, class_section" +
                     				    " WHERE student_section.student_id = '" + studentId + "'" + 
                     				    " AND student_section.section_id = class_section.section_id";
