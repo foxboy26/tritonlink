@@ -19,8 +19,10 @@
 <%-- Set the scripting language to Java and --%>
 <%-- Import the java.sql package --%>
 <%@ page language="java" import="java.sql.*" %>
+<%@ page language="java" import="java.util.ArrayList" %>
 <%@ page language="java" import="db.Config" %>
 <%@ page language="java" import="db.Meeting" %>
+<%@ page language="java" import="db.reviewSession" %>
 <%-- -------- Open Connection Code -------- --%>
 <%
     try {
@@ -37,7 +39,21 @@
 
         ResultSet rs = statement.executeQuery("SELECT student_id FROM student_section WHERE section_id = '" + sectionId + "'");
         
-        ArrayList<>
+        ArrayList<Meeting> meetinglist = new  ArrayList<Meeting>();
+        
+        ArrayList<reviewSession> reviewlist = new  ArrayList<reviewSession>();
+        
+        while(rs.next()){
+        	String id = rs.getString("student_id");
+        	ResultSet r = statement.executeQuery("SELECT type, start_time, end_time, days FROM student_section, meeting WHERE student_id = '" + id + "'" + 
+        										 " AND student_section.section_id = meeting.section_id");
+        	while(r.next()){
+        		if(r.getString("type").equals("RW"))
+        			reviewlist.add(new reviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));
+        		else
+        			meetinglist.add(new reviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
+        	}
+        }
         
     %>
 %>
@@ -65,8 +81,36 @@
 							</div>
             	</div>
             	
+            	<div class="control-group">
+                	<label class="control-label">Available Times</label>
+                	<div class="controls">
+                	<table class="table table-hover">
+                    	<tr>
+                        	<th>Date</th>
+                        	<th>Day</th>
+                         	<th>Time</th>                         	                    
+                    	</tr>
+                		<%
+                    	
+                   	 	while ( rs.next() ) {
+                		%>
+                    	<tr>
+                        	<td><%= i++ %></td>
+                        	<td><%= rs.getString("course_id") %></td>
+                        	<td><%= rs.getString("quarter") %></td>
+                        	<td><%= rs.getString("title") %></td>
+                        	<td><%= rs.getString("unit") %></td>
+                        	<td><%= rs.getString("grade") %></td>                        
+                    	</tr>
+                	<%
+                    	}
+                	%>
+                </table>
+            </div>
+            	
 			</div>
 			</div>
+		</div>
 		</div>
 		
 		<script src="js/jquery-1.9.1.js"></script>
