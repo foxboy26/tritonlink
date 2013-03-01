@@ -30,6 +30,7 @@
         ResultSet rs;
 
         String studentId = request.getParameter("studentId");
+        String identity = request.getParameter("identity");
 %>
 
 <body>
@@ -42,7 +43,7 @@
                 <%-- -------- SELECT Statement Code Graduate-------- --%>
                 <%
                     statement = conn.createStatement();
-                    String identity = request.getParameter("identity");
+                    
                     if (identity.equals("graduate")) {
                         rs = statement.executeQuery
                             ("SELECT * FROM graduate, student WHERE student.student_id=graduate.student_id AND student.student_id = '" + studentId + "'");
@@ -77,7 +78,7 @@
                         <div class="control-group">
                             <label class="control-label" for="ssn">SSN</label>
                             <div class="controls">
-                                <input type="text" id="ssn" value="<%= rs.getString("ssn") %>" name="ssn">
+                                <input type="text" id="ssn" value="<%= (rs.getString("ssn") == null)? "N/A" : rs.getString("ssn") %>" name="ssn">
                             </div>
                         </div>
 
@@ -185,8 +186,19 @@
             $('#sub-newthesiscommittee > a').attr('href', 'newthesiscommittee.jsp?studentId=<%= studentId %>');
             $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
             $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentId %>');
+            <%
+                if (identity.equals("undergraduate")) {
+            %>
             $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentId %>');
+            <%
+                }
+
+                if (identity.equals("graduate")) {
+            %>
             $('#sub-checkmsdegree > a').attr('href', 'checkmsdegree.jsp?studentId=<%= studentId %>');
+            <%
+                }
+            %>
         });
     </script>
 </body>
