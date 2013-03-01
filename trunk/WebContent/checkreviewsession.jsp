@@ -22,7 +22,7 @@
 <%@ page language="java" import="java.util.ArrayList" %>
 <%@ page language="java" import="db.Config" %>
 <%@ page language="java" import="db.Meeting" %>
-<%@ page language="java" import="db.reviewSession" %>
+<%@ page language="java" import="db.ReviewSession" %>
 <%-- -------- Open Connection Code -------- --%>
 <%
     try {
@@ -43,7 +43,7 @@
         
         ArrayList<Meeting> meetinglist = new  ArrayList<Meeting>();
         
-        ArrayList<reviewSession> reviewlist = new  ArrayList<reviewSession>();
+        ArrayList<ReviewSession> reviewlist = new  ArrayList<ReviewSession>();
         
         while(rs.next()){
         	String id = rs.getString("student_id");
@@ -51,12 +51,11 @@
         										 " AND student_section.section_id = meeting.section_id");
         	while(r.next()){
         		if(r.getString("type").equals("RW"))
-        			reviewlist.add(new reviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));
+        			reviewlist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));
         		else
-        			meetinglist.add(new reviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
+        			meetinglist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
         	}
         }
-        
     %>
 <body>
 	<jsp:include page="tpl/header.html" />
