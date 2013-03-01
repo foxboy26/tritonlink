@@ -55,13 +55,14 @@
         		else
         			meetinglist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
         	}
-        }
+        } 
+        
     %>
 <body>
 	<jsp:include page="tpl/header.html" />
     	<div class="container-fluid">
         	<div class="row-fluid">
-            <jsp:include page="tpl/sub_section.html" />
+            <jsp:include page="tpl/sub_section.html"/>
             <div class="span10">
              	<form class="form-inline" action="checkreviewsession.jsp?sectionId=<%= sectionId %>" method="post"> 
              		<input type = "hidden" value = "confirm" name = "action">
@@ -101,12 +102,15 @@
                          	<th>Time</th>                         	                    
                     	</tr>
                     </table>
-                </div>            	
+                	</div>            	
                 <%
                     }
                 %>
-            </div>
+            	</div>
+			</div>
 		</div>
+	</div>
+		
 		
 		<script src="js/jquery-1.9.1.js"></script>
     	<script src="js/bootstrap.min.js"></script>
@@ -145,13 +149,13 @@
 <%-- -------- Close Connection Code -------- --%>
 <%
         // Close the ResultSet
-        rs.close();
+         rs.close();
 
         // Close the Statement
         statement.close();
 
         // Close the Connection
-        conn.close();
+        conn.close(); 
     } catch (SQLException sqle) {
         out.println(sqle.getMessage());
     } catch (Exception e) {
