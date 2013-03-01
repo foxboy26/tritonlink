@@ -186,6 +186,7 @@ try {
                     <table>
                         <tr>            
                             <td><input type="hidden" name = "rStudentID" value= "<%= studentID%>"></td>
+                            <td><input type="hidden" name = "identity" value= "<%= identity%>"></td>
                             <td><input type="hidden" name = "rCourseID" value= "<%= courseID%>"></td>
                             <td><input type="hidden" name = "rSectionID" value= "<%= sectionID%>"></td>
                             <td><input type="hidden" name = "rUnits" value=  "<%= units%>"></td>

@@ -18,6 +18,7 @@
 <%
         String action = request.getParameter("action");
         String studentId = request.getParameter("rStudentID");
+        String identity = request.getParameter("identity");
         // Check if an insertion is requested
         if (action != null && action.equals("insert")) {
             // Preprocess submitted form data
@@ -67,7 +68,7 @@
         // Close the Connection
         conn.close();
 
-        response.sendRedirect("currentclass.jsp?studentId=" + studentId);
+        response.sendRedirect("currentclass.jsp?studentId=" + studentId + "&identity=" + identity);
     } catch (SQLException sqle) {
         out.println(sqle.getMessage());
     } catch (Exception e) {
