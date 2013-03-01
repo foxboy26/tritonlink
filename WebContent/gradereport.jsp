@@ -128,6 +128,8 @@
     <script>
         $(document).ready(function() {
         	$('#nav-student').addClass('active');
+        	$('#sub-gradereport').addClass('active');
+
             $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
             $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
             $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
@@ -135,6 +137,7 @@
             $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentId %>');
             $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentId %>');
             $('#sub-checkmsdegree > a').attr('href', 'checkmsdegree.jsp?studentId=<%= studentId %>');
+            $('#sub-conflictclass > a').attr('href', 'conflictclass.jsp?studentId=<%= studentId %>');
         });
     </script>
 </body>
