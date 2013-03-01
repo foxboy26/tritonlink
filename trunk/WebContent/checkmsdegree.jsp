@@ -230,7 +230,7 @@ try {
                         <th>Given time</th>                       
                     </tr>
                 <% 
-                        String next = "Spring 2005";
+                        String next = Config.currentQuarter;
                         String courseId = "";
                         String category = "";
                     	
@@ -243,7 +243,7 @@ try {
                                 next = quarter;
                             }
                             if(!courseId.equals(rs.getString("course_id"))){
-                                if(Quarter.greater("Spring 2005", next))
+                                if(Quarter.greater( Config.currentQuarter, next))
                                     next = "";
                 %>
                     	<tr>
@@ -256,7 +256,7 @@ try {
                                 category = rs.getString("category");
                                 next = quarter;
                             }
-                            else if(Quarter.greater(next, quarter) && Quarter.greater(quarter, "Spring 2005")){
+                            else if(Quarter.greater(next, quarter) && Quarter.greater(quarter,  Config.currentQuarter)){
                                 next =  quarter;
                             }
                         }
