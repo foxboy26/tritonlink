@@ -36,6 +36,8 @@
         Statement statement = conn.createStatement();
         
         String sectionId = request.getParameter("sectionId");
+        
+        String action = request.getParameter("action");
 
         ResultSet rs = statement.executeQuery("SELECT student_id FROM student_section WHERE section_id = '" + sectionId + "'");
         
@@ -56,30 +58,35 @@
         }
         
     %>
-%>
 <body>
 	<jsp:include page="tpl/header.html" />
     	<div class="container-fluid">
         	<div class="row-fluid">
             <jsp:include page="tpl/sub_section.html" />
             <div class="span10">
-            	<div class="control-group">
+             	<form class="form-inline" action="checkreviewsession.jsp?sectionId=<%= sectionId %>" method="post"> 
+             		<input type = "hidden" value = "confirm" name = "action">
+            			<div class="control-group">
                             <label class="control-label" for="course_id">Start Date</label>
                             <div class="input-append date" id="dpd1" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
-  								<input class="span2" size="100" type="text" value="01-04-2013">
+  								<input id = "start" class="span2" size="100" type="text" value="01-04-2013">
   								<span class="add-on"><i class="icon-th"></i></span>
 							</div>
-            	</div>
+            			</div>
 			
 			
 			
-				<div class="control-group">
+						<div class="control-group">
                             <label class="control-label" for="course_id">End Date</label>
                             <div class="input-append date" id="dpd2" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
-  								<input class="span2" size="100" type="text" value="01-04-2013">
+  								<input id = "end" class="span2" size="100" type="text" value="01-04-2013">
   								<span class="add-on"><i class="icon-th"></i></span>
 							</div>
-            	</div>
+            			</div>
+            			
+            			<button type="submit" class="btn btn-primary">Confirm</button>
+            	</form>
+           
             	
             	<div class="control-group">
                 	<label class="control-label">Available Times</label>
@@ -91,23 +98,14 @@
                          	<th>Time</th>                         	                    
                     	</tr>
                 		<%
-                    	
-                   	 	while ( rs.next() ) {
-                		%>
-                    	<tr>
-                        	<td><%= i++ %></td>
-                        	<td><%= rs.getString("course_id") %></td>
-                        	<td><%= rs.getString("quarter") %></td>
-                        	<td><%= rs.getString("title") %></td>
-                        	<td><%= rs.getString("unit") %></td>
-                        	<td><%= rs.getString("grade") %></td>                        
-                    	</tr>
-                	<%
-                    	}
+ 
+                     	if(action != null){
+                     		String start = request.getParameter("start");
+                     		String end = request.getParameter("end");
+                   	 	
                 	%>
                 </table>
-            </div>
-            	
+            </div>            	
 			</div>
 			</div>
 		</div>
