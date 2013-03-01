@@ -60,7 +60,8 @@
                 				+ " class_section.course_id = class.course_id"
                 				+ " AND class_section.quarter = class.quarter"
                 				+ " AND class_section.section_id = student_section.section_id"
-                				+ " AND student_section.student_id = '" + studentId + "'";
+                				+ " AND student_section.student_id = '" + studentId + "'"
+                                + " AND class.quarter <> '" + Config.currentQuarter + "'";
                 		String sql	=	basic	+ " ORDER BY class.quarter";
                 	
                 
