@@ -62,8 +62,10 @@
                     rs = statement.executeQuery(sql);
                     int i = 1;
                     while ( rs.next() ) {
+                        String courseId = rs.getString("course_id");
+                        String quarter = rs.getString("quarter");
                 %>
-                    <tr>
+                    <tr onclick="document.location = 'class.jsp?&courseId=<%= courseId %>&quarter=<%= quarter %>';">
                         <td><%= i++ %></td>
                         <td><%= rs.getString("course_id") %></td>
                         <td><%= rs.getString("quarter") %></td>
