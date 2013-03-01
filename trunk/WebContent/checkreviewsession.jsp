@@ -66,28 +66,32 @@
             <div class="span10">
              	<form class="form-inline" action="checkreviewsession.jsp?sectionId=<%= sectionId %>" method="post"> 
              		<input type = "hidden" value = "confirm" name = "action">
-            			<div class="control-group">
-                            <label class="control-label" for="course_id">Start Date</label>
-                            <div class="input-append date" id="dpd1" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
-  								<input id = "start" class="span2" size="100" type="text" value="01-04-2013">
-  								<span class="add-on"><i class="icon-th"></i></span>
-							</div>
-            			</div>
-			
-			
-			
-						<div class="control-group">
-                            <label class="control-label" for="course_id">End Date</label>
-                            <div class="input-append date" id="dpd2" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
-  								<input id = "end" class="span2" size="100" type="text" value="01-04-2013">
-  								<span class="add-on"><i class="icon-th"></i></span>
-							</div>
-            			</div>
-            			
-            			<button type="submit" class="btn btn-primary">Confirm</button>
+                    <div class="control-group">
+                        <label class="control-label" for="course_id">Start Date</label>
+                        <div class="input-append date" id="dpd1" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
+                            <input id = "start" class="span2" size="100" type="text" value="01-04-2013">
+                            <span class="add-on"><i class="icon-th"></i></span>
+                        </div>
+                    </div>
+        
+        
+        
+                    <div class="control-group">
+                        <label class="control-label" for="course_id">End Date</label>
+                        <div class="input-append date" id="dpd2" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
+                            <input id = "end" class="span2" size="100" type="text" value="01-04-2013">
+                            <span class="add-on"><i class="icon-th"></i></span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Confirm</button>
             	</form>
            
-            	
+                <%
+                    if(action != null){
+                        String start = request.getParameter("start");
+                        String end = request.getParameter("end");
+                %>
             	<div class="control-group">
                 	<label class="control-label">Available Times</label>
                 	<div class="controls">
@@ -97,18 +101,12 @@
                         	<th>Day</th>
                          	<th>Time</th>                         	                    
                     	</tr>
-                		<%
- 
-                     	if(action != null){
-                     		String start = request.getParameter("start");
-                     		String end = request.getParameter("end");
-                     	}
-                	%>
-                </table>
-            </div>            	
-			</div>
-			</div>
-		</div>
+                    </table>
+                </div>            	
+                <%
+                    }
+                %>
+            </div>
 		</div>
 		
 		<script src="js/jquery-1.9.1.js"></script>
