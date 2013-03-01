@@ -26,7 +26,7 @@ public class Meeting
     public Meeting(Time startTime, Time endTime, String days) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.days = days;
+        this.days = days;;
     }
     
     public boolean conflictWith(Meeting b) {

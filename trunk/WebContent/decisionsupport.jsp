@@ -14,6 +14,7 @@
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="java.util.ArrayList" %>
 <%@ page language="java" import="db.Config" %>
+<%@ page language="java" import="db.Decision" %>
 <%-- -------- Open Connection Code -------- --%>
 <%
 try {
@@ -33,6 +34,7 @@ try {
     if(action != null && action.equals("select")) {
     	name = request.getParameter("name");
     }
+
 %>
 <body>
     <jsp:include page="tpl/header.html" />
@@ -96,9 +98,20 @@ try {
                 </form>         
                 <%
                     if (action != null && action.equals("i")) {
-                        String sql = "";
+                        String facultyId = request.getParameter("faculty_id");
+                        String courseId = request.getParameter("course_id");
+                        String quarter = request.getParameter("quarter") + " " + request.getParameter("year");
 
-                        rs = statement.executeQuery(sql);
+                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM class AS c, teach AS t, class_section AS cs, student_section AS ss" +
+                                            " WHERE c.course_id=cs.course_id" +
+                                            " AND t.section_id=cs.section_id" +
+                                            " AND cs.section_id=ss.section_id" +
+                                            " AND t.faculty_id='" + facultyId + "'" +
+                                            " AND c.course_id='" + courseId + "'" +
+                                            " AND c.quarter='" + quarter + "'" +
+                                            " GROUP BY ss.grade";
+                        
+                        rs = statement.executeQuery(Decision.makeSQL(gradeAll));
                 %>
                 <table class="table">
                     <tr>
@@ -109,8 +122,8 @@ try {
                         while (rs.next()) {
                     %>
                     <tr>
-                        <td><%= " " %></td>
-                        <td><%= " " %></td>
+                        <td><%= rs.getString("grade") %></td>
+                        <td><%= (rs.getString("grade_count") == null)? 0 : rs.getInt("grade_count") %></td>
                     </tr>
                     <%
                         }
@@ -159,6 +172,40 @@ try {
 
                     <button type="submit" class="btn btn-primary">Show</button>
                 </form>         
+                <%
+                    if (action != null && action.equals("ii")) {
+                        String facultyId = request.getParameter("faculty_id");
+                        String courseId = request.getParameter("course_id");
+
+                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM class AS c, teach AS t, class_section AS cs, student_section AS ss" +
+                                            " WHERE c.course_id=cs.course_id" +
+                                            " AND t.section_id=cs.section_id" +
+                                            " AND cs.section_id=ss.section_id" +
+                                            " AND t.faculty_id='" + facultyId + "'" +
+                                            " AND c.course_id='" + courseId + "'" +
+                                            " GROUP BY ss.grade";
+                        
+                        rs = statement.executeQuery(Decision.makeSQL(gradeAll));
+                %>
+                <table class="table">
+                    <tr>
+                        <th>Grade Type</th>
+                        <th>Count</th>
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td><%= rs.getString("grade") %></td>
+                        <td><%= (rs.getString("grade_count") == null)? 0 : rs.getInt("grade_count") %></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+                <%
+                    }
+                %>
 
                 <!-- iii) -->
                 <form class="form-inline" action="decisionsupport.jsp?studentId=<%= studentId %>" method="post"> 
@@ -187,6 +234,38 @@ try {
 
                     <button type="submit" class="btn btn-primary">Show</button>
                 </form>         
+                <%
+                    if (action != null && action.equals("iii")) {
+                        String courseId = request.getParameter("course_id");
+
+                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM class AS c, teach AS t, class_section AS cs, student_section AS ss" +
+                                            " WHERE c.course_id=cs.course_id" +
+                                            " AND t.section_id=cs.section_id" +
+                                            " AND cs.section_id=ss.section_id" +
+                                            " AND c.course_id='" + courseId + "'" +
+                                            " GROUP BY ss.grade";
+                        
+                        rs = statement.executeQuery(Decision.makeSQL(gradeAll));
+                %>
+                <table class="table">
+                    <tr>
+                        <th>Grade Type</th>
+                        <th>Count</th>
+                    </tr>
+                    <%
+                        while (rs.next()) {
+                    %>
+                    <tr>
+                        <td><%= rs.getString("grade") %></td>
+                        <td><%= (rs.getString("grade_count") == null)? 0 : rs.getInt("grade_count") %></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+                <%
+                    }
+                %>
 
                 <!-- iv) -->
                 <form class="form-inline" action="decisionsupport.jsp?studentId=<%= studentId %>" method="post"> 
@@ -227,6 +306,26 @@ try {
 
                     <button type="submit" class="btn btn-primary">Show</button>
                 </form>         
+                <%
+                    if (action != null && action.equals("iv")) {
+                        String courseId = request.getParameter("course_id");
+                        String facultyId = request.getParameter("faculty_id");
+
+                        String sql = "SELECT AVG(gc.number_grade) as grade FROM class AS c, teach AS t, class_section AS cs, student_section AS ss, grade_conversion AS gc" +
+                                            " WHERE c.course_id=cs.course_id" +
+                                            " AND t.section_id=cs.section_id" +
+                                            " AND cs.section_id=ss.section_id" +
+                                            " AND gc.letter_grade=ss.grade" +
+                                            " AND t.faculty_id='" + facultyId + "'" +
+                                            " AND c.course_id='" + courseId + "'";
+                        
+                        rs = statement.executeQuery(sql);
+                        rs.next();
+                %>
+                <span>Average grade: <%= rs.getFloat("grade") %></span>
+                <%
+                    }
+                %>
             </div>
         </div>
     </div>

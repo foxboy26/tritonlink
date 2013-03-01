@@ -53,6 +53,7 @@
                     String sql = "SELECT c.course_id, c.quarter, c.title" +
                                  " FROM class AS c, class_section AS cs, teach AS t" +
                                  " WHERE c.course_id=cs.course_id" + 
+                                 " AND c.quarter=cs.quarter" +
                                  " AND cs.section_id=t.section_id" + 
                                  " AND t.faculty_id='" + facultyId + "'" + 
                                  " ORDER BY c.quarter";
