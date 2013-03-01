@@ -22,6 +22,8 @@
 <%@ page language="java" import="java.util.ArrayList" %>
 <%@ page language="java" import="java.util.Calendar" %>
 <%@ page language="java" import="java.text.SimpleDateFormat" %>
+<%@ page language="java" import="java.util.Locale" %>
+<%@ page language="java" import="java.text.DateFormat" %>
 <%@ page language="java" import="db.Config" %>
 <%@ page language="java" import="db.Meeting" %>
 <%@ page language="java" import="db.ReviewSession" %>
@@ -42,6 +44,10 @@
         String sectionId = request.getParameter("sectionId");
         
         String action = request.getParameter("action");
+        
+        String startdate = "07-12-2012";
+        
+        String enddate = "23-02-2013";
 
         ResultSet rs = statement1.executeQuery("SELECT student_id FROM student_section WHERE section_id = '" + sectionId + "'");
         
@@ -49,9 +55,11 @@
         
         ArrayList<ReviewSession> reviewlist = new  ArrayList<ReviewSession>();
         
-        String[] dic  = {"Mo","Tu", "We", "Th", "Fr"};
+        String[] dic  = {"Su", "Mo","Tu", "We", "Th", "Fr", "Sa"};
         
+        DateFormat df = new SimpleDateFormat("MMM d EEE", Locale.US);
         
+
 
         while(rs.next()){
         	
@@ -61,7 +69,7 @@
         										 " AND student_section.section_id = meeting.section_id");
         	while(r.next()){
         		if(r.getString("type").equals("RW"))
-        			reviewlist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), new SimpleDateFormat("dd-mm-yyyy").parse(r.getString("days"))));
+        			reviewlist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), new SimpleDateFormat("dd-MM-yyyy").parse(r.getString("days"))));
         		else
         			meetinglist.add(new Meeting(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
         	}
@@ -81,7 +89,7 @@
              		<input type = "hidden" value = "confirm" name = "action">
                     <div class="control-group">
                         <label class="control-label" for="course_id">Start Date</label>
-                        <div class="input-append date" id="dpd1" data-date="07-12-2012" data-date-format="dd-mm-yyyy">
+                        <div class="input-append date" id="dpd1" data-date=<%=startdate%> data-date-format="dd-mm-yyyy">
                             <input id = "start" name= "start" class="span2" size="100" type="text" value="01-04-2013">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
@@ -91,7 +99,7 @@
         
                     <div class="control-group">
                         <label class="control-label" for="course_id">End Date</label>
-                        <div class="input-append date" id="dpd2" data-date="23-02-2013" data-date-format="dd-mm-yyyy">
+                        <div class="input-append date" id="dpd2" data-date=<%=enddate%> data-date-format="dd-mm-yyyy">
                             <input id = "end" name = "end" class="span2" size="100" type="text" value="01-04-2013">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
@@ -117,28 +125,30 @@
                         String start = request.getParameter("start");
                         String end = request.getParameter("end");
                         Calendar cstart = Calendar.getInstance();
-                        cstart.setTime(new SimpleDateFormat("dd-mm-yyyy").parse(start));
+                        cstart.setTime(new SimpleDateFormat("dd-MM-yyyy").parse(start));
                         Calendar cend = Calendar.getInstance();                       
-                        cend.setTime(new SimpleDateFormat("dd-mm-yyyy").parse(end));
+                        cend.setTime(new SimpleDateFormat("dd-MM-yyyy").parse(end));
                         cstart.setFirstDayOfWeek(Calendar.MONDAY);
                         cend.setFirstDayOfWeek(Calendar.MONDAY);
-                        int startdayOfWeek = (cstart.get(Calendar.DAY_OF_WEEK) + 1)%7 + 1;
-                        int enddayOfWeek = (cend.get(Calendar.DAY_OF_WEEK) + 1)%7 + 1;
+                        int startdayOfWeek = cstart.get(Calendar.DAY_OF_WEEK) - 1;
+                        int enddayOfWeek = cend.get(Calendar.DAY_OF_WEEK) - 1;
                         int dif = (int)((cend.getTimeInMillis() - cstart.getTimeInMillis())/(1000*60*60*24));
                         //Regular Meeting
-                        for(int i = 0; i < dif; ++i){
+                        for(int i = 0; i <= dif; ++i){
                         	Calendar nextDay = (Calendar) cstart.clone();
                         	nextDay.add (Calendar.DAY_OF_YEAR, i);
+                        	int day = (startdayOfWeek+i)%7;
+                        	if(day < 6 && day > 0){
                         	for(int j = 8; j < 20; ++j){                        		
-                        		int day = (startdayOfWeek+i)%7;
+                        		
                         		Meeting temp = new Meeting(new Time(j,0,0), new Time(j+1,0,0), dic[day] );
                         		boolean isConflict = false;
-                        		/* for(Meeting m: meetinglist){
+                        		for(Meeting m: meetinglist){
                         			if(temp.conflictWith(m)){
                         				isConflict = true;
                         				break;
                         			}
-                        		} */
+                        		}
                         		if(isConflict == false){                       			
                         			for(ReviewSession r: reviewlist){
                         				ReviewSession re = new ReviewSession(new Time(j, 0, 0), new Time(j+1, 0, 0), nextDay.getTime());
@@ -151,13 +161,14 @@
                         		if(isConflict == false){
                         	%>
                         		<tr>
-                        			<th><%= nextDay.toString()%></th>
+                        			<th><%= df.format(nextDay.getTime())%></th>
                         			<th><%= new Time(j,0,0)%></th>
                          			<th><%= new Time(j+1,0,0)%></th>                         	                    
                     			</tr>
                         	
                         	<%
                         		}
+                        	}
                         	}
                         }
 
