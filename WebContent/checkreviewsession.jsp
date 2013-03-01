@@ -20,6 +20,8 @@
 <%-- Import the java.sql package --%>
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="java.util.ArrayList" %>
+<%@ page language="java" import="java.util.Calendar" %>
+<%@ page language="java" import="java.text.SimpleDateFormat" %>
 <%@ page language="java" import="db.Config" %>
 <%@ page language="java" import="db.Meeting" %>
 <%@ page language="java" import="db.ReviewSession" %>
@@ -33,28 +35,39 @@
         // Make a connection to the MS SQL Server datasource "tritonlink"
         Connection conn = DriverManager.getConnection(Config.connectionURL);
         
-        Statement statement = conn.createStatement();
+        Statement statement1 = conn.createStatement();
+        
+       
         
         String sectionId = request.getParameter("sectionId");
         
         String action = request.getParameter("action");
 
-        ResultSet rs = statement.executeQuery("SELECT student_id FROM student_section WHERE section_id = '" + sectionId + "'");
+        ResultSet rs = statement1.executeQuery("SELECT student_id FROM student_section WHERE section_id = '" + sectionId + "'");
         
         ArrayList<Meeting> meetinglist = new  ArrayList<Meeting>();
         
         ArrayList<ReviewSession> reviewlist = new  ArrayList<ReviewSession>();
         
+        String[] dic  = {"Mo","Tu", "We", "Th", "Fr"};
+        
+        
+
         while(rs.next()){
+        	
+        	Statement statement2 = conn.createStatement();
         	String id = rs.getString("student_id");
-        	ResultSet r = statement.executeQuery("SELECT type, start_time, end_time, days FROM student_section, meeting WHERE student_id = '" + id + "'" + 
+        	ResultSet r = statement2.executeQuery("SELECT type, start_time, end_time, days FROM student_section, meeting WHERE student_id = '" + id + "'" + 
         										 " AND student_section.section_id = meeting.section_id");
         	while(r.next()){
         		if(r.getString("type").equals("RW"))
         			reviewlist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));
         		else
-        			meetinglist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
+        			meetinglist.add(new Meeting(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
         	}
+        	
+        	r.close();
+            statement2.close();
         } 
         
     %>
@@ -68,8 +81,8 @@
              		<input type = "hidden" value = "confirm" name = "action">
                     <div class="control-group">
                         <label class="control-label" for="course_id">Start Date</label>
-                        <div class="input-append date" id="dpd1" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
-                            <input id = "start" class="span2" size="100" type="text" value="01-04-2013">
+                        <div class="input-append date" id="dpd1" data-date="07-12-2012" data-date-format="dd-mm-yyyy">
+                            <input id = "start" name= "start" class="span2" size="100" type="text" value="01-04-2013">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -78,8 +91,8 @@
         
                     <div class="control-group">
                         <label class="control-label" for="course_id">End Date</label>
-                        <div class="input-append date" id="dpd2" data-date="01-04-2013" data-date-format="dd-mm-yyyy">
-                            <input id = "end" class="span2" size="100" type="text" value="01-04-2013">
+                        <div class="input-append date" id="dpd2" data-date="23-02-2013" data-date-format="dd-mm-yyyy">
+                            <input id = "end" name = "end" class="span2" size="100" type="text" value="01-04-2013">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -89,10 +102,8 @@
            
                 <%
                     if(action != null){
-                        String start = request.getParameter("start");
-                        String end = request.getParameter("end");
-                %>
-            	<div class="control-group">
+                 %>
+                 	<div class="control-group">
                 	<label class="control-label">Available Times</label>
                 	<div class="controls">
                 	<table class="table table-hover">
@@ -101,8 +112,56 @@
                         	<th>Day</th>
                          	<th>Time</th>                         	                    
                     	</tr>
-                    </table>
-                	</div>            	
+         
+                 <%
+                        String start = request.getParameter("start");
+                        String end = request.getParameter("end");
+                        Calendar cstart = Calendar.getInstance();
+                        cstart.setTime(new SimpleDateFormat("dd-mm-yyyy").parse(start));
+                        Calendar cend = Calendar.getInstance();
+                        cend.setTime(new SimpleDateFormat("dd-mm-yyyy").parse(end));
+                        int startdayOfWeek = cstart.get(Calendar.DAY_OF_WEEK);
+                        int enddayOfWeek = cend.get(Calendar.DAY_OF_WEEK);
+                        int dif = (int)(cend.getTimeInMillis() - cstart.getTimeInMillis())/(1000*60*60*24);
+                        //Regular Meeting
+                        for(int i = 0; i < dif; ++i){
+                        	Calendar nextDay = (Calendar) cstart.clone();
+                        	nextDay.add (Calendar.DAY_OF_YEAR, i);
+                        	for(int j = 8; j < 20; ++j){                        		
+                        		int day = (startdayOfWeek+i)%7;
+                        		Meeting temp = new Meeting(new Time(j,0,0), new Time(j+1,0,0), dic[day] );
+                        		boolean isConflict = false;
+                        		for(Meeting m: meetinglist){
+                        			if(temp.conflictWith(m)){
+                        				isConflict = true;
+                        				break;
+                        			}
+                        		}
+                        		if(isConflict == false){                       			
+                        			for(ReviewSession r: reviewlist){
+                        				ReviewSession re = new ReviewSession(new Time(j, 0, 0), new Time(j+1, 0, 0), nextDay.toString());
+                            			if(temp.conflictWith(r)){
+                            				isConflict = true;
+                            				break;
+                            			}
+                            		}
+                        		}
+                        		if(isConflict == false){
+                        	%>
+                        		<tr>
+                        			<th><%= nextDay.toString()%></th>
+                        			<th><%= new Time(j,0,0)%></th>
+                         			<th><%= new Time(j+1,0,0)%></th>                         	                    
+                    			</tr>
+                        	
+                        	<%
+                        		}
+                        	}
+                        }
+
+                %>
+            	  	 </table>
+                	</div> 
                 <%
                     }
                 %>
@@ -119,8 +178,8 @@
         	$(document).ready(function() {
             	$('#nav-course').addClass('active');
             	 
-            	var now = new Date(2013, 03, 01, 0, 0, 0, 0);
-            	var end = new Date(2013, 05, 07, 0, 0, 0, 0);
+            	var now = new Date(2012, 12, 07, 0, 0, 0, 0);
+            	var end = new Date(2013, 02, 23, 0, 0, 0, 0);
             	 
             	var checkin = $('#dpd1').datepicker({
             	  onRender: function(date) {
@@ -152,7 +211,8 @@
          rs.close();
 
         // Close the Statement
-        statement.close();
+        statement1.close();
+
 
         // Close the Connection
         conn.close(); 
