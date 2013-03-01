@@ -69,7 +69,6 @@
                     	    	 "   where c.quarter='" + Config.currentQuarter + "') offered" +
                     	    	 " where enrolled.course_id<>offered.course_id";
                     	    	 
-                    System.out.println(sql);
                     rs = statement.executeQuery(sql);
                     int i = 1;
                     while ( rs.next() ) {

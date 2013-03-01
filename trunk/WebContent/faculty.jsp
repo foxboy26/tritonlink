@@ -113,6 +113,8 @@
     <script>
         $(document).ready(function() {
             $('#nav-faculty').addClass('active');
+
+            $('#sub-teachlist > a').attr('href', 'teachlist.jsp?facultyId=<%= facultyId %>');
         });
     </script>
 </body>
