@@ -61,7 +61,7 @@
         										 " AND student_section.section_id = meeting.section_id");
         	while(r.next()){
         		if(r.getString("type").equals("RW"))
-        			reviewlist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));
+        			reviewlist.add(new ReviewSession(r.getTime("start_time"), r.getTime("end_time"), new SimpleDateFormat("dd-mm-yyyy").parse(r.getString("days"))));
         		else
         			meetinglist.add(new Meeting(r.getTime("start_time"), r.getTime("end_time"), r.getString("days")));   			
         	}
@@ -118,11 +118,13 @@
                         String end = request.getParameter("end");
                         Calendar cstart = Calendar.getInstance();
                         cstart.setTime(new SimpleDateFormat("dd-mm-yyyy").parse(start));
-                        Calendar cend = Calendar.getInstance();
+                        Calendar cend = Calendar.getInstance();                       
                         cend.setTime(new SimpleDateFormat("dd-mm-yyyy").parse(end));
-                        int startdayOfWeek = cstart.get(Calendar.DAY_OF_WEEK);
-                        int enddayOfWeek = cend.get(Calendar.DAY_OF_WEEK);
-                        int dif = (int)(cend.getTimeInMillis() - cstart.getTimeInMillis())/(1000*60*60*24);
+                        cstart.setFirstDayOfWeek(Calendar.MONDAY);
+                        cend.setFirstDayOfWeek(Calendar.MONDAY);
+                        int startdayOfWeek = (cstart.get(Calendar.DAY_OF_WEEK) + 1)%7 + 1;
+                        int enddayOfWeek = (cend.get(Calendar.DAY_OF_WEEK) + 1)%7 + 1;
+                        int dif = (int)((cend.getTimeInMillis() - cstart.getTimeInMillis())/(1000*60*60*24));
                         //Regular Meeting
                         for(int i = 0; i < dif; ++i){
                         	Calendar nextDay = (Calendar) cstart.clone();
@@ -131,16 +133,16 @@
                         		int day = (startdayOfWeek+i)%7;
                         		Meeting temp = new Meeting(new Time(j,0,0), new Time(j+1,0,0), dic[day] );
                         		boolean isConflict = false;
-                        		for(Meeting m: meetinglist){
+                        		/* for(Meeting m: meetinglist){
                         			if(temp.conflictWith(m)){
                         				isConflict = true;
                         				break;
                         			}
-                        		}
+                        		} */
                         		if(isConflict == false){                       			
                         			for(ReviewSession r: reviewlist){
-                        				ReviewSession re = new ReviewSession(new Time(j, 0, 0), new Time(j+1, 0, 0), nextDay.toString());
-                            			if(temp.conflictWith(r)){
+                        				ReviewSession re = new ReviewSession(new Time(j, 0, 0), new Time(j+1, 0, 0), nextDay.getTime());
+                            			if(re.conflictWith(r)){
                             				isConflict = true;
                             				break;
                             			}
