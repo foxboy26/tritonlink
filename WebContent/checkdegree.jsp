@@ -79,30 +79,28 @@ try {
                 <legend>Status</legend>
                 <%
                     if (action != null && action.equals("select")) {
-                        int total = 0;
-                        String sql = "SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId;
+                        int total = 0, totalRequired = 0;
+                        String sql = "SELECT * FROM" +
+		                        		" (SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId + ") owned, " +
+		                        		" (SELECT units FROM program_requirement" + 
+		                                " WHERE program_name='" + name + "'" +
+		                                " AND category='all') required";
                         rs = statement.executeQuery(sql);
                         if (rs.next()) {
                             total = rs.getInt("total");
+                            totalRequired = rs.getInt("units");
                         }
+                        
+                        sql = "SELECT units FROM program_requirement" + 
+                                " WHERE program_name='" + name + "'" +
+                                " AND category='all'";
+                        
 
-                        sql = "SELECT category, units FROM program_requirement" + 
+                        String required = "SELECT category, units FROM program_requirement" + 
                               " WHERE program_name='" + name + "'" +
                               " AND NOT category LIKE 'c-%'";
 
-                        rs = statement.executeQuery(sql);
-                        int totalRequired = 0;
-                        ArrayList<Integer> requiredUnitList = new ArrayList<Integer> ();
-                        while (rs.next()) {
-                            if(rs.getString("category").equals("all"))
-                                totalRequired = rs.getInt("units");
-                            else
-                                requiredUnitList.add(rs.getInt("units"));
-                                System.out.println(rs.getString("category"));
-                                System.out.println(rs.getInt("units"));
-                        }
-
-                        sql = "SELECT p.category AS category, SUM(ss.unit) AS units" +
+                        String owned = "SELECT p.category AS category, SUM(ss.unit) AS units" +
                               " FROM student_section AS ss, class_section AS cs, plans AS p" +
                               " WHERE ss.section_id=cs.section_id" +
                               " AND cs.course_id=p.course_id" +
@@ -110,11 +108,16 @@ try {
                               " AND p.program_name='" + name + "'" +
                               " AND NOT p.category LIKE 'c-%'" +
                               " GROUP BY category";
+                        
+                        sql = "SELECT owned.category AS category, owned.units AS o_units, required.units AS r_units FROM" +
+                              " (" + owned + ") owned, " +
+                              " (" + required + ") required" +
+                              " WHERE owned.category=required.category";
 
                         rs = statement.executeQuery(sql);
                 %>
                 <div>
-                    <h3>Total units: <%= totalRequired %>, <%= totalRequired - total %> remains.</h3>
+                    <h4>Total units: <%= totalRequired %>, <%= totalRequired - total %> remains.</h4>
                 </div>
                 <table class="table">
                     <tr>
@@ -127,14 +130,14 @@ try {
                         int i = 0;
                         while (rs.next()) {
                             String category = rs.getString("category");
-                            int requiredUnits = requiredUnitList.get(i++);
-                            int units = rs.getInt("units");
+                            int rUnits = rs.getInt("r_units");
+                            int oUnits = rs.getInt("o_units");
                     %>
                     <tr>
                         <td><%= category %></td>
-                        <td><%= requiredUnits %></td>
-                        <td><%= units %></td>
-                        <td><%= requiredUnits - units %></td>
+                        <td><%= rUnits %></td>
+                        <td><%= oUnits %></td>
+                        <td><%= (rUnits - oUnits > 0)? rUnits - oUnits : 0 %></td>
                     </tr>
                     <%
                         }
