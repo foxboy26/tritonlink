@@ -39,6 +39,7 @@
         }
 
         String studentId = request.getParameter("studentId");
+        String identity = request.getParameter("identity");
 %>
 <body>
     <jsp:include page="tpl/header.html" />
@@ -89,13 +90,28 @@
         $(document).ready(function() {
             $('#nav-student').addClass('active');
             $('#sub-newthesiscommittee').addClass('active');
-            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentId %>');
-            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentId=<%= studentId %>');
-            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentId %>');
-            $('#sub-newthesiscommittee > a').attr('href', 'newthesiscommittee.jsp?studentId=<%= studentId %>');
-            $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentId %>');
-            $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentId %>');
-            $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentId %>');
+            
+            var args = '?' + 'studentId=<%= studentId %>' + '&' + 'identity=<%= identity %>';
+            $('#sub-newprobation > a').attr('href', 'newprobation.jsp' + args);
+            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp' + args);
+            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp' + args);
+            $('#sub-newthesiscommittee > a').attr('href', 'newthesiscommittee.jsp' +  args);
+            $('#sub-currentclass > a').attr('href', 'currentclass.jsp' + args);
+            $('#sub-gradereport > a').attr('href', 'gradereport.jsp' + args);
+            <%
+                if (identity.equals("undergraduate")) {
+            %>
+            $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp' + args);
+            <%
+                }
+
+                if (identity.equals("graduate")) {
+            %>
+            $('#sub-checkdegree > a').attr('href', 'checkmsdegree.jsp' + args);
+            <%
+                }
+            %>
+            $('#sub-conflictclass > a').attr('href', 'conflictclass.jsp' + args);
         });
     </script>
 </body>
