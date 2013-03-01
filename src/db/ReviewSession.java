@@ -1,9 +1,11 @@
 package db;
 
 import java.sql.Time;
+import java.util.Date;
 
 public class ReviewSession extends Meeting{
-	public ReviewSession(Time startTime, Time endTime, String days) {
+	Date days;
+	public ReviewSession(Time startTime, Time endTime, Date days) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.days = days;
