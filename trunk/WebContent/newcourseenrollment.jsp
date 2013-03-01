@@ -28,6 +28,7 @@ try {
     String sectionID = "";
     String units = "";
     String studentID = request.getParameter("studentId");
+    String identity = request.getParameter("identity");
     String gradeType = "Letter";
     if(action != null && action.equals("select")){
         courseID = request.getParameter("course_id");
@@ -207,14 +208,29 @@ try {
         $(document).ready(function() {
             $('#nav-student').addClass('active');
             $('#sub-newcourseenrollment').addClass('active');
-            $('#sub-newprobation > a').attr('href', 'newprobation.jsp?studentId=<%= studentID %>');
-            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp?studentID=<%= studentID %>');
-            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp?studentId=<%= studentID %>');
-            $('#sub-currentclass > a').attr('href', 'currentclass.jsp?studentId=<%= studentID %>');
-            $('#sub-gradereport > a').attr('href', 'gradereport.jsp?studentId=<%= studentID %>');
-            $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp?studentId=<%= studentID %>');
-            $('#sub-checkmsdegree > a').attr('href', 'checkmsdegree.jsp?studentId=<%= studentID %>');
-            $('#sub-conflictclass > a').attr('href', 'conflictclass.jsp?studentId=<%= studentID %>');
+
+            var args = '?' + 'studentId=<%= studentID %>' + '&' + 'identity=<%= identity %>';
+            $('#sub-newprobation > a').attr('href', 'newprobation.jsp' + args);
+            $('#sub-newcourseenrollment > a').attr('href', 'newcourseenrollment.jsp' + args);
+            $('#sub-newpastclass > a').attr('href', 'newpastclass.jsp' + args);
+            $('#sub-newthesiscommittee > a').attr('href', 'newthesiscommittee.jsp' +  args);
+            $('#sub-currentclass > a').attr('href', 'currentclass.jsp' + args);
+            $('#sub-gradereport > a').attr('href', 'gradereport.jsp' + args);
+            <%
+                if (identity.equals("undergraduate")) {
+            %>
+            $('#sub-checkdegree > a').attr('href', 'checkdegree.jsp' + args);
+            <%
+                }
+
+                if (identity.equals("graduate")) {
+            %>
+            $('#sub-checkdegree > a').attr('href', 'checkmsdegree.jsp' + args);
+            <%
+                }
+            %>
+            $('#sub-conflictclass > a').attr('href', 'conflictclass.jsp' + args);
+            $('#sub-decisionsupport > a').attr('href', 'decisionsupport.jsp' + args);
         });
 
         function setStudent(){
