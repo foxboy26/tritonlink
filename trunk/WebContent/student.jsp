@@ -199,6 +199,7 @@
             <%
                 }
             %>
+            $('#sub-conflictclass > a').attr('href', 'conflictclass.jsp?studentId=<%= studentId %>');
         });
     </script>
 </body>
