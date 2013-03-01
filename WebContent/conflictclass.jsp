@@ -82,7 +82,9 @@
 						" AND c.quarter=cs.quarter" +
 						" AND cs.section_id=m.section_id" +
 						" AND c.course_id='" + rs.getString("e_course_id") + "'" +
-						" AND c.quarter='" + Config.currentQuarter + "'";
+						" AND c.quarter='" + Config.currentQuarter + "'" +
+                        " AND m.type<>'RW'";
+
 						Statement innerStatement = conn.createStatement();                        
 						ResultSet innerRs = innerStatement.executeQuery(sql);
 						
@@ -109,7 +111,8 @@
                         " AND c.quarter=cs.quarter" +
                         " AND cs.section_id=m.section_id" +
                         " AND c.course_id='" + rs.getString("o_course_id") + "'" +
-                        " AND c.quarter='" + Config.currentQuarter + "'";
+						" AND c.quarter='" + Config.currentQuarter + "'" +
+                        " AND m.type<>'RW'";
                         
                         innerRs = innerStatement.executeQuery(sql);
                         
