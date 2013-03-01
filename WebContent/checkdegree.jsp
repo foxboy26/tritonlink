@@ -41,8 +41,10 @@ try {
         <div class="row-fluid">
             <jsp:include page="tpl/sub_student.html" />
             <div class="span10">
-                <form class="form-horizontal" action="checkdegree.jsp?studentId=<%= studentId %>" method="post"> 
+                <form class="form-horizontal" action="checkdegree.jsp" method="post"> 
                     <input type = "hidden" value = "select" name = "action">
+                    <input type = "hidden" value = "<%= studentId %>" name = "studentId">
+                    <input type = "hidden" value = "<%= identity %>" name = "identity">
                     <legend>Choose a program</legend>
                     <div class="control-group">
                         <label class="control-label">Program</label>
@@ -56,7 +58,7 @@ try {
                                     programList.add(rs.getString("name"));
                         }
                         %>
-                            <select onchange = form.submit() name = "name">
+                            <select onchange="form.submit()" onfocus="this.selectedIndex = -1;" name = "name">
                             <%
                             if(action != null && action.equals("select")){
                             	programList.remove(request.getParameter("name"));   

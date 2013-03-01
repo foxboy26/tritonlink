@@ -44,9 +44,11 @@ try {
             <div class="span10">
             <fieldset>
             <legend>Choose a program</legend>
-                <form class="form-horizontal" action="checkmsdegree.jsp?studentId=<%= studentId %>" method="post"> 
+                <form class="form-horizontal" action="checkmsdegree.jsp" method="post"> 
                     <input type = "hidden" value = "select" name = "action">
-                    
+                    <input type = "hidden" value = "<%= studentId %>" name = "studentId">
+                    <input type = "hidden" value = "<%= identity %>" name = "identity">
+
                     <div class="control-group">
                         <label class="control-label">Program</label>
                         <div class="controls">
@@ -58,7 +60,7 @@ try {
                                     programList.add(rs.getString("name"));
                         }
                         %>
-                            <select onchange = form.submit() name = "name">
+                            <select onchange="form.submit()" onfocus="this.selectedIndex = -1;" name = "name">
                             <%
                             if(action != null && action.equals("select")){
                             	programList.remove(request.getParameter("name"));   
@@ -76,6 +78,7 @@ try {
                         </div>
                     </div>
                 </form>         
+
                 <legend>Status</legend>
                 <%
                     if (action != null && action.equals("select")) {
