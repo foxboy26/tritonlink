@@ -55,7 +55,7 @@
                         <th>Location</th>
                         <th>Start Time</th>
                         <th>End Time</th>
-                        <th>Dates</th>
+                        <th>Days</th>
                         <th>Mandatory</th>
                     </tr>
             <%

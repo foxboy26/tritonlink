@@ -102,7 +102,7 @@
                      	if(action != null){
                      		String start = request.getParameter("start");
                      		String end = request.getParameter("end");
-                   	 	
+                     	}
                 	%>
                 </table>
             </div>            	
