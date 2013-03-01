@@ -47,7 +47,7 @@
         
         String startdate = "07-12-2012";
         
-        String enddate = "23-02-2013";
+        String enddate = "15-02-2013";
 
         ResultSet rs = statement1.executeQuery("SELECT student_id FROM student_section WHERE section_id = '" + sectionId + "'");
         

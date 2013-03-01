@@ -62,7 +62,7 @@ public class Meeting
     }
     
     private boolean timeConflictWith(Meeting b) {
-    	return (this.startTime.compareTo(b.startTime) >= 0 && this.startTime.compareTo(b.endTime) <= 0) ||
-    		   (b.startTime.compareTo(this.startTime) >= 0 && b.startTime.compareTo(this.endTime) <= 0);
+    	return (this.startTime.compareTo(b.startTime) >= 0 && this.startTime.compareTo(b.endTime) < 0) ||
+    		   (b.startTime.compareTo(this.startTime) >= 0 && b.startTime.compareTo(this.endTime) < 0);
     }
 }
