@@ -79,10 +79,75 @@ try {
                     </div>
                 </form>         
 
-                <legend>Status</legend>
                 <%
                     if (action != null && action.equals("select")) {
-						
+                    	int total = 0, totalRequired = 0;
+                        String sql = "SELECT * FROM" +
+                                        " (SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId + ") owned, " +
+                                        " (SELECT units FROM program_requirement" + 
+                                        " WHERE program_name='" + name + "'" +
+                                        " AND category='all') required";
+                        rs = statement.executeQuery(sql);
+                        if (rs.next()) {
+                            total = rs.getInt("total");
+                            totalRequired = rs.getInt("units");
+                        }
+                        
+                        sql = "SELECT units FROM program_requirement" + 
+                                " WHERE program_name='" + name + "'" +
+                                " AND category='all'";
+                        
+
+                        String required = "SELECT category, units FROM program_requirement" + 
+                              " WHERE program_name='" + name + "'" +
+                              " AND NOT category LIKE 'c-%'";
+
+                        String owned = "SELECT p.category AS category, SUM(ss.unit) AS units" +
+                              " FROM student_section AS ss, class_section AS cs, plans AS p" +
+                              " WHERE ss.section_id=cs.section_id" +
+                              " AND cs.course_id=p.course_id" +
+                              " AND ss.student_id=" + studentId +
+                              " AND p.program_name='" + name + "'" +
+                              " AND NOT p.category LIKE 'c-%'" +
+                              " GROUP BY category";
+                        
+                        sql = "SELECT owned.category AS category, owned.units AS o_units, required.units AS r_units FROM" +
+                              " (" + owned + ") owned, " +
+                              " (" + required + ") required" +
+                              " WHERE owned.category=required.category";
+
+                        rs = statement.executeQuery(sql);
+                %>
+                <legend>Status</legend>
+                <div>
+                    <h3>Total units: <%= totalRequired %>, <%= totalRequired - total %> remains.</h3>
+                </div>
+                <table class="table">
+                    <tr>
+                        <th>Category</th>
+                        <th>Required Units</th>
+                        <th>Completed Units</th>
+                        <th>Remaining Units</th>
+                    </tr>
+                    <%
+                        int i = 0;
+                        while (rs.next()) {
+                            String category = rs.getString("category");
+                            int rUnits = rs.getInt("r_units");
+                            int oUnits = rs.getInt("o_units");
+                    %>
+                    <tr>
+                        <td><%= category %></td>
+                        <td><%= rUnits %></td>
+                        <td><%= oUnits %></td>
+                        <td><%= (rUnits - oUnits > 0)? rUnits - oUnits : 0 %></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                </table>
+                    	
+                <%    	
                     	//Find all courses a student has taken
                     	String table1 = "SELECT course_id, unit, grade FROM student_section, class_section" +
                     				    " WHERE student_section.student_id = '" + studentId + "'" + 
@@ -121,7 +186,7 @@ try {
                 	<div class="controls">
                 <table class="table">
                     <tr>
-                        <th>Category</th>
+                        <th>Concentration</th>
                         <th>Required Units</th>
                         <th>Completed Units</th>
                         <th>Required GPA</th>
@@ -141,19 +206,19 @@ try {
                         }
                     %>
                 </table>
-                	<%
-                	//Find all courses that have not taken yet from every concentration
-                	String table6 = "SELECT course_id, category FROM (" + table2 + ") AS C" +
-                					" WHERE course_id NOT IN (SELECT course_id FROM (" + table1 + ") AS S)" +
-                					" AND category LIKE 'c-%'";
-                	
-                	String table7 = "SELECT N.course_id, category, quarter FROM class, (" + table6 + ") AS N" +
-                					" WHERE N.course_id = class.course_id" +
-                        			" ORDER BY  N.course_id";
-                	
-                	rs = statement.executeQuery(table7);   
-                	              	                	
-               	 	%>
+
+                <%
+                        //Find all courses that have not taken yet from every concentration
+                        String table6 = "SELECT course_id, category FROM (" + table2 + ") AS C" +
+                                        " WHERE course_id NOT IN (SELECT course_id FROM (" + table1 + ") AS S)" +
+                                        " AND category LIKE 'c-%'";
+                        
+                        String table7 = "SELECT N.course_id, category, quarter FROM class, (" + table6 + ") AS N" +
+                                        " WHERE N.course_id = class.course_id" +
+                                        " ORDER BY  N.course_id";
+                        
+                        rs = statement.executeQuery(table7);   
+                %>
                  	
                 <div class="control-group">
                 <label class="control-label">Courses to choose</label>
@@ -164,47 +229,46 @@ try {
                         <th>concentration</th>    
                         <th>Given time</th>                       
                     </tr>
-                    <% 
-                    String next = "Spring 2005";
-                    String courseId = "";
-                    String category = "";
+                <% 
+                        String next = "Spring 2005";
+                        String courseId = "";
+                        String category = "";
                     	
-                	while (rs.next()) {
-                		
-                		String quarter =  rs.getString("quarter");
-                		if(courseId == ""){
-                			courseId = rs.getString("course_id");
-                			category = rs.getString("category");
-                			next = quarter;
-                		}
-                		if(!courseId.equals(rs.getString("course_id"))){
-                			if(Quarter.greater("Spring 2005", next))
-								next = "";
-                	%>
+                        while (rs.next()) {
+                            
+                            String quarter =  rs.getString("quarter");
+                            if(courseId == ""){
+                                courseId = rs.getString("course_id");
+                                category = rs.getString("category");
+                                next = quarter;
+                            }
+                            if(!courseId.equals(rs.getString("course_id"))){
+                                if(Quarter.greater("Spring 2005", next))
+                                    next = "";
+                %>
                     	<tr>
                     		<td><%= courseId %></td>
                         	<td><%= category %></td>
                         	<td><%= next %></td>
                     	</tr>
-                    <%
-                    		courseId = rs.getString("course_id");
-                    		category = rs.getString("category");
-                    		next = quarter;
-                		}
-                		else if(Quarter.greater(next, quarter) && Quarter.greater(quarter, "Spring 2005")){
-                			next =  quarter;
-                		}
-                	}
-                	%>
+                <%
+                                courseId = rs.getString("course_id");
+                                category = rs.getString("category");
+                                next = quarter;
+                            }
+                            else if(Quarter.greater(next, quarter) && Quarter.greater(quarter, "Spring 2005")){
+                                next =  quarter;
+                            }
+                        }
+                %>
                 	<tr>
                     		<td><%= courseId %></td>
                         	<td><%= category %></td>
                         	<td><%= next %></td>
                     	</tr>
-                    <% 
+                <% 
                     }
-                    %>              
-                    	
+                %>              
                 </table>
                 </div>
                 </div>
