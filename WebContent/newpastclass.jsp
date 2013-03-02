@@ -72,6 +72,7 @@
                             <form action="newpastclass.jsp" method="post"> 
                                 <input type="hidden" name = "action" value= "select">
                                 <input type="hidden" name = "studentId" value= "<%=studentId %>">
+                                <input type="hidden" name = "identity" value= "<%=identity %>">
                                 <select onchange = "form.submit()" name = "course_id">
                                 <%
                                 
@@ -117,6 +118,7 @@
                                 <input type = "hidden" name = "action" value = "quarterSelect">
                                 <input type = "hidden" name = "course_id" value = "<%= courseID%>">
                                 <input type="hidden" name = "studentId" value= "<%=studentId %>">
+                                <input type="hidden" name = "identity" value= "<%=identity %>">
                                 <select name="quarter" onchange="form.submit()">
                                 <% 
                                 if(action != null && action.equals("quarterSelect")){        
@@ -241,6 +243,7 @@
 
                 <form action="pastclass.jsp" method="post">  
                     <input type="hidden" value="insert" name="action">
+                    <input type="hidden" name ="identity" value= "<%=identity %>">
                     <table>
                         <tr>         	
                             <td><input type="hidden" name = "rStudentId" value= "<%= studentId%>"></td>
