@@ -99,11 +99,13 @@
                             	enrolledSections.add(section);
                             	section = new ClassSection(sid);
                             }
-                            else {
+                            
                             	section.addMeeting(new Meeting(innerRs.getTime("start_time"), innerRs.getTime("end_time"), innerRs.getString("days")));
-                            }
-                            enrolledSections.add(section);
+                         
+                            
                         }
+                        
+                        enrolledSections.add(section);
 
                         sql = "select m.section_id AS section_id, start_time, end_time, days" +
                         " FROM class AS c, class_section AS cs, meeting AS m" +
@@ -127,11 +129,12 @@
                             	offeredSections.add(section);
                                 section = new ClassSection(sid);
                             }
-                            else {
-                                section.addMeeting(new Meeting(innerRs.getTime("start_time"), innerRs.getTime("end_time"), innerRs.getString("days")));
-                            }
-                            offeredSections.add(section);
+                            
+                            section.addMeeting(new Meeting(innerRs.getTime("start_time"), innerRs.getTime("end_time"), innerRs.getString("days")));
+          
+                            
                         }
+                        offeredSections.add(section);
                         
                         for (ClassSection sectionA : enrolledSections) {
                             for (ClassSection sectionB : offeredSections) {
@@ -141,8 +144,11 @@
 	                        		break;
 	                        	}
                             }
+                            if(isConflict == false)
+                            	break;
                         }
                         
+           
                         if (isConflict) {
                         	String oCourseId = rs.getString("o_course_id");
                 %>
