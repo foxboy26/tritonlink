@@ -152,7 +152,7 @@ try {
                 <legend>Status</legend>
                 <%
                     if (action != null && action.equals("select")) {
-                    	System.out.println(student);
+
                         int total = 0, totalRequired = 0;
                         String sql = "SELECT * FROM" +
 		                        		" (SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + student + ") owned, " +
