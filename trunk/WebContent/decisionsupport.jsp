@@ -103,13 +103,12 @@ try {
                         String courseId = request.getParameter("course_id");
                         String quarter = request.getParameter("quarter") + " " + request.getParameter("year");
 
-                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM class AS c, teach AS t, class_section AS cs, student_section AS ss" +
-                                            " WHERE c.course_id=cs.course_id" +
-                                            " AND t.section_id=cs.section_id" +
+                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM teach AS t, class_section AS cs, student_section AS ss" +
+                                            " WHERE t.section_id=cs.section_id" +
                                             " AND cs.section_id=ss.section_id" +
                                             " AND t.faculty_id='" + facultyId + "'" +
-                                            " AND c.course_id='" + courseId + "'" +
-                                            " AND c.quarter='" + quarter + "'" +
+                                            " AND cs.course_id='" + courseId + "'" +
+                                            " AND cs.quarter='" + quarter + "'" +
                                             " GROUP BY ss.grade";
                         
                         rs = statement.executeQuery(Decision.makeSQL(gradeAll));
@@ -178,13 +177,12 @@ try {
                         String facultyId = request.getParameter("faculty_id");
                         String courseId = request.getParameter("course_id");
 
-                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM class AS c, teach AS t, class_section AS cs, student_section AS ss" +
-                                            " WHERE c.course_id=cs.course_id" +
-                                            " AND t.section_id=cs.section_id" +
-                                            " AND cs.section_id=ss.section_id" +
-                                            " AND t.faculty_id='" + facultyId + "'" +
-                                            " AND c.course_id='" + courseId + "'" +
-                                            " GROUP BY ss.grade";
+                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM teach AS t, class_section AS cs, student_section AS ss" +
+                                " WHERE t.section_id=cs.section_id" +
+                                " AND cs.section_id=ss.section_id" +
+                                " AND t.faculty_id='" + facultyId + "'" +
+                                " AND cs.course_id='" + courseId + "'" +
+                                " GROUP BY ss.grade";
                         
                         rs = statement.executeQuery(Decision.makeSQL(gradeAll));
                 %>
@@ -238,13 +236,11 @@ try {
                 <%
                     if (action != null && action.equals("iii")) {
                         String courseId = request.getParameter("course_id");
-
-                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM class AS c, teach AS t, class_section AS cs, student_section AS ss" +
-                                            " WHERE c.course_id=cs.course_id" +
-                                            " AND t.section_id=cs.section_id" +
-                                            " AND cs.section_id=ss.section_id" +
-                                            " AND c.course_id='" + courseId + "'" +
-                                            " GROUP BY ss.grade";
+                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM teach AS t, class_section AS cs, student_section AS ss" +
+                                " WHERE t.section_id=cs.section_id" +
+                                " AND cs.section_id=ss.section_id" +
+                                " AND cs.course_id='" + courseId + "'" +
+                                " GROUP BY ss.grade";
                         
                         rs = statement.executeQuery(Decision.makeSQL(gradeAll));
                 %>
