@@ -30,10 +30,12 @@ try {
 
     String action = request.getParameter("action");
     String name = "";
+    String student = "";
     String studentId = request.getParameter("studentId");
     String identity = request.getParameter("identity");
     if(action != null && action.equals("select")) {
     	name = request.getParameter("name");
+    	student = request.getParameter("student");
     }
 %>
 <body>
@@ -43,31 +45,59 @@ try {
             <jsp:include page="tpl/sub_student.html" />
             <div class="span10">
             <fieldset>
-            <legend>Choose a program</legend>
                 <form class="form-horizontal" action="checkmsdegree.jsp" method="post"> 
                     <input type = "hidden" value = "select" name = "action">
                     <input type = "hidden" value = "<%= studentId %>" name = "studentId">
                     <input type = "hidden" value = "<%= identity %>" name = "identity">
-
+                    
+                    <legend>Choose a student</legend>
+                    <div class="control-group">
+                        <label class="control-label">Student</label>
+                        <div class="controls">
+                        <%
+                            statement = conn.createStatement();
+                            rs = statement.executeQuery("SELECT student.student_id, firstname, middlename, lastname FROM student, graduate WHERE student.student_id = graduate.student_id");
+                            //rs = statement.executeQuery("SELECT name FROM program");
+                            ArrayList<String> studentList = new ArrayList<String>();
+                            while (rs.next()) {            
+                                    studentList.add(rs.getString("student_id"));
+                        }
+                        %>
+                            <select  onfocus="this.selectedIndex = -1;" name = "student">
+                            <%
+                            
+                            for(String s : studentList){
+                            	Statement statement2 = conn.createStatement();
+                            	ResultSet r = statement2.executeQuery("SELECT firstname, middlename, lastname FROM student WHERE student_id =" + s);
+                            	if(r.next()){ 
+                            %>
+                            	
+                                <option value="<%= s %>"><%= r.getString("firstname") + " " + r.getString("middlename") + " " + r.getString("lastname")%></option>
+                            <%
+                            	}
+                            }
+                            %>
+                            </select>   
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <legend>Choose a program</legend>
                     <div class="control-group">
                         <label class="control-label">Program</label>
                         <div class="controls">
                         <%
                             statement = conn.createStatement();
                             rs = statement.executeQuery("SELECT name FROM program WHERE name LIKE 'M%'");
+                            //rs = statement.executeQuery("SELECT name FROM program");
                             ArrayList<String> programList = new ArrayList<String>();
                             while (rs.next()) {            
                                     programList.add(rs.getString("name"));
                         }
                         %>
-                            <select onchange="form.submit()" onfocus="this.selectedIndex = -1;" name = "name">
-                            <%
-                            if(action != null && action.equals("select")){
-                            	programList.remove(request.getParameter("name"));   
-                            %>
-                                <option value="<%= request.getParameter("name") %>"><%= request.getParameter("name") %></option>
-                            <% 
-                            }
+                            <select  onfocus="this.selectedIndex = -1;" name = "name">
+                           <%
                             for(String program : programList){
                             %>
                                 <option value="<%= program %>"><%= program %></option>
@@ -77,10 +107,50 @@ try {
                             </select>   
                         </div>
                     </div>
-                </form>         
+                    
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </form> 
+                <%
+                	if(action != null){
+                %>
+                 <legend>Student Info</legend>
+                <table class="table table-hover">
+                            <tr>
+                                <th>SSN</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>                             
+                            </tr>
+                 <%
+                 	rs = statement.executeQuery("SELECT ssn, firstname, middlename, lastname FROM student WHERE student_id = '" + student + "'");
+                    rs.next();
+                 %>
+                  			<tr>
+                                <th><%= rs.getString("ssn")%></th>
+                                <th><%= rs.getString("firstname")%></th>
+                                <th><%= rs.getString("middlename")%></th>
+                                <th><%= rs.getString("lastname")%></th>                             
+                            </tr>
+                </table>
+                
+                  <legend>Degree Info</legend>
+                <table class="table table-hover">
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>                                                  
+                            </tr>
+                 <%
+                 	rs = statement.executeQuery("SELECT * FROM program WHERE name = '" + name + "'");
+                    rs.next();
+                 %>
+                  			<tr>
+                                <th><%= rs.getString("name")%></th>
+                                <th><%= rs.getString("degree_type")%></th>                           
+                            </tr>
+                </table>
 
                 <%
-                    if (action != null && action.equals("select")) {
+                    
                     	int total = 0, totalRequired = 0;
                         String sql = "SELECT * FROM" +
                                         " (SELECT SUM(unit) AS total FROM student_section WHERE student_id=" + studentId + " AND grade IS NOT NULL) owned, " +
@@ -151,7 +221,7 @@ try {
                         while (rs.next()) {
                     %>
                     <tr>
-                        <td><%= rs.getString("category")%></td>
+                        <td><%= rs.getString("category") %></td>
                         <td><%= rs.getInt("units")%></td>
                         <td><%= 0 %></td>
                         <td><%= rs.getInt("units") %></td>
