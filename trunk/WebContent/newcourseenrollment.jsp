@@ -181,7 +181,7 @@ try {
                 </div>
                 </form>
 
-                <form action="action/courseenrollment.jsp" method="post">  
+                <form id="newcourseenrollment" action="action/courseenrollment.jsp" method="post">  
                     <input type="hidden" value="insert" name="action">
                     <table>
                         <tr>            
@@ -194,10 +194,14 @@ try {
                         </tr>
                     </table>
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button id="submit" type="submit" class="btn btn-primary">Save</button>
                         <button type="button" class="btn">Cancel</button>
                     </div>
                 </form>
+                <div id='error' class="alert alert-error" style='display:none'>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> Xixi TODO!
+                </div>
             </div>
         </div>
     </div>
@@ -254,6 +258,9 @@ try {
             var t = (document.getElementsByName('type')[0]).options[document.getElementsByName('type')[0].selectedIndex].value;
             document.getElementsByName("rType")[0].value = t;
         }
+        
+        // Xixi TODO!
+        // see newsession.jsp
     </script>
 </body>
 </html>
