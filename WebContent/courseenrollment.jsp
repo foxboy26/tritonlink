@@ -27,37 +27,26 @@
             String units = request.getParameter("rUnits");         
             String type = request.getParameter("rType");
             String status = "enrolled";
-            
-            
-            int enrolledNum = 0;
-            int limit = 0;
 
-            // Begin transaction
-            conn.setAutoCommit(false);
-            
-            if (enrolledNum < limit) {
-                //update enrolledNum+1;
-            }
-            else
-            {
-            	status = "waitlist";
-            	//update waitlist+1;
-            }
-            // Create the prepared statement and use it to
-            // INSERT the student attributes INTO the Student table.
-            pstmt = conn.prepareStatement(
-                "INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null, ?)");
+            pstmt = conn.prepareStatement("INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null, ?)");
 
             pstmt.setInt(1, Integer.parseInt(studentId));
             pstmt.setString(2, sectionId);
             pstmt.setInt(3, Integer.parseInt(units));
             pstmt.setString(4, type);
+
             int rowCount = pstmt.executeUpdate();
+
+            // update section.enrolled_num
+            pstmt = conn.prepareStatement("UPDATE section SET enrolled_num = enrolled_num + 1 WHERE section_id = ?");
+
+            pstmt.setString(1, sectionId);
+
+            rowCount = pstmt.executeUpdate();
             
             // Commit transaction
             conn.commit();
             conn.setAutoCommit(true);
-
         }
 %>
 <%-- -------- Close Connection Code -------- --%>
