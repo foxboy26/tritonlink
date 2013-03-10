@@ -181,7 +181,7 @@ try {
                 </div>
                 </form>
 
-                <form action="courseenrollment.jsp" method="post">  
+                <form action="action/courseenrollment.jsp" method="post">  
                     <input type="hidden" value="insert" name="action">
                     <table>
                         <tr>            

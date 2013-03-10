@@ -26,10 +26,11 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <jsp:include page="tpl/sub_class.html" />
+            <jsp:include page="tpl/sub_section.html" />
             <div class="span10">
-                <form class="form-horizontal" action="sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>" method="post">
+                <form id="newsession" class="form-horizontal" action="sessionlist.jsp?sectionId=<%= sectionId %>&courseId=<%= courseId%>&quarter=<%= quarter%>" method="post">
                     <input type="hidden" value="insert-weekly" name="action">
+                    <input type="hidden" value="<%= sectionId %>" name="sectionId">
                     <fieldset>
                         <legend>Weekly Meeting</legend>
                         <div class="control-group">
@@ -72,11 +73,15 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button id="submit" type="submit" class="btn btn-primary">Save</button>
                             <button type="button" class="btn">Cancel</button>
                         </div>
                     </fieldset>
                 </form>
+                <div id='error' class="alert alert-error" style='display:none'>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+				    <strong>Error!</strong> conflict!
+				</div>
             </div><!--/span-->
         </div><!--/row-->
     </div><!--/.fluid-container-->
@@ -87,6 +92,36 @@
         $(document).ready(function() {
             $('#nav-class').addClass('active');
             $('#sub-newsession').addClass('active');
+
+             var args = '?' + 'sectionId=<%= sectionId %>&courseId=<%= courseId%>&quarter=<%= quarter%>';
+             $('#sub-newsession > a').attr('href', 'newsession.jsp' + args);
+             $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp' + args);
+             $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp' + args);
+             $('#sub-checkreviewsession > a').attr('href', 'checkreviewsession.jsp' + args);
+        });
+        
+        $("#submit").click(function() {
+
+            var url = "action/session.jsp"; // the script where you handle the form input.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#newsession").serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    data = data.trim();	
+
+                    if (data == 'success') {
+                        document.location = 'sessionlist.jsp?sectionId=<%= sectionId %>&courseId=<%= courseId%>&quarter=<%= quarter%>';
+                        return true;
+                    } 
+                    else {
+                        $('#error').css('display', 'block');
+                    }
+                }
+            });
+
+            return false; // avoid to execute the actual submit of the form.
         });
     </script>
 </body>
