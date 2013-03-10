@@ -99,25 +99,43 @@
             String location = request.getParameter("location");
             String startTime = request.getParameter("start_time");
             String endTime = request.getParameter("end_time");
-            String date = request.getParameter("days");                                            
             String mandatory = request.getParameter("mandatory");                                            
             // Begin transaction
             conn.setAutoCommit(false);
+
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Meeting VALUES (?, ?, ?, ?, ?, ?, ?)");
             
-            // Create the prepared statement and use it to
-            // INSERT the student attributes INTO the Student table.
-            PreparedStatement pstmt = conn.prepareStatement(
-                "INSERT INTO Meeting VALUES (?, ?, ?, ?, ?, ?, ?)");
+            if (type.equals("RW")) {
+                String date = request.getParameter("days");                                            
 
-            pstmt.setString(1, sectionId);
-            pstmt.setString(2, type);
-            pstmt.setString(3, location);
-            pstmt.setString(4, startTime);
-            pstmt.setString(5, endTime);
-            pstmt.setString(6, date);
-            pstmt.setString(7, mandatory);
+                pstmt.setString(1, sectionId);
+                pstmt.setString(2, type);
+                pstmt.setString(3, location);
+                pstmt.setString(4, startTime);
+                pstmt.setString(5, endTime);
+                pstmt.setString(6, date);
+                pstmt.setString(7, mandatory);
 
-            int rowCount = pstmt.executeUpdate();
+                int rowCount = pstmt.executeUpdate();
+            }
+            else {
+                String days = request.getParameter("days");                                            
+
+                for (int i = 0; i < days.length(); i+=2) {
+                    String weekday = days.substring(i, i+2);
+                    pstmt.setString(1, sectionId);
+                    pstmt.setString(2, type);
+                    pstmt.setString(3, location);
+                    pstmt.setString(4, startTime);
+                    pstmt.setString(5, endTime);
+                    pstmt.setString(6, weekday);
+                    pstmt.setString(7, mandatory);
+
+                    int rowCount = pstmt.executeUpdate();
+                }
+            }
+
+            pstmt.close();
             
             // Commit transaction
             conn.commit();
