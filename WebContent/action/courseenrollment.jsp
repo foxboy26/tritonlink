@@ -2,7 +2,6 @@
 <%-- Import the java.sql package --%>
 <%@ page language="java" import="java.sql.*" %>
 <%@ page language="java" import="db.Config" %>
-<%-- -------- Open Connection Code -------- --%>
 <%
     try {
         // Load JDBC Driver class file
@@ -13,9 +12,7 @@
         Connection conn = DriverManager.getConnection(Config.connectionURL);
 
         PreparedStatement pstmt = null;
-%>
-<%-- -------- INSERT Code -------- --%>
-<%
+
         String action = request.getParameter("action");
         String studentId = request.getParameter("rStudentID");
         String identity = request.getParameter("identity");
@@ -48,16 +45,15 @@
             conn.commit();
             conn.setAutoCommit(true);
         }
-%>
-<%-- -------- Close Connection Code -------- --%>
-<%
+
         // Close the Statement
         pstmt.close();
 
         // Close the Connection
         conn.close();
-
-        response.sendRedirect("currentclass.jsp?studentId=" + studentId + "&identity=" + identity);
+        
+        response.setContentType("text/html");
+        out.println("success");        
     } catch (SQLException sqle) {
         out.println(sqle.getMessage());
     } catch (Exception e) {
