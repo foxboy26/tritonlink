@@ -67,6 +67,7 @@
 
         // Close the Connection
         conn.close();
+        
         response.setContentType("text/html");
         out.println("success");
     } catch (SQLException sqle) {
