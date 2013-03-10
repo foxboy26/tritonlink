@@ -68,8 +68,8 @@
                             <label class="control-label">Date</label>
                             <div class="input-append date" id="dpd1" data-date="" data-date-format="dd-mm-yyyy">
                             	<input id = "start" name= "days" class="span2" size="100" type="text" value="01-03-2013">
-                            <span class="add-on"><i class="icon-th"></i></span>
-                        </div>
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>
                         </div>
                         
                          <div class="control-group">
@@ -97,19 +97,19 @@
         	 $('#nav-class').addClass('active');
              $('#sub-newreviewsession').addClass('active');
 
-             $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
-             $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
-             $('#sub-checkreviewsession > a').attr('href', 'checkreviewsession.jsp?&sectionId=<%= sectionId %>&courseId= <%= courseId%>&quarter=<%= quarter%>');
-             
-             
+             var args = '?' + 'sectionId=<%= sectionId %>&courseId=<%= courseId%>&quarter=<%= quarter%>';
+             $('#sub-newsession > a').attr('href', 'newsession.jsp' + args);
+             $('#sub-sessionlist > a').attr('href', 'sessionlist.jsp' + args);
+             $('#sub-newreviewsession > a').attr('href', 'newreviewsession.jsp' + args);
+             $('#sub-checkreviewsession > a').attr('href', 'checkreviewsession.jsp' + args);
          	 
-         	$('#dpd1').datepicker().on('changeDate', function(ev) {
-         	  if (ev.date.valueOf() > checkout.date.valueOf()) {
-         	    var newDate = new Date(ev.date);
-         	    newDate.setDate(newDate.getDate());
-         	    checkout.setValue(newDate);
-         	  }       	           	 
-         	}).data('datepicker');
+         	 $('#dpd1').datepicker().on('changeDate', function(ev) {
+         	    if (ev.date.valueOf() > checkout.date.valueOf()) {
+         	        var newDate = new Date(ev.date);
+         	        newDate.setDate(newDate.getDate());
+         	        checkout.setValue(newDate);
+         	    }       	           	 
+         	 }).data('datepicker');
         });
     </script>
 </body>
