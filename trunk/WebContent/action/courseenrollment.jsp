@@ -25,19 +25,20 @@
             String type = request.getParameter("rType");
             String status = "enrolled";
 
+
+            // update section.enrolled_num
+            pstmt = conn.prepareStatement("UPDATE section SET enrolled_num = enrolled_num + 1 WHERE section_id = ?");
+
+            pstmt.setString(1, sectionId);
+
+            int rowCount = pstmt.executeUpdate();
+
             pstmt = conn.prepareStatement("INSERT INTO student_section VALUES (?, ?, 'enrolled', ?, null, ?)");
 
             pstmt.setInt(1, Integer.parseInt(studentId));
             pstmt.setString(2, sectionId);
             pstmt.setInt(3, Integer.parseInt(units));
             pstmt.setString(4, type);
-
-            int rowCount = pstmt.executeUpdate();
-
-            // update section.enrolled_num
-            pstmt = conn.prepareStatement("UPDATE section SET enrolled_num = enrolled_num + 1 WHERE section_id = ?");
-
-            pstmt.setString(1, sectionId);
 
             rowCount = pstmt.executeUpdate();
             
