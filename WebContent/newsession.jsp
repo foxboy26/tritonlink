@@ -82,6 +82,10 @@
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
 				    <strong>Error!</strong> conflict!
 				</div>
+				<div id='error2' class="alert alert-error" style='display:none'>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+				    <strong>Error!</strong> A faculty can't have more than one session at the same time!
+				</div>
             </div><!--/span-->
         </div><!--/row-->
     </div><!--/.fluid-container-->
@@ -115,6 +119,9 @@
                         document.location = 'sessionlist.jsp?sectionId=<%= sectionId %>&courseId=<%= courseId%>&quarter=<%= quarter%>';
                         return true;
                     } 
+                    else if(data == 'faculty conflict'){
+                    	$('#error2').css('display', 'block');
+                    }
                     else {
                         $('#error').css('display', 'block');
                     }
