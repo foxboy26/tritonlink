@@ -181,7 +181,7 @@ try {
                 </div>
                 </form>
 
-                <form id="newcourseenrollment" action="action/courseenrollment.jsp" method="post">  
+                <form id="newcourseenrollment" action="currentclass.jsp?studentId=<%= studentID %>&identity=<%= identity %>" method="post">  
                     <input type="hidden" value="insert" name="action">
                     <table>
                         <tr>            
@@ -271,8 +271,7 @@ try {
                     data = data.trim();	
 
                     if (data == 'success') {
-                        document.location = 'newcourseenrollment.jsp' + args;
-                        return true;
+                        document.location = 'currentclass.jsp' + args;
                     } 
                     else {
                         $('#error').css('display', 'block');
