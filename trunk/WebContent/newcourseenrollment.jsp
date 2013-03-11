@@ -200,7 +200,7 @@ try {
                 </form>
                 <div id='error' class="alert alert-error" style='display:none'>
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>Error!</strong> Xixi TODO!
+                    <strong>Error!</strong> No available seat!
                 </div>
             </div>
         </div>
@@ -259,7 +259,29 @@ try {
             document.getElementsByName("rType")[0].value = t;
         }
         
-        // Xixi TODO!
+        $("#submit").click(function() {
+
+            var url = "action/courseenrollment.jsp"; // the script where you handle the form input.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#newcourseenrollment").serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    data = data.trim();	
+
+                    if (data == 'success') {
+                        document.location = 'newcourseenrollment.jsp' + args;
+                        return true;
+                    } 
+                    else {
+                        $('#error').css('display', 'block');
+                    }
+                }
+            });
+
+            return false; // avoid to execute the actual submit of the form.
+        });
         // see newsession.jsp
     </script>
 </body>
