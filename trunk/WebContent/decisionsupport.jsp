@@ -103,15 +103,13 @@ try {
                         String courseId = request.getParameter("course_id");
                         String quarter = request.getParameter("quarter") + " " + request.getParameter("year");
 
-                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM teach AS t, class_section AS cs, student_section AS ss" +
-                                            " WHERE t.section_id=cs.section_id" +
-                                            " AND cs.section_id=ss.section_id" +
-                                            " AND t.faculty_id='" + facultyId + "'" +
-                                            " AND cs.course_id='" + courseId + "'" +
-                                            " AND cs.quarter='" + quarter + "'" +
-                                            " GROUP BY ss.grade";
+                        String gradeAll = "SELECT * FROM CPQG WHERE" + 
+                                            " faculty_id='" + facultyId + "'" +
+                                            " AND course_id='" + courseId + "'" +
+                                            " AND quarter='" + quarter + "'" + 
+                                            " ORDER BY type";
                         
-                        rs = statement.executeQuery(Decision.makeSQL(gradeAll));
+                        rs = statement.executeQuery(gradeAll);
                 %>
                 <table class="table">
                     <tr>
@@ -122,8 +120,8 @@ try {
                         while (rs.next()) {
                     %>
                     <tr>
-                        <td><%= rs.getString("grade") %></td>
-                        <td><%= (rs.getString("grade_count") == null)? 0 : rs.getInt("grade_count") %></td>
+                        <td><%= rs.getString("type") %></td>
+                        <td><%= rs.getInt("count") %></td>
                     </tr>
                     <%
                         }
@@ -177,14 +175,12 @@ try {
                         String facultyId = request.getParameter("faculty_id");
                         String courseId = request.getParameter("course_id");
 
-                        String gradeAll = "SELECT ss.grade as grade, COUNT(ss.grade) as grade_count FROM teach AS t, class_section AS cs, student_section AS ss" +
-                                " WHERE t.section_id=cs.section_id" +
-                                " AND cs.section_id=ss.section_id" +
-                                " AND t.faculty_id='" + facultyId + "'" +
-                                " AND cs.course_id='" + courseId + "'" +
-                                " GROUP BY ss.grade";
+                        String gradeAll = "SELECT * FROM CPG WHERE" +
+                                " faculty_id='" + facultyId + "'" +
+                                " AND course_id='" + courseId + "'" + 
+                                " ORDER BY type";
                         
-                        rs = statement.executeQuery(Decision.makeSQL(gradeAll));
+                        rs = statement.executeQuery(gradeAll);
                 %>
                 <table class="table">
                     <tr>
@@ -195,8 +191,8 @@ try {
                         while (rs.next()) {
                     %>
                     <tr>
-                        <td><%= rs.getString("grade") %></td>
-                        <td><%= (rs.getString("grade_count") == null)? 0 : rs.getInt("grade_count") %></td>
+                        <td><%= rs.getString("type") %></td>
+                        <td><%= rs.getInt("count") %></td>
                     </tr>
                     <%
                         }
